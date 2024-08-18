@@ -13,6 +13,11 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/api/og/*",
         disallow: "/private/",
       },
+      {
+        userAgent: "*",
+        allow: "/api/og/",
+        disallow: "/private/",
+      },
     ],
     sitemap: "https://acme.com/sitemap.xml",
   };
