@@ -4,23 +4,20 @@ const uniqueArray = <T>(arr: T[]): boolean => {
   return arr.length === new Set(arr).size;
 };
 
-const nameSchema = z.string().min(2);
-const dollarAmountSchema = z.coerce.number().positive();
+const nameSchema = z
+  .string()
+  .min(1, { message: "Name must be at least 1 character long." });
+const dollarAmountSchema = z.coerce
+  .number()
+  .positive({ message: "Dollar amount must be positive" });
 const percentageSchema = z.coerce.number().positive();
 
 const uniqueNameArraySchema = z
   .array(nameSchema)
+  .min(1, "At least one eater is required")
   .refine((arr) => uniqueArray(arr), {
-    message: "Array contains duplicate items.",
+    message: "Names must be unique",
   });
-
-const itemSchema = z.object({
-  name: nameSchema,
-  price: dollarAmountSchema,
-  eaters: uniqueNameArraySchema
-    .default([])
-    .describe("People who ate this item"),
-});
 
 const eaterSchema = z.object({
   name: nameSchema,
@@ -32,17 +29,23 @@ const eaterSchema = z.object({
 });
 export type EaterSchema = z.infer<typeof eaterSchema>;
 
+const itemSchema = z.object({
+  name: nameSchema,
+  price: dollarAmountSchema,
+  eaters: uniqueNameArraySchema.describe("People who ate this item"),
+});
+
 const baseSchema = z.object({
   checkName: nameSchema,
   taxPercentage: percentageSchema,
   taxAmount: dollarAmountSchema,
   tipBeforeTax: z.boolean().default(true),
   tipPercentage: percentageSchema,
-  tipAmount: dollarAmountSchema,
+  tipAmount: z.coerce.number().min(0),
   subTotal: dollarAmountSchema,
   total: dollarAmountSchema,
-  items: z.array(itemSchema),
-  eaters: z.array(eaterSchema),
+  items: z.array(itemSchema).min(1, { message: "Must have at least one item" }),
+  eaters: z.array(eaterSchema).min(1),
 });
 
 export const formSchema = baseSchema
@@ -60,7 +63,17 @@ export const formSchema = baseSchema
     return items.every((item) =>
       item.eaters.every((eater) => eaters.includes(eater)),
     );
-  });
+  })
+  .refine(
+    ({ items }) => {
+      const itemNames = items.map((item) => item.name);
+      return uniqueArray(itemNames);
+    },
+    {
+      message: "Item names must be unique.",
+      path: ["items"],
+    },
+  );
 export type FormSchema = z.infer<typeof formSchema>;
 
 export const splitSchema = baseSchema
@@ -123,6 +136,26 @@ export const splitSchema = baseSchema
     {
       message: "Tip amount must be consistent with tip percentage.",
       path: ["tipAmount", "tipPercentage"],
+    },
+  )
+  .refine(
+    ({ items }) => {
+      const itemNames = items.map((item) => item.name);
+      return uniqueArray(itemNames);
+    },
+    {
+      message: "Item names must be unique.",
+      path: ["items", "name"],
+    },
+  )
+  .refine(
+    ({ eaters }) => {
+      const eaterNames = eaters.map((eater) => eater.name);
+      return uniqueArray(eaterNames);
+    },
+    {
+      message: "Eater names must be unique.",
+      path: ["eaters", "name"],
     },
   );
 
