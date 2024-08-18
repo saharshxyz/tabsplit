@@ -65,6 +65,13 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
         </div>
 
         <Table className="mt-2">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Item</TableHead>
+              <TableHead className="text-center">Eaters</TableHead>
+              <TableHead className="text-right">Price</TableHead>
+            </TableRow>
+          </TableHeader>
           <TableBody>
             {splitResult.items.map((item, index) => (
               <TableRow key={index} className="border-0 leading-tight">
