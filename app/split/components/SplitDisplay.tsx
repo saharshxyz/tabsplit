@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import {
   Table,
+  TableHeader,
   TableHead,
   TableBody,
   TableCell,
@@ -71,9 +72,9 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
                 <TableCell className="py-2 text-right">
                   <div className="flex items-center justify-end">
                     {item.eaters.length > 1 ? (
-                      <Users className="mr-2 h-4 w-4 sm:hidden" />
+                      <Users className="mr-2 hidden h-4 w-4 sm:inline-block" />
                     ) : (
-                      <User className="mr-2 h-4 w-4 sm:hidden" />
+                      <User className="mr-2 hidden h-4 w-4 sm:inline-block" />
                     )}
                     {item.eaters.join(", ")}
                   </div>
