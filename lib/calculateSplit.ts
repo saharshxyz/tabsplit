@@ -33,15 +33,15 @@ export function calculateSplit(data: FormSchema): SplitSchema {
       }
     }
 
-    return createNewEater(eater)
+    return createNewEater(eater.name)
   })
 
   items.forEach((item) => {
     const share = item.price / item.eaters.length
-    item.eaters.forEach((name) => {
-      const eater = eaters[findEaterIndexByName(eaters, name)]
-      eater.subtotal += share
-      eater.items.push(item.name)
+    item.eaters.forEach((eater) => {
+      const eaterIndex = findEaterIndexByName(eaters, eater.name)
+      eaters[eaterIndex].subtotal += share
+      eaters[eaterIndex].items.push({ name: item.name })
     })
   })
 

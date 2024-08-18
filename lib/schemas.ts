@@ -13,9 +13,9 @@ const dollarAmountSchema = z.coerce
 const percentageSchema = z.coerce.number().positive()
 
 const uniqueNameArraySchema = z
-  .array(nameSchema)
+  .array(z.object({ name: nameSchema }))
   .min(1, "At least one eater is required")
-  .refine((arr) => uniqueArray(arr), {
+  .refine((arr) => uniqueArray(arr.map((item) => item.name)), {
     message: "Names must be unique"
   })
 
@@ -61,7 +61,7 @@ export const formSchema = baseSchema
   })
   .refine(({ items, eaters }) => {
     return items.every((item) =>
-      item.eaters.every((eater) => eaters.includes(eater))
+      item.eaters.every((eater) => eaters.some((e) => e.name === eater.name))
     )
   })
   .refine(
@@ -81,7 +81,7 @@ export const splitSchema = baseSchema
   .refine(
     ({ items, eaters }) =>
       items.every((item) =>
-        item.eaters.every((eater) => eaters.some((e) => e.name === eater))
+        item.eaters.every((eater) => eaters.some((e) => e.name === eater.name))
       ),
     {
       message: "All eaters must be present in the 'eaters' array.",
@@ -90,7 +90,9 @@ export const splitSchema = baseSchema
   )
   .refine(
     ({ items, eaters }) => {
-      const itemEaters = new Set(items.flatMap((item) => item.eaters))
+      const itemEaters = new Set(
+        items.flatMap((item) => item.eaters.map((e) => e.name))
+      )
       return eaters.every((eater) => itemEaters.has(eater.name))
     },
     {

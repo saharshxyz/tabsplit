@@ -83,7 +83,7 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
                     ) : (
                       <User className="mr-2 hidden h-4 w-4 sm:inline-block" />
                     )}
-                    {item.eaters.join(", ")}
+                    {item.eaters.map((eater) => eater.name).join(", ")}
                   </div>
                 </TableCell>
                 <TableCell className="py-2 pl-0 text-right">
@@ -140,7 +140,9 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
                   </Avatar>
                   <div>
                     <CardTitle className="text-xl">{eater.name}</CardTitle>
-                    <CardDescription>{eater.items.join(", ")}</CardDescription>
+                    <CardDescription>
+                      {eater.items.map((item) => item.name).join(", ")}
+                    </CardDescription>
                   </div>
                 </div>
               </CardHeader>

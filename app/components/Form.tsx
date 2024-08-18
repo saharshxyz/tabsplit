@@ -1,8 +1,9 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useFieldArray } from "react-hook-form"
+import { useForm, useFieldArray, useWatch } from "react-hook-form"
 import { z } from "zod"
+import { useEffect, useMemo, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -34,6 +35,60 @@ export function SplittingForm() {
     }
   })
 
+  const {
+    fields: eaterFields,
+    append: appendEater,
+    remove: removeEater
+  } = useFieldArray({
+    control: form.control,
+    name: "eaters"
+  })
+
+  const {
+    fields: itemFields,
+    append: appendItem,
+    remove: removeItem,
+    update: updateItem
+  } = useFieldArray({
+    control: form.control,
+    name: "items"
+  })
+
+  const watchedEaters = useWatch({
+    control: form.control,
+    name: "eaters"
+  })
+
+  const validEaters = useMemo(
+    () => watchedEaters.filter((eater) => eater.name.trim() !== ""),
+    [watchedEaters]
+  )
+
+  const previousValidEatersRef = useRef(validEaters)
+
+  useEffect(() => {
+    if (
+      JSON.stringify(previousValidEatersRef.current) !==
+      JSON.stringify(validEaters)
+    ) {
+      itemFields.forEach((item, index) => {
+        const updatedEaters = item.eaters.filter((eater) =>
+          validEaters.some((validEater) => validEater.name === eater.name)
+        )
+        if (JSON.stringify(updatedEaters) !== JSON.stringify(item.eaters)) {
+          updateItem(index, { ...item, eaters: updatedEaters })
+        }
+      })
+      previousValidEatersRef.current = validEaters
+    }
+  }, [validEaters, itemFields, updateItem])
+
+  useEffect(() => {
+    if (eaterFields.length > 1) {
+      form.trigger("eaters")
+    }
+  }, [eaterFields, form])
+
   const onSubmit = async (values: FormSchema) => {
     try {
       const validatedData = await formSchema.parseAsync(values)
@@ -54,15 +109,6 @@ export function SplittingForm() {
       }
     }
   }
-
-  const {
-    fields: itemFields,
-    append: appendItem,
-    remove: removeItem
-  } = useFieldArray({
-    control: form.control,
-    name: "items"
-  })
 
   return (
     <Form {...form}>
@@ -91,7 +137,7 @@ export function SplittingForm() {
                 <FormControl>
                   <Input
                     type="number"
-                    step="1"
+                    step="0.01"
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
                   />
@@ -129,7 +175,7 @@ export function SplittingForm() {
                 <FormControl>
                   <Input
                     type="number"
-                    step="1"
+                    step="0.01"
                     placeholder="Enter tip amount"
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
@@ -143,38 +189,30 @@ export function SplittingForm() {
         <div>
           <FormLabel>Eaters</FormLabel>
           <div className="space-y-2">
-            {form.watch("eaters").map((eater, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <FormItem className="mb-0 flex-grow">
-                  <FormControl>
-                    <Input
-                      value={eater}
-                      onChange={(e) => {
-                        const newEaters = [...form.getValues("eaters")]
-                        newEaters[index] = e.target.value
-                        form.setValue("eaters", newEaters)
-                        form.trigger("eaters")
-                      }}
-                      placeholder="Eater's name"
-                    />
-                  </FormControl>
-                  {form.formState.errors.eaters &&
-                    Array.isArray(form.formState.errors.eaters) &&
-                    form.formState.errors.eaters[index] && (
-                      <FormMessage>
-                        {form.formState.errors.eaters[index]?.message}
-                      </FormMessage>
-                    )}
-                </FormItem>
+            {eaterFields.map((field, index) => (
+              <div key={field.id} className="flex items-center gap-2">
+                <FormField
+                  control={form.control}
+                  name={`eaters.${index}.name`}
+                  render={({ field }) => (
+                    <FormItem className="mb-0 flex-grow">
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Eater's name"
+                          onChange={(e) => {
+                            field.onChange(e)
+                            form.trigger("eaters")
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <Button
                   type="button"
-                  onClick={() => {
-                    const newEaters = form
-                      .getValues("eaters")
-                      .filter((_, i) => i !== index)
-                    form.setValue("eaters", newEaters)
-                    form.trigger("eaters")
-                  }}
+                  onClick={() => removeEater(index)}
                   className="h-10 w-10 p-1"
                   variant="ghost"
                 >
@@ -183,18 +221,12 @@ export function SplittingForm() {
               </div>
             ))}
           </div>
-          {form.formState.errors.eaters &&
-            !Array.isArray(form.formState.errors.eaters) && (
-              <FormMessage className="mt-2">
-                {form.formState.errors.eaters.message}
-              </FormMessage>
-            )}
+          <FormMessage className="mt-1">
+            {form.formState.errors.eaters?.root?.message}
+          </FormMessage>
           <Button
             type="button"
-            onClick={() => {
-              form.setValue("eaters", [...form.getValues("eaters"), ""])
-              form.trigger("eaters")
-            }}
+            onClick={() => appendEater({ name: "" })}
             className="mt-2 w-full"
             variant="secondary"
           >
@@ -215,17 +247,13 @@ export function SplittingForm() {
                     <FormField
                       control={form.control}
                       name={`items.${index}.name`}
-                      render={({ field, fieldState }) => (
+                      render={({ field }) => (
                         <FormItem className="flex-grow">
                           <FormLabel>Item Name</FormLabel>
                           <FormControl>
                             <Input {...field} placeholder="Item name" />
                           </FormControl>
-                          {fieldState.error && (
-                            <FormMessage>
-                              {fieldState.error.message}
-                            </FormMessage>
-                          )}
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -238,7 +266,7 @@ export function SplittingForm() {
                           <FormControl>
                             <Input
                               type="number"
-                              step="1"
+                              step="0.01"
                               placeholder="Price"
                               {...field}
                               onChange={(e) =>
@@ -271,27 +299,35 @@ export function SplittingForm() {
                           </FormDescription>
                         </div>
                         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-                          {form.watch("eaters").map((eater, eaterIndex) => (
+                          {validEaters.map((eater) => (
                             <FormItem
-                              key={eaterIndex}
+                              key={eater.name}
                               className="flex flex-row items-start space-x-3 space-y-0"
                             >
                               <FormControl>
                                 <Checkbox
-                                  checked={field.value?.includes(eater)}
+                                  checked={field.value?.some(
+                                    (e) => e.name === eater.name
+                                  )}
                                   onCheckedChange={(checked) => {
-                                    const updatedEaters = checked
-                                      ? [...(field.value || []), eater]
-                                      : (field.value || []).filter(
-                                          (value) => value !== eater
-                                        )
+                                    const currentEaters = field.value || []
+                                    let updatedEaters
+                                    if (checked) {
+                                      updatedEaters = [
+                                        ...currentEaters,
+                                        { name: eater.name }
+                                      ]
+                                    } else {
+                                      updatedEaters = currentEaters.filter(
+                                        (e) => e.name !== eater.name
+                                      )
+                                    }
                                     field.onChange(updatedEaters)
-                                    form.trigger(`items.${index}.eaters`)
                                   }}
                                 />
                               </FormControl>
                               <FormLabel className="font-normal">
-                                {eater}
+                                {eater.name}
                               </FormLabel>
                             </FormItem>
                           ))}
@@ -316,17 +352,15 @@ export function SplittingForm() {
           <FormField
             control={form.control}
             name="items"
-            render={({ field, fieldState }) => {
-              return (
-                <div className="px-6 pb-4">
-                  {fieldState.error?.root?.message && (
-                    <p className="font-medium text-destructive">
-                      {fieldState.error.root.message}
-                    </p>
-                  )}
-                </div>
-              )
-            }}
+            render={({ fieldState }) => (
+              <div className="px-6 pb-4">
+                {fieldState.error?.root?.message && (
+                  <p className="font-medium text-destructive">
+                    {fieldState.error.root.message}
+                  </p>
+                )}
+              </div>
+            )}
           />
         </Card>
 

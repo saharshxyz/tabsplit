@@ -13,11 +13,11 @@ describe("calculateSplit", () => {
         {
           name: "Pizza",
           price: 20.0,
-          eaters: ["Alice", "Bob"]
+          eaters: [{ name: "Alice" }, { name: "Bob" }]
         },
-        { name: "Salad", price: 10.0, eaters: ["Charlie"] }
+        { name: "Salad", price: 10.0, eaters: [{ name: "Charlie" }] }
       ],
-      eaters: ["Alice", "Bob", "Charlie"]
+      eaters: [{ name: "Alice" }, { name: "Bob" }, { name: "Charlie" }]
     }
 
     const parseResult = formSchema.safeParse(inputData)
@@ -47,30 +47,51 @@ describe("calculateSplit", () => {
         {
           name: "Large French Fries",
           price: 7.49,
-          eaters: ["Vincent", "Kyle", "Samuel", "Adam"]
+          eaters: [
+            { name: "Vincent" },
+            { name: "Kyle" },
+            { name: "Samuel" },
+            { name: "Adam" }
+          ]
         },
         {
           name: "30 Traditional Wings",
           price: 40.99,
-          eaters: ["Vincent", "Kyle", "Samuel", "Adam"]
+          eaters: [
+            { name: "Vincent" },
+            { name: "Kyle" },
+            { name: "Samuel" },
+            { name: "Adam" }
+          ]
         },
         {
           name: "10 Traditional Wings",
           price: 15.99,
-          eaters: ["Karen"]
+          eaters: [{ name: "Karen" }]
         },
         {
           name: "Michelob Ultra (2x)",
           price: 13.5,
-          eaters: ["Adam", "Kyle"]
+          eaters: [{ name: "Adam" }, { name: "Kyle" }]
         },
         {
           name: "20 Traditional Wings",
           price: 28.49,
-          eaters: ["Vincent", "Kyle", "Samuel", "Adam"]
+          eaters: [
+            { name: "Vincent" },
+            { name: "Kyle" },
+            { name: "Samuel" },
+            { name: "Adam" }
+          ]
         }
       ],
-      eaters: ["Vincent", "Karen", "Samuel", "Adam", "Kyle"]
+      eaters: [
+        { name: "Vincent" },
+        { name: "Karen" },
+        { name: "Samuel" },
+        { name: "Adam" },
+        { name: "Kyle" }
+      ]
     }
 
     const parseResult = formSchema.safeParse(input)
