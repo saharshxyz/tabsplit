@@ -68,15 +68,15 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
           <TableHeader>
             <TableRow>
               <TableHead>Item</TableHead>
-              <TableHead className="text-center">Eaters</TableHead>
-              <TableHead className="text-right">Price</TableHead>
+              <TableHead className="w-full text-right">Eaters</TableHead>
+              <TableHead className="w-24 text-right">Price</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {splitResult.items.map((item, index) => (
               <TableRow key={index} className="border-0 leading-tight">
                 <TableCell className="py-2">{item.name}</TableCell>
-                <TableCell className="py-2 text-right">
+                <TableCell className="w-full py-2 text-right">
                   <div className="flex items-center justify-end">
                     {item.eaters.length > 1 ? (
                       <Users className="mr-2 hidden h-4 w-4 sm:inline-block" />
@@ -86,7 +86,7 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
                     {item.eaters.map((eater) => eater.name).join(", ")}
                   </div>
                 </TableCell>
-                <TableCell className="py-2 pl-0 text-right">
+                <TableCell className="w-24 py-2 pl-0 text-right">
                   ${item.price.toFixed(2)}
                 </TableCell>
               </TableRow>

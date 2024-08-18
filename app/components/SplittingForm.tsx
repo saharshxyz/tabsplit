@@ -22,6 +22,7 @@ import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
 import { formSchema, FormSchema } from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 interface EaterPlaceholder {
   name: string
@@ -82,6 +83,7 @@ const getRandomItemName = () => {
 }
 
 export function SplittingForm() {
+  const router = useRouter()
   const searchParams = useSearchParams()
 
   const parseUrlData = () => {
@@ -231,26 +233,42 @@ export function SplittingForm() {
     appendItem({ name: "", price: 0, eaters: [] })
   }, [appendItem, generateItemPlaceholder])
 
-  const onSubmit = async (values: FormSchema) => {
-    try {
-      const validatedData = await formSchema.parseAsync(values)
-      console.log(validatedData)
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        console.error("Validation error:", error.errors)
-        error.errors.forEach((err) => {
-          if (err.path.length > 0) {
-            form.setError(err.path as any, {
-              type: "manual",
-              message: err.message
-            })
-          }
-        })
-      } else {
-        console.error("An unexpected error occurred:", error)
-      }
-    }
-  }
+  const updateUrl = useCallback(
+    (data: FormSchema) => {
+      const params = new URLSearchParams()
+      params.set("checkName", data.checkName || "")
+      params.set("taxAmount", data.taxAmount?.toString() || "")
+      params.set("tipBeforeTax", data.tipBeforeTax ? "true" : "false")
+      params.set("tipAmount", data.tipAmount?.toString() || "")
+      params.set("eaters", JSON.stringify(data.eaters))
+      params.set("items", JSON.stringify(data.items))
+
+      router.push(`?${params.toString()}`, { scroll: false })
+    },
+    [router]
+  )
+
+  useEffect(() => {
+    const subscription = form.watch((data) => {
+      updateUrl(data as FormSchema)
+    })
+    return () => subscription.unsubscribe()
+  }, [form, updateUrl])
+
+  const onSubmit = useCallback(
+    (values: FormSchema) => {
+      const params = new URLSearchParams()
+      params.set("checkName", values.checkName || "")
+      params.set("taxAmount", values.taxAmount?.toString() || "")
+      params.set("tipBeforeTax", values.tipBeforeTax ? "true" : "false")
+      params.set("tipAmount", values.tipAmount?.toString() || "")
+      params.set("eaters", JSON.stringify(values.eaters))
+      params.set("items", JSON.stringify(values.items))
+
+      router.push(`/split?${params.toString()}`)
+    },
+    [router]
+  )
 
   return (
     <Form {...form}>
@@ -521,8 +539,9 @@ export function SplittingForm() {
             )}
           />
         </Card>
-
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-end">
+          <Button type="submit">Submit</Button>
+        </div>
       </form>
     </Form>
   )
