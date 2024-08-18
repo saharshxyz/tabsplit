@@ -5,7 +5,13 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -65,9 +71,9 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
                 <TableCell className="py-2 text-right">
                   <div className="flex items-center justify-end">
                     {item.eaters.length > 1 ? (
-                      <Users className="mr-2 h-4 w-4" />
+                      <Users className="mr-2 h-4 w-4 sm:hidden" />
                     ) : (
-                      <User className="mr-2 h-4 w-4" />
+                      <User className="mr-2 h-4 w-4 sm:hidden" />
                     )}
                     {item.eaters.join(", ")}
                   </div>
