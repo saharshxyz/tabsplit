@@ -1,6 +1,6 @@
-import { calculateSplit } from "@/lib/calculateSplit";
-import { formSchema, splitSchema } from "@/lib/schemas";
-import { logZodErrors } from "@/lib/utils";
+import { calculateSplit } from "@/lib/calculateSplit"
+import { formSchema, splitSchema } from "@/lib/schemas"
+import { logZodErrors } from "@/lib/utils"
 
 describe("calculateSplit", () => {
   it("should accept valid input and produce correctly formatted output", () => {
@@ -13,29 +13,29 @@ describe("calculateSplit", () => {
         {
           name: "Pizza",
           price: 20.0,
-          eaters: ["Alice", "Bob"],
+          eaters: ["Alice", "Bob"]
         },
-        { name: "Salad", price: 10.0, eaters: ["Charlie"] },
+        { name: "Salad", price: 10.0, eaters: ["Charlie"] }
       ],
-      eaters: ["Alice", "Bob", "Charlie"],
-    };
-
-    const parseResult = formSchema.safeParse(inputData);
-    if (!parseResult.success) {
-      logZodErrors(parseResult.error, "FormSchema");
+      eaters: ["Alice", "Bob", "Charlie"]
     }
-    expect(parseResult.success).toBe(true);
+
+    const parseResult = formSchema.safeParse(inputData)
+    if (!parseResult.success) {
+      logZodErrors(parseResult.error, "FormSchema")
+    }
+    expect(parseResult.success).toBe(true)
 
     if (parseResult.success) {
-      const result = calculateSplit(parseResult.data);
+      const result = calculateSplit(parseResult.data)
 
-      const splitParseResult = splitSchema.safeParse(result);
+      const splitParseResult = splitSchema.safeParse(result)
       if (!splitParseResult.success) {
-        logZodErrors(splitParseResult.error, "SplitSchema");
+        logZodErrors(splitParseResult.error, "SplitSchema")
       }
-      expect(splitParseResult.success).toBe(true);
+      expect(splitParseResult.success).toBe(true)
     }
-  });
+  })
 
   it("should correctly calculate the split for a given order", () => {
     const input = {
@@ -47,76 +47,76 @@ describe("calculateSplit", () => {
         {
           name: "Large French Fries",
           price: 7.49,
-          eaters: ["Vincent", "Kyle", "Samuel", "Adam"],
+          eaters: ["Vincent", "Kyle", "Samuel", "Adam"]
         },
         {
           name: "30 Traditional Wings",
           price: 40.99,
-          eaters: ["Vincent", "Kyle", "Samuel", "Adam"],
+          eaters: ["Vincent", "Kyle", "Samuel", "Adam"]
         },
         {
           name: "10 Traditional Wings",
           price: 15.99,
-          eaters: ["Karen"],
+          eaters: ["Karen"]
         },
         {
           name: "Michelob Ultra (2x)",
           price: 13.5,
-          eaters: ["Adam", "Kyle"],
+          eaters: ["Adam", "Kyle"]
         },
         {
           name: "20 Traditional Wings",
           price: 28.49,
-          eaters: ["Vincent", "Kyle", "Samuel", "Adam"],
-        },
+          eaters: ["Vincent", "Kyle", "Samuel", "Adam"]
+        }
       ],
-      eaters: ["Vincent", "Karen", "Samuel", "Adam", "Kyle"],
-    };
-
-    const parseResult = formSchema.safeParse(input);
-    if (!parseResult.success) {
-      logZodErrors(parseResult.error, "FormSchema");
+      eaters: ["Vincent", "Karen", "Samuel", "Adam", "Kyle"]
     }
-    expect(parseResult.success).toBe(true);
+
+    const parseResult = formSchema.safeParse(input)
+    if (!parseResult.success) {
+      logZodErrors(parseResult.error, "FormSchema")
+    }
+    expect(parseResult.success).toBe(true)
 
     if (parseResult.success) {
-      const split = calculateSplit(parseResult.data);
+      const split = calculateSplit(parseResult.data)
 
-      const splitParseResult = splitSchema.safeParse(split);
+      const splitParseResult = splitSchema.safeParse(split)
       if (!splitParseResult.success) {
-        logZodErrors(splitParseResult.error, "SplitSchema");
+        logZodErrors(splitParseResult.error, "SplitSchema")
       }
-      expect(splitParseResult.success).toBe(true);
+      expect(splitParseResult.success).toBe(true)
 
       if (splitParseResult.success) {
-        expect(split.checkName).toBe(input.checkName);
-        expect(split.taxPercentage).toBeCloseTo(7, 1);
-        expect(split.taxAmount).toBe(input.taxAmount);
-        expect(split.tipPercentage).toBeGreaterThanOrEqual(15);
-        expect(split.tipPercentage).toBeLessThanOrEqual(20);
-        expect(split.tipAmount).toBe(input.tipAmount);
+        expect(split.checkName).toBe(input.checkName)
+        expect(split.taxPercentage).toBeCloseTo(7, 1)
+        expect(split.taxAmount).toBe(input.taxAmount)
+        expect(split.tipPercentage).toBeGreaterThanOrEqual(15)
+        expect(split.tipPercentage).toBeLessThanOrEqual(20)
+        expect(split.tipAmount).toBe(input.tipAmount)
 
         const eatersByName = split.eaters.reduce(
           (acc, eater) => {
-            acc[eater.name] = eater;
-            return acc;
+            acc[eater.name] = eater
+            return acc
           },
-          {} as Record<string, (typeof split.eaters)[0]>,
-        );
+          {} as Record<string, (typeof split.eaters)[0]>
+        )
 
         const [karen, samuel, adam, vincent, kyle] = [
           "Karen",
           "Samuel",
           "Adam",
           "Vincent",
-          "Kyle",
-        ].map((name) => split.eaters.find((e) => e.name === name)!);
+          "Kyle"
+        ].map((name) => split.eaters.find((e) => e.name === name)!)
 
-        expect(karen.total).toBeLessThan(20);
-        expect(adam.total).toBeCloseTo(kyle.total);
-        expect(samuel.total).toBeCloseTo(vincent.total);
-        expect(samuel.total).toBeLessThan(adam.total);
+        expect(karen.total).toBeLessThan(20)
+        expect(adam.total).toBeCloseTo(kyle.total)
+        expect(samuel.total).toBeCloseTo(vincent.total)
+        expect(samuel.total).toBeLessThan(adam.total)
       }
     }
-  });
-});
+  })
+})

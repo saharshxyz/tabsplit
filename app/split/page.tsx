@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
-import { Button } from "@/components/ui/button";
-import { PenSquare } from "lucide-react";
-import { LoadingDisplay } from "./components/LoadingDisplay";
+import { Suspense } from "react"
+import dynamic from "next/dynamic"
+import { Button } from "@/components/ui/button"
+import { PenSquare } from "lucide-react"
+import { LoadingDisplay } from "./components/LoadingDisplay"
 
 const DynamicSplitContent = dynamic(
   () => import("./components/SplitComponent"),
   {
-    ssr: false,
-  },
-);
+    ssr: false
+  }
+)
 
 export default function Split() {
   return (
@@ -26,5 +26,5 @@ export default function Split() {
         <DynamicSplitContent />
       </Suspense>
     </main>
-  );
+  )
 }

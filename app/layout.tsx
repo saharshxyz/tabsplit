@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "@/styles/globals.css";
-import { generateMetadata } from "@/lib/generateMetadata";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "@/styles/globals.css"
+import { generateMetadata } from "@/lib/generateMetadata"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
-export const metadata: Metadata = generateMetadata();
+export const metadata: Metadata = generateMetadata()
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" className={inter.className}>
@@ -31,5 +31,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  );
+  )
 }

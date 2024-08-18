@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { SplittingForm } from "./components/Form";
+import { Card, CardContent } from "@/components/ui/card"
+import { SplittingForm } from "./components/Form"
 
 export default function Home() {
   return (
@@ -10,5 +10,5 @@ export default function Home() {
         </CardContent>
       </Card>
     </main>
-  );
+  )
 }

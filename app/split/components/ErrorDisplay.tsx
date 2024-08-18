@@ -1,7 +1,7 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
 interface ErrorDisplayProps {
-  error: string;
+  error: string
 }
 
 export const ErrorDisplay = ({ error }: ErrorDisplayProps) => (
@@ -19,4 +19,4 @@ export const ErrorDisplay = ({ error }: ErrorDisplayProps) => (
       </pre>
     </CardContent>
   </Card>
-);
+)

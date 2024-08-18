@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from "next"
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,19 +6,19 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: "/private/",
+        disallow: "/private/"
       },
       {
         userAgent: "*",
         allow: "/api/og/*",
-        disallow: "/private/",
+        disallow: "/private/"
       },
       {
         userAgent: "*",
         allow: "/api/og/",
-        disallow: "/private/",
-      },
+        disallow: "/private/"
+      }
     ],
-    sitemap: "https://acme.com/sitemap.xml",
-  };
+    sitemap: "https://acme.com/sitemap.xml"
+  }
 }

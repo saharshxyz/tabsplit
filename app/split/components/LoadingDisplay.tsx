@@ -3,11 +3,11 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { RefreshCcw } from "lucide-react";
+  CardFooter
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
+import { RefreshCcw } from "lucide-react"
 
 export const LoadingDisplay = () => (
   <Card className="m-4">
@@ -30,4 +30,4 @@ export const LoadingDisplay = () => (
       </Button>
     </CardFooter>
   </Card>
-);
+)

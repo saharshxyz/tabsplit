@@ -3,32 +3,32 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+  CardContent
+} from "@/components/ui/card"
 import {
   Table,
   TableHeader,
   TableHead,
   TableBody,
   TableCell,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+  TableRow
+} from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ExternalLink, Users, User } from "lucide-react";
-import { SplitSchema } from "@/lib/schemas";
+  TooltipTrigger
+} from "@/components/ui/tooltip"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { ExternalLink, Users, User } from "lucide-react"
+import { SplitSchema } from "@/lib/schemas"
 
 interface SplitDisplayProps {
-  splitResult: SplitSchema;
-  onCopyUrl: () => void;
+  splitResult: SplitSchema
+  onCopyUrl: () => void
 }
 
 export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
@@ -180,4 +180,4 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
       </div>
     </CardContent>
   </Card>
-);
+)

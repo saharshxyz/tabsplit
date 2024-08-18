@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useFieldArray } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm, useFieldArray } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -12,14 +12,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
-} from "@/components/ui/form";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
-import { formSchema, FormSchema } from "@/lib/schemas";
-import { PlusIcon, X } from "lucide-react";
+  FormDescription
+} from "@/components/ui/form"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
+import { Checkbox } from "@/components/ui/checkbox"
+import { formSchema, FormSchema } from "@/lib/schemas"
+import { PlusIcon, X } from "lucide-react"
 
 export function SplittingForm() {
   const form = useForm<FormSchema>({
@@ -30,39 +30,39 @@ export function SplittingForm() {
       tipBeforeTax: true,
       tipAmount: 0,
       eaters: [],
-      items: [],
-    },
-  });
+      items: []
+    }
+  })
 
   const onSubmit = async (values: FormSchema) => {
     try {
-      const validatedData = await formSchema.parseAsync(values);
-      console.log(validatedData);
+      const validatedData = await formSchema.parseAsync(values)
+      console.log(validatedData)
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error("Validation error:", error.errors);
+        console.error("Validation error:", error.errors)
         error.errors.forEach((err) => {
           if (err.path.length > 0) {
             form.setError(err.path as any, {
               type: "manual",
-              message: err.message,
-            });
+              message: err.message
+            })
           }
-        });
+        })
       } else {
-        console.error("An unexpected error occurred:", error);
+        console.error("An unexpected error occurred:", error)
       }
     }
-  };
+  }
 
   const {
     fields: itemFields,
     append: appendItem,
-    remove: removeItem,
+    remove: removeItem
   } = useFieldArray({
     control: form.control,
-    name: "items",
-  });
+    name: "items"
+  })
 
   return (
     <Form {...form}>
@@ -150,10 +150,10 @@ export function SplittingForm() {
                     <Input
                       value={eater}
                       onChange={(e) => {
-                        const newEaters = [...form.getValues("eaters")];
-                        newEaters[index] = e.target.value;
-                        form.setValue("eaters", newEaters);
-                        form.trigger("eaters");
+                        const newEaters = [...form.getValues("eaters")]
+                        newEaters[index] = e.target.value
+                        form.setValue("eaters", newEaters)
+                        form.trigger("eaters")
                       }}
                       placeholder="Eater's name"
                     />
@@ -171,9 +171,9 @@ export function SplittingForm() {
                   onClick={() => {
                     const newEaters = form
                       .getValues("eaters")
-                      .filter((_, i) => i !== index);
-                    form.setValue("eaters", newEaters);
-                    form.trigger("eaters");
+                      .filter((_, i) => i !== index)
+                    form.setValue("eaters", newEaters)
+                    form.trigger("eaters")
                   }}
                   className="h-10 w-10 p-1"
                   variant="ghost"
@@ -192,8 +192,8 @@ export function SplittingForm() {
           <Button
             type="button"
             onClick={() => {
-              form.setValue("eaters", [...form.getValues("eaters"), ""]);
-              form.trigger("eaters");
+              form.setValue("eaters", [...form.getValues("eaters"), ""])
+              form.trigger("eaters")
             }}
             className="mt-2 w-full"
             variant="secondary"
@@ -283,10 +283,10 @@ export function SplittingForm() {
                                     const updatedEaters = checked
                                       ? [...(field.value || []), eater]
                                       : (field.value || []).filter(
-                                          (value) => value !== eater,
-                                        );
-                                    field.onChange(updatedEaters);
-                                    form.trigger(`items.${index}.eaters`);
+                                          (value) => value !== eater
+                                        )
+                                    field.onChange(updatedEaters)
+                                    form.trigger(`items.${index}.eaters`)
                                   }}
                                 />
                               </FormControl>
@@ -325,7 +325,7 @@ export function SplittingForm() {
                     </p>
                   )}
                 </div>
-              );
+              )
             }}
           />
         </Card>
@@ -333,5 +333,5 @@ export function SplittingForm() {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  );
+  )
 }
