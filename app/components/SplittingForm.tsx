@@ -3,7 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray, useWatch } from "react-hook-form"
 import { z } from "zod"
-import { useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef, useState, useCallback } from "react"
+import { useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -22,16 +23,127 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { formSchema, FormSchema } from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
 
+interface EaterPlaceholder {
+  name: string
+}
+
+interface ItemPlaceholder {
+  name: string
+  price: string
+}
+
+const getRandomAmount = (upperLimit: number) =>
+  (Math.random() * upperLimit + 5).toFixed(2)
+
+const getRandomName = () => {
+  const names = [
+    "Alex",
+    "Sam",
+    "Jordan",
+    "Taylor",
+    "Casey",
+    "Morgan",
+    "Riley",
+    "Jamie",
+    "Quinn",
+    "Avery"
+  ]
+  return names[Math.floor(Math.random() * names.length)]
+}
+
+const getRandomCheckName = () => {
+  const restaurants = [
+    "Pizzeria",
+    "Sushi Bar",
+    "Cafe",
+    "Steakhouse",
+    "Bistro",
+    "Diner",
+    "Taco Place",
+    "Burger Joint"
+  ]
+  return `Dinner at ${restaurants[Math.floor(Math.random() * restaurants.length)]}`
+}
+
+const getRandomItemName = () => {
+  const items = [
+    "Pizza",
+    "Salad",
+    "Burger",
+    "Pasta",
+    "Sushi",
+    "Steak",
+    "Sandwich",
+    "Soup",
+    "Fries",
+    "Dessert"
+  ]
+  return items[Math.floor(Math.random() * items.length)]
+}
+
 export function SplittingForm() {
+  const searchParams = useSearchParams()
+
+  const parseUrlData = () => {
+    const checkName = searchParams.get("checkName") || ""
+    const taxAmount = parseFloat(searchParams.get("taxAmount") || "0")
+    const tipBeforeTax = searchParams.get("tipBeforeTax") === "true"
+    const tipAmount = parseFloat(searchParams.get("tipAmount") || "0")
+
+    let eaters = []
+    try {
+      eaters = JSON.parse(searchParams.get("eaters") || "[]")
+    } catch (e) {
+      console.error("Failed to parse eaters from URL")
+    }
+
+    let items = []
+    try {
+      items = JSON.parse(searchParams.get("items") || "[]")
+    } catch (e) {
+      console.error("Failed to parse items from URL")
+    }
+
+    return {
+      checkName,
+      taxAmount,
+      tipBeforeTax,
+      tipAmount,
+      eaters,
+      items
+    }
+  }
+
+  const urlData = parseUrlData()
+
+  const [eaterPlaceholders, setEaterPlaceholders] = useState<
+    EaterPlaceholder[]
+  >([])
+  const [itemPlaceholders, setItemPlaceholders] = useState<ItemPlaceholder[]>(
+    []
+  )
+
+  const randomPlaceholders = useMemo(
+    () => ({
+      checkName: getRandomCheckName(),
+      taxAmount: getRandomAmount(23),
+      tipAmount: getRandomAmount(40),
+      eaterName: getRandomName(),
+      itemName: getRandomItemName(),
+      itemPrice: getRandomAmount(30)
+    }),
+    []
+  )
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      checkName: "",
-      taxAmount: 0,
-      tipBeforeTax: true,
-      tipAmount: 0,
-      eaters: [],
-      items: []
+      checkName: urlData.checkName,
+      taxAmount: urlData.taxAmount,
+      tipBeforeTax: urlData.tipBeforeTax,
+      tipAmount: urlData.tipAmount,
+      eaters: urlData.eaters,
+      items: urlData.items
     }
   })
 
@@ -60,7 +172,10 @@ export function SplittingForm() {
   })
 
   const validEaters = useMemo(
-    () => watchedEaters.filter((eater) => eater.name.trim() !== ""),
+    () =>
+      watchedEaters.filter(
+        (eater) => typeof eater.name === "string" && eater.name.trim() !== ""
+      ),
     [watchedEaters]
   )
 
@@ -88,6 +203,33 @@ export function SplittingForm() {
       form.trigger("eaters")
     }
   }, [eaterFields, form])
+
+  const generateEaterPlaceholder = useCallback(
+    (): EaterPlaceholder => ({
+      name: getRandomName()
+    }),
+    []
+  )
+
+  const generateItemPlaceholder = useCallback(
+    (): ItemPlaceholder => ({
+      name: getRandomItemName(),
+      price: getRandomAmount(30)
+    }),
+    []
+  )
+
+  const appendEaterWithPlaceholder = useCallback(() => {
+    const newPlaceholder = generateEaterPlaceholder()
+    setEaterPlaceholders((prev) => [...prev, newPlaceholder])
+    appendEater({ name: "" })
+  }, [appendEater, generateEaterPlaceholder])
+
+  const appendItemWithPlaceholder = useCallback(() => {
+    const newPlaceholder = generateItemPlaceholder()
+    setItemPlaceholders((prev) => [...prev, newPlaceholder])
+    appendItem({ name: "", price: 0, eaters: [] })
+  }, [appendItem, generateItemPlaceholder])
 
   const onSubmit = async (values: FormSchema) => {
     try {
@@ -121,7 +263,10 @@ export function SplittingForm() {
               <FormItem className="w-full">
                 <FormLabel>Check Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Dinner at Restaurant" {...field} />
+                  <Input
+                    placeholder={randomPlaceholders.checkName}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -139,6 +284,7 @@ export function SplittingForm() {
                     type="number"
                     step="0.01"
                     {...field}
+                    placeholder={randomPlaceholders.taxAmount}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
                   />
                 </FormControl>
@@ -176,7 +322,7 @@ export function SplittingForm() {
                   <Input
                     type="number"
                     step="0.01"
-                    placeholder="Enter tip amount"
+                    placeholder={randomPlaceholders.tipAmount}
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
                   />
@@ -199,7 +345,10 @@ export function SplittingForm() {
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="Eater's name"
+                          placeholder={
+                            eaterPlaceholders[index]?.name ||
+                            randomPlaceholders.eaterName
+                          }
                           onChange={(e) => {
                             field.onChange(e)
                             form.trigger("eaters")
@@ -226,7 +375,7 @@ export function SplittingForm() {
           </FormMessage>
           <Button
             type="button"
-            onClick={() => appendEater({ name: "" })}
+            onClick={appendEaterWithPlaceholder}
             className="mt-2 w-full"
             variant="secondary"
           >
@@ -251,7 +400,13 @@ export function SplittingForm() {
                         <FormItem className="flex-grow">
                           <FormLabel>Item Name</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="Item name" />
+                            <Input
+                              {...field}
+                              placeholder={
+                                itemPlaceholders[index]?.name ||
+                                randomPlaceholders.itemName
+                              }
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -267,7 +422,10 @@ export function SplittingForm() {
                             <Input
                               type="number"
                               step="0.01"
-                              placeholder="Price"
+                              placeholder={
+                                itemPlaceholders[index]?.price ||
+                                randomPlaceholders.itemPrice
+                              }
                               {...field}
                               onChange={(e) =>
                                 field.onChange(parseFloat(e.target.value))
@@ -341,7 +499,7 @@ export function SplittingForm() {
             ))}
             <Button
               type="button"
-              onClick={() => appendItem({ name: "", price: 0, eaters: [] })}
+              onClick={appendItemWithPlaceholder}
               className="w-full"
               variant="secondary"
             >
