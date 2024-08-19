@@ -2,14 +2,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## TODO
 
-- [] Use Hash Arguments (URL Fragments) instead of Search Params
-- [] Refactor codebase
-- [] Use consistent copy/naming across site (are we going by 'bill' or 'check' or what)
-- [] Create favicon/logo
-- [] Update OG image to use logo
-- [] Share button on form
-- [] Clear form button
-- [] Come up with a way not to have submit form button at bottom as that's inconvenient for longer forms
+- [ ] Use Hash Arguments (URL Fragments) instead of Search Params
+- [ ] Refactor codebase
+- [ ] Use consistent copy/naming across site (are we going by 'bill' or 'check' or what)
+- [ ] Create favicon/logo
+- [ ] Update OG image to use logo
+- [ ] Share button on form
+- [ ] Clear form button
+- [ ] Come up with a way not to have submit form button at bottom as that's inconvenient for longer forms
+- [ ] For the individual splits, display the amount the individual payed for each item in the receipt-like format (so they won't show in the card description but instead as a table row)
 
 Example: [Random bill](https://multisplit.saharsh.xyz/?checkName=Friday+Night+Dinner+at+Gourmet+Fusion&taxAmount=15.75&tipAmount=31.5&tipBeforeTax=true&items=%5B%7B%22name%22%3A%22Truffle+Infused+Risotto%22%2C%22price%22%3A24.99%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Alice%22%7D%2C%7B%22name%22%3A%22Bob%22%7D%2C%7B%22name%22%3A%22Charlie%22%7D%5D%7D%2C%7B%22name%22%3A%22Seared+Ahi+Tuna%22%2C%22price%22%3A28.5%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Diana%22%7D%2C%7B%22name%22%3A%22Eve%22%7D%5D%7D%2C%7B%22name%22%3A%22Wagyu+Beef+Sliders%22%2C%22price%22%3A18.75%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Frank%22%7D%2C%7B%22name%22%3A%22George%22%7D%2C%7B%22name%22%3A%22Hannah%22%7D%5D%7D%2C%7B%22name%22%3A%22Lobster+Mac+and+Cheese%22%2C%22price%22%3A22.99%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Alice%22%7D%2C%7B%22name%22%3A%22Charlie%22%7D%2C%7B%22name%22%3A%22Eve%22%7D%2C%7B%22name%22%3A%22Isaac%22%7D%5D%7D%2C%7B%22name%22%3A%22Grilled+Vegetable+Platter%22%2C%22price%22%3A15.5%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Bob%22%7D%2C%7B%22name%22%3A%22Diana%22%7D%2C%7B%22name%22%3A%22Hannah%22%7D%5D%7D%2C%7B%22name%22%3A%22Artisanal+Cheese+Board%22%2C%22price%22%3A19.99%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Alice%22%7D%2C%7B%22name%22%3A%22Bob%22%7D%2C%7B%22name%22%3A%22Charlie%22%7D%2C%7B%22name%22%3A%22Diana%22%7D%2C%7B%22name%22%3A%22Eve%22%7D%2C%7B%22name%22%3A%22Frank%22%7D%2C%7B%22name%22%3A%22George%22%7D%2C%7B%22name%22%3A%22Hannah%22%7D%2C%7B%22name%22%3A%22Isaac%22%7D%5D%7D%2C%7B%22name%22%3A%22Crispy+Calamari%22%2C%22price%22%3A16.5%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Charlie%22%7D%2C%7B%22name%22%3A%22Frank%22%7D%2C%7B%22name%22%3A%22Isaac%22%7D%5D%7D%2C%7B%22name%22%3A%22Miso+Glazed+Black+Cod%22%2C%22price%22%3A32%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Diana%22%7D%2C%7B%22name%22%3A%22George%22%7D%5D%7D%2C%7B%22name%22%3A%22Truffled+Pommes+Frites%22%2C%22price%22%3A9.99%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Alice%22%7D%2C%7B%22name%22%3A%22Bob%22%7D%2C%7B%22name%22%3A%22Charlie%22%7D%2C%7B%22name%22%3A%22Diana%22%7D%2C%7B%22name%22%3A%22Eve%22%7D%2C%7B%22name%22%3A%22Frank%22%7D%2C%7B%22name%22%3A%22George%22%7D%2C%7B%22name%22%3A%22Hannah%22%7D%2C%7B%22name%22%3A%22Isaac%22%7D%5D%7D%2C%7B%22name%22%3A%22Chocolate+Lava+Cake%22%2C%22price%22%3A11.99%2C%22eaters%22%3A%5B%7B%22name%22%3A%22Alice%22%7D%2C%7B%22name%22%3A%22Eve%22%7D%2C%7B%22name%22%3A%22Hannah%22%7D%2C%7B%22name%22%3A%22Isaac%22%7D%5D%7D%5D&eaters=%5B%7B%22name%22%3A%22Alice%22%7D%2C%7B%22name%22%3A%22Bob%22%7D%2C%7B%22name%22%3A%22Charlie%22%7D%2C%7B%22name%22%3A%22Diana%22%7D%2C%7B%22name%22%3A%22Eve%22%7D%2C%7B%22name%22%3A%22Frank%22%7D%2C%7B%22name%22%3A%22George%22%7D%2C%7B%22name%22%3A%22Hannah%22%7D%2C%7B%22name%22%3A%22Isaac%22%7D%5D)
 
