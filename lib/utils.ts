@@ -104,3 +104,35 @@ export function calculateSplit(data: FormSchema): SplitSchema {
 
   return split
 }
+
+export function parseUrlData(
+  searchParams: URLSearchParams
+): Partial<FormSchema> {
+  const checkName = searchParams.get("checkName") || ""
+  const taxAmount = parseFloat(searchParams.get("taxAmount") || "0")
+  const tipBeforeTax = searchParams.get("tipBeforeTax") === "true"
+  const tipAmount = parseFloat(searchParams.get("tipAmount") || "0")
+
+  let eaters = []
+  try {
+    eaters = JSON.parse(searchParams.get("eaters") || "[]")
+  } catch (e) {
+    console.error("Failed to parse eaters from URL")
+  }
+
+  let items = []
+  try {
+    items = JSON.parse(searchParams.get("items") || "[]")
+  } catch (e) {
+    console.error("Failed to parse items from URL")
+  }
+
+  return {
+    checkName,
+    taxAmount,
+    tipBeforeTax,
+    tipAmount,
+    eaters,
+    items
+  }
+}

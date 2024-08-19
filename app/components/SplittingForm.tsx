@@ -2,8 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray, useWatch } from "react-hook-form"
-import { z } from "zod"
-import { useEffect, useMemo, useRef, useState, useCallback } from "react"
+import { useEffect, useMemo, useRef, useCallback } from "react"
 import { useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
@@ -23,68 +22,19 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { formSchema, FormSchema } from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
-
-interface EaterPlaceholder {
-  name: string
-}
-
-interface ItemPlaceholder {
-  name: string
-  price: string
-}
-
-const getRandomAmount = (upperLimit: number) =>
-  (Math.random() * upperLimit + 5).toFixed(2)
-
-const getRandomName = () => {
-  const names = [
-    "Alex",
-    "Sam",
-    "Jordan",
-    "Taylor",
-    "Casey",
-    "Morgan",
-    "Riley",
-    "Jamie",
-    "Quinn",
-    "Avery"
-  ]
-  return names[Math.floor(Math.random() * names.length)]
-}
-
-const getRandomCheckName = () => {
-  const restaurants = [
-    "Pizzeria",
-    "Sushi Bar",
-    "Cafe",
-    "Steakhouse",
-    "Bistro",
-    "Diner",
-    "Taco Place",
-    "Burger Joint"
-  ]
-  return `Dinner at ${restaurants[Math.floor(Math.random() * restaurants.length)]}`
-}
-
-const getRandomItemName = () => {
-  const items = [
-    "Pizza",
-    "Salad",
-    "Burger",
-    "Pasta",
-    "Sushi",
-    "Steak",
-    "Sandwich",
-    "Soup",
-    "Fries",
-    "Dessert"
-  ]
-  return items[Math.floor(Math.random() * items.length)]
-}
+import { usePlaceholders } from "./hooks/usePlaceholders"
 
 export function SplittingForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  const {
+    randomPlaceholders,
+    eaterPlaceholders,
+    itemPlaceholders,
+    appendEaterPlaceholder,
+    appendItemPlaceholder
+  } = usePlaceholders()
 
   const parseUrlData = () => {
     const checkName = searchParams.get("checkName") || ""
@@ -117,25 +67,6 @@ export function SplittingForm() {
   }
 
   const urlData = parseUrlData()
-
-  const [eaterPlaceholders, setEaterPlaceholders] = useState<
-    EaterPlaceholder[]
-  >([])
-  const [itemPlaceholders, setItemPlaceholders] = useState<ItemPlaceholder[]>(
-    []
-  )
-
-  const randomPlaceholders = useMemo(
-    () => ({
-      checkName: getRandomCheckName(),
-      taxAmount: getRandomAmount(23),
-      tipAmount: getRandomAmount(40),
-      eaterName: getRandomName(),
-      itemName: getRandomItemName(),
-      itemPrice: getRandomAmount(30)
-    }),
-    []
-  )
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -206,32 +137,15 @@ export function SplittingForm() {
     }
   }, [eaterFields, form])
 
-  const generateEaterPlaceholder = useCallback(
-    (): EaterPlaceholder => ({
-      name: getRandomName()
-    }),
-    []
-  )
-
-  const generateItemPlaceholder = useCallback(
-    (): ItemPlaceholder => ({
-      name: getRandomItemName(),
-      price: getRandomAmount(30)
-    }),
-    []
-  )
-
   const appendEaterWithPlaceholder = useCallback(() => {
-    const newPlaceholder = generateEaterPlaceholder()
-    setEaterPlaceholders((prev) => [...prev, newPlaceholder])
+    appendEaterPlaceholder()
     appendEater({ name: "" })
-  }, [appendEater, generateEaterPlaceholder])
+  }, [appendEater, appendEaterPlaceholder])
 
   const appendItemWithPlaceholder = useCallback(() => {
-    const newPlaceholder = generateItemPlaceholder()
-    setItemPlaceholders((prev) => [...prev, newPlaceholder])
+    appendItemPlaceholder()
     appendItem({ name: "", price: 0, eaters: [] })
-  }, [appendItem, generateItemPlaceholder])
+  }, [appendItem, appendItemPlaceholder])
 
   const updateUrl = useCallback(
     (data: FormSchema) => {
