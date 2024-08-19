@@ -2,6 +2,12 @@ import * as z from "zod"
 
 const uniqueArray = <T>(arr: T[]): boolean => arr.length === new Set(arr).size
 
+const roughlyEqual = (
+  num1: number,
+  num2: number,
+  marginOfError: number = 0.01
+): boolean => Math.abs(num1 - num2) < marginOfError
+
 const nameSchema = z
   .string()
   .min(1, { message: "Name must be at least 1 character long." })
@@ -10,27 +16,48 @@ const dollarAmountSchema = z.coerce
   .positive({ message: "Dollar amount must be positive" })
 const percentageSchema = z.coerce.number().positive()
 
-const uniqueNameArraySchema = z
-  .array(z.object({ name: nameSchema }))
-  .min(1, "At least one eater is required")
-  .refine((arr) => uniqueArray(arr.map((item) => item.name)), {
-    message: "Names must be unique"
-  })
+const uniqueNameArraySchema = <T extends { name: string }>(
+  schema: z.ZodType<T>
+) =>
+  z
+    .array(schema)
+    .min(1, "At least one item is required")
+    .refine((arr) => uniqueArray(arr.map((item) => item.name)), {
+      message: "Names must be unique"
+    }) as z.ZodType<T[], z.ZodTypeDef, T[]>
 
 const itemSchema = z.object({
   name: nameSchema,
   price: dollarAmountSchema,
-  eaters: uniqueNameArraySchema.describe("People who ate this item")
+  eaters: uniqueNameArraySchema(z.object({ name: nameSchema })).describe(
+    "People who ate this item"
+  )
 })
 
-const eaterSchema = z.object({
+const eaterItemSchema = z.object({
   name: nameSchema,
-  items: uniqueNameArraySchema,
-  subtotal: dollarAmountSchema,
-  taxAmount: dollarAmountSchema,
-  tipAmount: dollarAmountSchema,
-  total: dollarAmountSchema
+  portionCost: dollarAmountSchema
 })
+
+const eaterSchema = z
+  .object({
+    name: nameSchema,
+    items: uniqueNameArraySchema(eaterItemSchema),
+    subtotal: dollarAmountSchema,
+    taxAmount: dollarAmountSchema,
+    tipAmount: dollarAmountSchema,
+    total: dollarAmountSchema
+  })
+  .refine(
+    ({ items, subtotal }) =>
+      roughlyEqual(
+        subtotal,
+        items.reduce((acc, item) => acc + item.portionCost, 0)
+      ),
+    {
+      message: "Portion costs should equal subtotal"
+    }
+  )
 export type EaterSchema = z.infer<typeof eaterSchema>
 
 const baseSchema = z.object({
@@ -48,7 +75,7 @@ const baseSchema = z.object({
 
 const eatersAndItemsRefine = (
   items: z.infer<typeof itemSchema>[],
-  eaters: z.infer<typeof uniqueNameArraySchema>
+  eaters: { name: string }[]
 ) =>
   items.every((item) =>
     item.eaters.every((eater) => eaters.some((e) => e.name === eater.name))
@@ -62,8 +89,13 @@ export const formSchema = baseSchema
     tipAmount: true,
     items: true
   })
-  .extend({ eaters: uniqueNameArraySchema })
-  .refine(({ items, eaters }) => eatersAndItemsRefine(items, eaters))
+  .extend({
+    eaters: uniqueNameArraySchema(z.object({ name: nameSchema }))
+  })
+  .refine(({ items, eaters }) => eatersAndItemsRefine(items, eaters), {
+    message: "All eaters must be present in the items' eaters arrays.",
+    path: ["items", "eaters"]
+  })
   .refine(({ items }) => uniqueArray(items.map((item) => item.name)), {
     message: "Item names must be unique.",
     path: ["items"]
@@ -97,7 +129,7 @@ export const splitSchema = baseSchema
   )
   .refine(
     ({ subTotal, tipAmount, taxAmount, total }) =>
-      Math.abs(total - (subTotal + tipAmount + taxAmount)) < 0.01,
+      roughlyEqual(total, subTotal + tipAmount + taxAmount),
     {
       message:
         "Total must equal the sum of subtotal, tip amount, and tax amount.",
@@ -110,8 +142,10 @@ export const splitSchema = baseSchema
   })
   .refine(
     ({ total, eaters }) =>
-      Math.abs(total - eaters.reduce((sum, eater) => sum + eater.total, 0)) <
-      0.01,
+      roughlyEqual(
+        total,
+        eaters.reduce((sum, eater) => sum + eater.total, 0)
+      ),
     {
       message: "Sum of eater totals must equal the overall total.",
       path: ["total", "eaters"]
@@ -119,8 +153,10 @@ export const splitSchema = baseSchema
   )
   .refine(
     ({ subTotal, items }) =>
-      Math.abs(subTotal - items.reduce((sum, item) => sum + item.price, 0)) <
-      0.01,
+      roughlyEqual(
+        subTotal,
+        items.reduce((sum, item) => sum + item.price, 0)
+      ),
     {
       message: "Sum of item prices must equal the subtotal.",
       path: ["subTotal", "items"]
@@ -128,7 +164,7 @@ export const splitSchema = baseSchema
   )
   .refine(
     ({ tipAmount, tipPercentage, subTotal }) =>
-      Math.abs(tipAmount - (subTotal * tipPercentage) / 100) < 0.01,
+      roughlyEqual(tipAmount, (subTotal * tipPercentage) / 100),
     {
       message: "Tip amount must be consistent with tip percentage.",
       path: ["tipAmount", "tipPercentage"]

@@ -139,15 +139,20 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
                   </Avatar>
                   <div>
                     <CardTitle className="text-xl">{eater.name}</CardTitle>
-                    <CardDescription>
-                      {eater.items.map((item) => item.name).join(", ")}
-                    </CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableBody>
+                    {eater.items.map((item) => (
+                      <TableRow key={index} className="border-0 leading-tight">
+                        <TableCell className="py-2">{item.name}</TableCell>
+                        <TableCell className="w-24 py-2 pl-0 text-right">
+                          ${item.portionCost.toFixed(2)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                     <TableRow className="border-0 font-medium leading-tight">
                       <TableCell className="py-2">Subtotal</TableCell>
                       <TableCell className="py-2 text-right">

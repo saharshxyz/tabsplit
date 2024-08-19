@@ -71,11 +71,11 @@ export function calculateSplit(data: FormSchema): SplitSchema {
   // calculate individual shares
   items.forEach(
     (item: { name: string; price: number; eaters: { name: string }[] }) => {
-      const share = item.price / item.eaters.length
+      const portionCost = item.price / item.eaters.length
       item.eaters.forEach(({ name }: { name: string }) => {
         const eater = eaterMap.get(name.toLowerCase())!
-        eater.subtotal += share
-        eater.items.push({ name: item.name })
+        eater.subtotal += portionCost
+        eater.items.push({ name: item.name, portionCost })
       })
     }
   )
