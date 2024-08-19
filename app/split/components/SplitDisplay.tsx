@@ -26,12 +26,119 @@ import { Separator } from "@/components/ui/separator"
 import { ExternalLink, Users, User } from "lucide-react"
 import { SplitSchema } from "@/lib/schemas"
 
+interface SummaryRowProps {
+  label: string
+  amount: number
+  bold?: boolean
+  muted?: boolean
+}
+
+interface ItemRowProps {
+  item: {
+    name: string
+    price?: number
+    portionCost?: number
+    eaters?: { name: string }[]
+  }
+  showEaters?: boolean
+}
+
+interface SplitTableProps {
+  items: ItemRowProps["item"][]
+  showEaters?: boolean
+  summary: {
+    subTotal: number
+    taxPercentage: number | undefined
+    taxAmount: number
+    tipPercentage: number | undefined
+    tipAmount: number
+    total: number
+  }
+}
+
+const SummaryRow: React.FC<SummaryRowProps> = ({
+  label,
+  amount,
+  bold = false,
+  muted = false
+}) => (
+  <TableRow
+    className={`border-0 leading-tight ${muted ? "text-sm text-muted-foreground" : ""}`}
+  >
+    <TableCell className={`py-2 ${bold ? "font-medium" : ""}`} colSpan={2}>
+      {label}
+    </TableCell>
+    <TableCell className={`py-2 text-right ${bold ? "font-bold" : ""}`}>
+      ${amount.toFixed(2)}
+    </TableCell>
+  </TableRow>
+)
+
+const ItemRow: React.FC<ItemRowProps> = ({ item, showEaters = false }) => (
+  <TableRow className="w-full border-0 leading-tight">
+    <TableCell className="py-2">{item.name}</TableCell>
+    <TableCell className={`${showEaters ? "w-full" : ""} py-2 text-right`}>
+      {showEaters && item.eaters && (
+        <div className="flex items-center justify-end">
+          {item.eaters.length > 1 ? (
+            <Users className="mr-2 hidden h-4 w-4 sm:inline-block" />
+          ) : (
+            <User className="mr-2 hidden h-4 w-4 sm:inline-block" />
+          )}
+          {item.eaters.map((eater) => eater.name).join(", ")}
+        </div>
+      )}
+    </TableCell>
+    <TableCell className="w-24 py-2 pl-0 text-right">
+      ${item.price ? item.price.toFixed(2) : item.portionCost?.toFixed(2)}
+    </TableCell>
+  </TableRow>
+)
+
+const SplitTable: React.FC<SplitTableProps> = ({
+  items,
+  showEaters = false,
+  summary
+}) => (
+  <Table>
+    {showEaters && (
+      <TableHeader>
+        <TableRow>
+          <TableHead>Item</TableHead>
+          <TableHead className="w-full text-right">Eaters</TableHead>
+          <TableHead className="w-24 text-right">Price</TableHead>
+        </TableRow>
+      </TableHeader>
+    )}
+    <TableBody>
+      {items.map((item, index) => (
+        <ItemRow key={index} item={item} showEaters={showEaters} />
+      ))}
+      <SummaryRow label="Subtotal" amount={summary.subTotal} bold />
+      <SummaryRow
+        label={`Tax${summary.taxPercentage ? ` (${summary.taxPercentage.toFixed(2)}%)` : ""}`}
+        amount={summary.taxAmount}
+        muted
+      />
+      <SummaryRow
+        label={`Tip${summary.tipPercentage ? ` (${summary.tipPercentage.toFixed(2)}%)` : ""}`}
+        amount={summary.tipAmount}
+        muted
+      />
+      <SummaryRow label="Total" amount={summary.total} bold />
+    </TableBody>
+  </Table>
+)
+
 interface SplitDisplayProps {
   splitResult: SplitSchema
   onCopyUrl: () => void
 }
 
-export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
+export const SplitDisplay: React.FC<SplitDisplayProps> = ({
+  splitResult,
+  onCopyUrl
+}) => (
   <Card>
     <CardHeader>
       <div className="flex items-center justify-between">
@@ -63,67 +170,18 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
     </CardHeader>
     <CardContent>
       <div className="space-y-6">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Item</TableHead>
-              <TableHead className="w-full text-right">Eaters</TableHead>
-              <TableHead className="w-24 text-right">Price</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {splitResult.items.map((item, index) => (
-              <TableRow key={index} className="border-0 leading-tight">
-                <TableCell className="py-2">{item.name}</TableCell>
-                <TableCell className="w-full py-2 text-right">
-                  <div className="flex items-center justify-end">
-                    {item.eaters.length > 1 ? (
-                      <Users className="mr-2 hidden h-4 w-4 sm:inline-block" />
-                    ) : (
-                      <User className="mr-2 hidden h-4 w-4 sm:inline-block" />
-                    )}
-                    {item.eaters.map((eater) => eater.name).join(", ")}
-                  </div>
-                </TableCell>
-                <TableCell className="w-24 py-2 pl-0 text-right">
-                  ${item.price.toFixed(2)}
-                </TableCell>
-              </TableRow>
-            ))}
-            <TableRow className="border-0 font-medium leading-tight">
-              <TableCell className="py-2" colSpan={2}>
-                Subtotal
-              </TableCell>
-              <TableCell className="py-2 text-right">
-                ${splitResult.subTotal.toFixed(2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="border-0 text-sm leading-tight text-muted-foreground">
-              <TableCell className="py-2" colSpan={2}>
-                Tax ({splitResult.taxPercentage.toFixed(2)}%)
-              </TableCell>
-              <TableCell className="py-2 text-right">
-                ${splitResult.taxAmount.toFixed(2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="text-sm leading-tight text-muted-foreground">
-              <TableCell className="py-2" colSpan={2}>
-                Tip ({splitResult.tipPercentage.toFixed(2)}%)
-              </TableCell>
-              <TableCell className="py-2 text-right">
-                ${splitResult.tipAmount.toFixed(2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="leading-tight">
-              <TableCell className="py-2 font-medium" colSpan={2}>
-                Total
-              </TableCell>
-              <TableCell className="py-2 text-right font-bold">
-                ${splitResult.total.toFixed(2)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <SplitTable
+          items={splitResult.items}
+          showEaters={true}
+          summary={{
+            subTotal: splitResult.subTotal,
+            taxPercentage: splitResult.taxPercentage,
+            taxAmount: splitResult.taxAmount,
+            tipPercentage: splitResult.tipPercentage,
+            tipAmount: splitResult.tipAmount,
+            total: splitResult.total
+          }}
+        />
         <Separator />
 
         <div>
@@ -143,42 +201,17 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
                 </div>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableBody>
-                    {eater.items.map((item) => (
-                      <TableRow key={index} className="border-0 leading-tight">
-                        <TableCell className="py-2">{item.name}</TableCell>
-                        <TableCell className="w-24 py-2 pl-0 text-right">
-                          ${item.portionCost.toFixed(2)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    <TableRow className="border-0 font-medium leading-tight">
-                      <TableCell className="py-2">Subtotal</TableCell>
-                      <TableCell className="py-2 text-right">
-                        ${eater.subtotal.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="border-0 text-sm leading-tight text-muted-foreground">
-                      <TableCell className="py-2">Tax</TableCell>
-                      <TableCell className="py-2 text-right">
-                        ${eater.taxAmount.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="text-sm leading-tight text-muted-foreground">
-                      <TableCell className="py-2">Tip</TableCell>
-                      <TableCell className="py-2 text-right">
-                        ${eater.tipAmount.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className="leading-tight">
-                      <TableCell className="py-2 font-medium">Total</TableCell>
-                      <TableCell className="py-2 text-right font-bold">
-                        ${eater.total.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <SplitTable
+                  items={eater.items}
+                  summary={{
+                    subTotal: eater.subtotal,
+                    taxPercentage: 0,
+                    taxAmount: eater.taxAmount,
+                    tipPercentage: 0,
+                    tipAmount: eater.tipAmount,
+                    total: eater.total
+                  }}
+                />
               </CardContent>
             </Card>
           ))}
