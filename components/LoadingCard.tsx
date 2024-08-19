@@ -9,10 +9,14 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RefreshCcw } from "lucide-react"
 
-export const LoadingDisplay = () => (
+interface LoadingCardProps {
+  title: string
+}
+
+export const LoadingCard = ({ title }: LoadingCardProps) => (
   <Card className="m-4">
     <CardHeader>
-      <CardTitle>Loading Bill Split</CardTitle>
+      <CardTitle>{title}</CardTitle>
     </CardHeader>
     <CardContent className="space-y-2">
       <Skeleton className="h-4 w-full" />

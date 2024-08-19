@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation"
 import { formSchema, SplitSchema } from "@/lib/schemas"
 import { ZodError } from "zod"
 import { logZodErrors } from "@/lib/utils"
-import { calculateSplit } from "@/lib/calculateSplit"
+import { calculateSplit } from "@/lib/utils"
 
 export const useSplitCalculation = () => {
   const searchParams = useSearchParams()

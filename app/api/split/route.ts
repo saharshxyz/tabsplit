@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { formSchema, splitSchema, FormSchema } from "@/lib/schemas"
-import { calculateSplit } from "@/lib/calculateSplit"
+import { calculateSplit } from "@/lib/utils"
 import { createSplitURL, logZodErrors } from "@/lib/utils"
 import { ZodError } from "zod"
 import { headers } from "next/headers"
