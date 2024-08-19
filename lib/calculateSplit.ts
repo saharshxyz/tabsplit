@@ -1,70 +1,70 @@
 import { SplitSchema, FormSchema, EaterSchema } from "./schemas"
 
 export function calculateSplit(data: FormSchema): SplitSchema {
-  const { checkName, taxAmount, tipBeforeTax, tipAmount, items } = data
+  const {
+    checkName,
+    taxAmount,
+    tipBeforeTax,
+    tipAmount,
+    items,
+    eaters: formEaters
+  } = data
 
-  const subTotal = items.reduce((acc, curr) => acc + curr.price, 0)
-
-  const tipPercentage = tipBeforeTax
-    ? (tipAmount / subTotal) * 100
-    : (tipAmount / (subTotal + taxAmount)) * 100
-
-  const findEaterIndexByName = (
-    eaters: EaterSchema[],
-    name: string
-  ): number => {
-    return eaters.findIndex(
-      (eater) => eater.name.toLowerCase() === name.toLowerCase()
-    )
-  }
-
-  const total = subTotal + taxAmount + tipAmount
+  const subTotal = items.reduce(
+    (acc: number, curr: { price: number }) => acc + curr.price,
+    0
+  )
   const taxPercentage = (taxAmount / subTotal) * 100
+  const tipPercentage =
+    (tipAmount / (tipBeforeTax ? subTotal : subTotal + taxAmount)) * 100
+  const total = subTotal + taxAmount + tipAmount
 
-  const eaters = data.eaters.map((eater) => {
-    const createNewEater = (name: string): EaterSchema => {
-      return {
-        name,
-        taxAmount: 0,
-        tipAmount: 0,
-        total: 0,
-        subtotal: 0,
-        items: []
-      }
-    }
+  const eaterMap = new Map<string, EaterSchema>()
 
-    return createNewEater(eater.name)
-  })
-
-  items.forEach((item) => {
-    const share = item.price / item.eaters.length
-    item.eaters.forEach((eater) => {
-      const eaterIndex = findEaterIndexByName(eaters, eater.name)
-      eaters[eaterIndex].subtotal += share
-      eaters[eaterIndex].items.push({ name: item.name })
+  // Initialize eaters
+  formEaters.forEach(({ name }: { name: string }) => {
+    eaterMap.set(name.toLowerCase(), {
+      name,
+      taxAmount: 0,
+      tipAmount: 0,
+      total: 0,
+      subtotal: 0,
+      items: []
     })
   })
 
-  eaters.forEach((eater) => {
-    eater.taxAmount = eater.subtotal * (taxPercentage / 100)
-    eater.tipAmount = tipBeforeTax
-      ? eater.subtotal * (tipPercentage / 100)
-      : (eater.subtotal + eater.taxAmount) * (tipPercentage / 100)
+  // Calculate individual shares
+  items.forEach(
+    (item: { name: string; price: number; eaters: { name: string }[] }) => {
+      const share = item.price / item.eaters.length
+      item.eaters.forEach(({ name }: { name: string }) => {
+        const eater = eaterMap.get(name.toLowerCase())!
+        eater.subtotal += share
+        eater.items.push({ name: item.name })
+      })
+    }
+  )
 
+  // Calculate tax, tip, and total for each eater
+  eaterMap.forEach((eater) => {
+    eater.taxAmount = eater.subtotal * (taxPercentage / 100)
+    eater.tipAmount =
+      (tipBeforeTax ? eater.subtotal : eater.subtotal + eater.taxAmount) *
+      (tipPercentage / 100)
     eater.total = eater.subtotal + eater.taxAmount + eater.tipAmount
   })
 
   const split: SplitSchema = {
     checkName,
-    taxPercentage: taxPercentage,
-    taxAmount: taxAmount,
+    taxPercentage,
+    taxAmount,
     tipBeforeTax,
     tipPercentage,
-    tipAmount: tipAmount,
-    subTotal: subTotal,
-    total: total,
+    tipAmount,
+    subTotal,
+    total,
     items,
-    eaters
+    eaters: Array.from(eaterMap.values())
   }
 
   return split
