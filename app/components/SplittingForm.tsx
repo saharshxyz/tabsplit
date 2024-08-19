@@ -15,6 +15,7 @@ import {
   FormMessage,
   FormDescription
 } from "@/components/ui/form"
+import { Separator } from "@/components/ui/separator"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
@@ -316,14 +317,14 @@ export function SplittingForm() {
           </Button>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Items</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <Separator />
+
+        <div>
+          <h3 className="mb-2 text-lg font-semibold">Items</h3>
+          <div className="space-y-4">
             {itemFields.map((field, index) => (
               <Card key={field.id}>
-                <CardContent className="pt-6">
+                <CardContent className="p-6 px-4 sm:px-6">
                   <div className="mb-4 flex items-start gap-4">
                     <FormField
                       control={form.control}
@@ -348,7 +349,7 @@ export function SplittingForm() {
                       control={form.control}
                       name={`items.${index}.price`}
                       render={({ field }) => (
-                        <FormItem className="w-1/4">
+                        <FormItem className="w-2/5 sm:w-1/4">
                           <FormLabel>Price</FormLabel>
                           <FormControl>
                             <Input
@@ -371,7 +372,7 @@ export function SplittingForm() {
                     <Button
                       type="button"
                       onClick={() => removeItem(index)}
-                      className="mt-6 h-10 w-10 p-1"
+                      className="mt-6 hidden h-10 w-10 p-1 sm:flex"
                       variant="ghost"
                     >
                       <X className="h-4 w-4" />
@@ -426,6 +427,15 @@ export function SplittingForm() {
                       </FormItem>
                     )}
                   />
+                  <Button
+                    type="button"
+                    onClick={() => removeItem(index)}
+                    className="mt-4 w-full sm:hidden"
+                    variant="outline"
+                  >
+                    <X className="mr-2 h-4 w-4" />
+                    Remove Item
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -438,7 +448,7 @@ export function SplittingForm() {
               <PlusIcon className="mr-2 h-4 w-4" />
               Add Item
             </Button>
-          </CardContent>
+          </div>
           <FormField
             control={form.control}
             name="items"
@@ -452,10 +462,11 @@ export function SplittingForm() {
               </div>
             )}
           />
-        </Card>
-        <div className="flex justify-end">
-          <Button type="submit">Submit</Button>
         </div>
+
+        <Button type="submit" className="w-full">
+          Submit
+        </Button>
       </form>
     </Form>
   )

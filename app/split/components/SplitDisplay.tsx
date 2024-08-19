@@ -49,12 +49,8 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
           </Tooltip>
         </TooltipProvider>
       </div>
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-6">
+      <CardDescription>
         <div>
-          <h3 className="mb-2 text-lg font-semibold">Items and Summary</h3>
-
           <div className="flex flex-wrap gap-2">
             {splitResult.eaters.map((eater) => (
               <Badge key={eater.name} variant="secondary" className="text-sm">
@@ -63,8 +59,11 @@ export const SplitDisplay = ({ splitResult, onCopyUrl }: SplitDisplayProps) => (
             ))}
           </div>
         </div>
-
-        <Table className="mt-2">
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-6">
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Item</TableHead>
