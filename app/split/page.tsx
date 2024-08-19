@@ -4,7 +4,7 @@ import { Suspense } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { PenSquare } from "lucide-react"
-import { LoadingDisplay } from "./components/LoadingDisplay"
+import { LoadingCard } from "@/components/LoadingCard"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -22,7 +22,7 @@ export default function Split() {
       <Suspense fallback={<EditBillButtonLoading />}>
         <EditBillButton />
       </Suspense>
-      <Suspense fallback={<LoadingDisplay />}>
+      <Suspense fallback={<LoadingCard title="Loading Bill Split" />}>
         <DynamicSplitContent />
       </Suspense>
     </main>
