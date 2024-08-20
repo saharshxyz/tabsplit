@@ -2,13 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## TODO
 
-- [ ] Refactor codebase
 - [ ] Use consistent copy/naming across site (are we going by 'bill' or 'check' or what)
-- [ ] Create favicon/logo
-- [ ] Update OG image to use logo
-- [ ] Share button on form
-- [ ] Clear form button
-- [ ] Come up with a way not to have submit form button at bottom as that's inconvenient for longer forms
+- [ ] Create favicon/logo (Update OG image to use logo)
 - [ ] Add charts to split screen. One pie chart for how much each portion of the bill is and another for how much of the total each person has to pay (maybe used stacked pie chart)
 - [ ] Fix dark theme
 
