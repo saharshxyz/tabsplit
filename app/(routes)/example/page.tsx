@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
 import { getURLArgs } from "@/lib/utils"
 import { useState, useEffect } from "react"
+import { TextCursorInput, ReceiptText } from "lucide-react"
 
 function getRandomElement<T>(arr: T[]) {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -53,10 +54,14 @@ export default function Example() {
               <Link href={`/#${randomFormParams}`}>
                 <Button className="w-full" variant="outline">
                   See Form
+                  <TextCursorInput className="ml-2 h-4 w-4" strokeWidth={2} />
                 </Button>
               </Link>
               <Link href={`/split#${randomSplitParams}`}>
-                <Button className="w-full">See Split</Button>
+                <Button className="w-full">
+                  See Split
+                  <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2} />
+                </Button>
               </Link>
             </>
           )}

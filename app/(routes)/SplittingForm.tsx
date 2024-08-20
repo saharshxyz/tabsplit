@@ -23,6 +23,7 @@ import { formSchema, FormSchema } from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
+import { ReceiptText } from "lucide-react"
 
 interface SplittingFormProps {
   initialData: Partial<FormSchema>
@@ -427,6 +428,7 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
 
         <Button type="submit" className="w-full">
           Submit
+          <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2} />
         </Button>
       </form>
     </Form>
