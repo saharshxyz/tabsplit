@@ -26,13 +26,6 @@ import { Separator } from "@/components/ui/separator"
 import { ExternalLink, Users, User } from "lucide-react"
 import { SplitSchema } from "@/lib/schemas"
 
-interface SummaryRowProps {
-  label: string
-  amount: number
-  bold?: boolean
-  muted?: boolean
-}
-
 interface ItemRowProps {
   item: {
     name: string
@@ -42,37 +35,6 @@ interface ItemRowProps {
   }
   showEaters?: boolean
 }
-
-interface SplitTableProps {
-  items: ItemRowProps["item"][]
-  showEaters?: boolean
-  summary: {
-    subTotal: number
-    taxPercentage: number | undefined
-    taxAmount: number
-    tipPercentage: number | undefined
-    tipAmount: number
-    total: number
-  }
-}
-
-const SummaryRow: React.FC<SummaryRowProps> = ({
-  label,
-  amount,
-  bold = false,
-  muted = false
-}) => (
-  <TableRow
-    className={`border-0 leading-tight ${muted ? "text-sm text-muted-foreground" : ""}`}
-  >
-    <TableCell className={`py-2 ${bold ? "font-medium" : ""}`} colSpan={2}>
-      {label}
-    </TableCell>
-    <TableCell className={`py-2 text-right ${bold ? "font-bold" : ""}`}>
-      ${amount.toFixed(2)}
-    </TableCell>
-  </TableRow>
-)
 
 const ItemRow: React.FC<ItemRowProps> = ({ item, showEaters = false }) => (
   <TableRow className="w-full border-0 leading-tight">
@@ -95,6 +57,52 @@ const ItemRow: React.FC<ItemRowProps> = ({ item, showEaters = false }) => (
   </TableRow>
 )
 
+interface SummaryRowProps {
+  label: string
+  amount: number
+  variant?: "muted" | "emphasis" | "bold" | "normal"
+}
+
+const SummaryRow: React.FC<SummaryRowProps> = ({
+  label,
+  amount,
+  variant = "normal"
+}) => {
+  const variantClasses: Record<
+    NonNullable<SummaryRowProps["variant"]>,
+    string
+  > = {
+    muted: "text-sm text-muted-foreground",
+    emphasis: "font-medium",
+    bold: "font-bold",
+    normal: ""
+  }
+
+  return (
+    <TableRow
+      className={`${variant === "bold" ? "!border-t" : "border-0"} leading-tight ${variantClasses[variant]}`}
+    >
+      <TableCell className="py-2" colSpan={2}>
+        {label}
+      </TableCell>
+      <TableCell className="py-2 text-right">${amount.toFixed(2)}</TableCell>
+    </TableRow>
+  )
+}
+
+interface SplitTableProps {
+  items: ItemRowProps["item"][]
+  showEaters?: boolean
+  summary: {
+    subTotal: number
+    taxPercentage: number | undefined
+    taxAmount: number
+    tipPercentage: number | undefined
+    tipAmount: number
+    total: number
+  }
+}
+
 const SplitTable: React.FC<SplitTableProps> = ({
   items,
   showEaters = false,
@@ -114,18 +122,22 @@ const SplitTable: React.FC<SplitTableProps> = ({
       {items.map((item, index) => (
         <ItemRow key={index} item={item} showEaters={showEaters} />
       ))}
-      <SummaryRow label="Subtotal" amount={summary.subTotal} bold />
+      <SummaryRow
+        label="Subtotal"
+        amount={summary.subTotal}
+        variant="emphasis"
+      />
       <SummaryRow
         label={`Tax${summary.taxPercentage ? ` (${summary.taxPercentage.toFixed(2)}%)` : ""}`}
         amount={summary.taxAmount}
-        muted
+        variant="muted"
       />
       <SummaryRow
         label={`Tip${summary.tipPercentage ? ` (${summary.tipPercentage.toFixed(2)}%)` : ""}`}
         amount={summary.tipAmount}
-        muted
+        variant="muted"
       />
-      <SummaryRow label="Total" amount={summary.total} bold />
+      <SummaryRow label="Total" amount={summary.total} variant="bold" />
     </TableBody>
   </Table>
 )
