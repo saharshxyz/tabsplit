@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { formSchema, splitSchema, FormSchema } from "@/lib/schemas"
 import { calculateSplit } from "@/lib/utils"
-import { getSplitURL, logZodErrors, getBaseUrl } from "@/lib/utils"
+import { getURLArgs, logZodErrors, getBaseUrl } from "@/lib/utils"
 import { ZodError } from "zod"
 import { headers } from "next/headers"
 
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       `${protocol}://${host}/split` ||
       `${process.env.NEXT_PUBLIC_VERCEL_URL}/split`
 
-    const link = getSplitURL(validatedData).join("?")
+    const link = getURLArgs(validatedData).join("#")
 
     return NextResponse.json({
       link,

@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { toast } from "sonner"
 
-export const useCopyToClipboard = () => {
+export const useCopyURLToClipboard = () => {
   const copyUrlToClipboard = useCallback(() => {
     navigator.clipboard
       .writeText(window.location.href)

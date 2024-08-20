@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent
-} from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import {
   Table,
   TableHeader,
@@ -13,17 +7,10 @@ import {
   TableCell,
   TableRow
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { ExternalLink, Users, User } from "lucide-react"
+import { Users, User } from "lucide-react"
 import { SplitSchema } from "@/lib/schemas"
 
 interface ItemRowProps {
@@ -144,41 +131,22 @@ const SplitTable: React.FC<SplitTableProps> = ({
 
 interface SplitDisplayProps {
   splitResult: SplitSchema
-  onCopyUrl: () => void
 }
 
-export const SplitDisplay: React.FC<SplitDisplayProps> = ({
-  splitResult,
-  onCopyUrl
-}) => (
+export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
   <Card>
     <CardHeader>
       <div className="flex items-center justify-between">
         <CardTitle>{splitResult.checkName} - Check Split</CardTitle>
-        <TooltipProvider>
-          <Tooltip delayDuration={100}>
-            <TooltipTrigger asChild>
-              <Button size="icon" onClick={onCopyUrl}>
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              <p>Send Bill to Friends</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       </div>
-      <CardDescription>
-        <div>
-          <div className="flex flex-wrap gap-2">
-            {splitResult.eaters.map((eater) => (
-              <Badge key={eater.name} variant="secondary" className="text-sm">
-                {eater.name}: ${Math.ceil(eater.total)}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      </CardDescription>
+
+      <div className="flex flex-wrap gap-2">
+        {splitResult.eaters.map((eater) => (
+          <Badge key={eater.name} variant="secondary" className="text-sm">
+            {eater.name}: ${Math.ceil(eater.total)}
+          </Badge>
+        ))}
+      </div>
     </CardHeader>
     <CardContent>
       <div className="space-y-6">

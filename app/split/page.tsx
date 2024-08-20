@@ -1,53 +1,49 @@
 "use client"
 
-import { Suspense } from "react"
-import dynamic from "next/dynamic"
-import { Button } from "@/components/ui/button"
-import { PenSquare } from "lucide-react"
+import { useHash } from "@/lib/useHash"
+import { ErrorDisplay } from "./ErrorDisplay"
+import { SplitDisplay } from "./SplitDisplay"
+import { calculateSplit } from "@/lib/utils"
+import { useCopyURLToClipboard } from "@/lib/useCopyURLToClipboard"
+import { FormSchema } from "@/lib/schemas"
+import { useEffect, useState } from "react"
 import { LoadingCard } from "@/components/LoadingCard"
-import { useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { Skeleton } from "@/components/ui/skeleton"
-
-const DynamicSplitContent = dynamic(
-  () => import("./components/SplitComponent"),
-  {
-    ssr: false
-  }
-)
+import { Button } from "@/components/ui/button"
+import { PenSquare, ExternalLink } from "lucide-react"
 
 export default function Split() {
+  const { hash, parsedData, error } = useHash()
+  const [isLoading, setIsLoading] = useState(true)
+  const copyUrlToClipboard = useCopyURLToClipboard()
+
+  useEffect(() => {
+    if (Object.keys(parsedData).length > 0 || error) {
+      setIsLoading(false)
+    }
+  }, [parsedData, error])
+
   return (
     <main className="mx-auto max-w-3xl">
-      <Suspense fallback={<EditBillButtonLoading />}>
-        <EditBillButton />
-      </Suspense>
-      <Suspense fallback={<LoadingCard title="Loading Bill Split" />}>
-        <DynamicSplitContent />
-      </Suspense>
-    </main>
-  )
-}
-
-function EditBillButton() {
-  const searchParams = useSearchParams()
-
-  return (
-    <div className="m-2 flex justify-center">
-      <Link href={`/?${searchParams.toString()}`} className="w-full">
-        <Button className="w-full" variant="outline">
-          Edit Bill
-          <PenSquare className="ml-2 h-4 w-4" strokeWidth={2} />
+      <div className="m-2 flex space-x-2">
+        <Link href={`/#${hash}`} className="w-2/5">
+          <Button variant="outline" className="w-full">
+            Edit Bill
+            <PenSquare className="ml-2 h-4 w-4" strokeWidth={2} />
+          </Button>
+        </Link>
+        <Button onClick={copyUrlToClipboard} className="w-3/5">
+          Share Split
+          <ExternalLink className="ml-2 h-4 w-4" strokeWidth={2} />
         </Button>
-      </Link>
-    </div>
-  )
-}
-
-function EditBillButtonLoading() {
-  return (
-    <div className="m-2 flex justify-center">
-      <Skeleton className="h-10 w-full rounded-md" />
-    </div>
+      </div>
+      {isLoading ? (
+        <LoadingCard title="Loading Split ..." />
+      ) : error ? (
+        <ErrorDisplay error={error} />
+      ) : (
+        <SplitDisplay splitResult={calculateSplit(parsedData as FormSchema)} />
+      )}
+    </main>
   )
 }

@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray, useWatch } from "react-hook-form"
 import { useEffect, useMemo, useRef, useCallback } from "react"
-import { useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,18 +15,21 @@ import {
   FormDescription
 } from "@/components/ui/form"
 import { Separator } from "@/components/ui/separator"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
 import { formSchema, FormSchema } from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { usePlaceholders } from "./hooks/usePlaceholders"
+import { usePlaceholders } from "@/lib/usePlaceholders"
 
-export function SplittingForm() {
+interface SplittingFormProps {
+  initialData: Partial<FormSchema>
+}
+
+export function SplittingForm({ initialData }: SplittingFormProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const {
     randomPlaceholders,
@@ -37,49 +39,30 @@ export function SplittingForm() {
     appendItemPlaceholder
   } = usePlaceholders()
 
-  const parseUrlData = () => {
-    const checkName = searchParams.get("checkName") || ""
-    const taxAmount = parseFloat(searchParams.get("taxAmount") || "0")
-    const tipBeforeTax = searchParams.get("tipBeforeTax") === "true"
-    const tipAmount = parseFloat(searchParams.get("tipAmount") || "0")
-
-    let eaters = []
-    try {
-      eaters = JSON.parse(searchParams.get("eaters") || "[]")
-    } catch (e) {
-      console.error("Failed to parse eaters from URL")
-    }
-
-    let items = []
-    try {
-      items = JSON.parse(searchParams.get("items") || "[]")
-    } catch (e) {
-      console.error("Failed to parse items from URL")
-    }
-
-    return {
-      checkName,
-      taxAmount,
-      tipBeforeTax,
-      tipAmount,
-      eaters,
-      items
-    }
-  }
-
-  const urlData = parseUrlData()
-
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      checkName: urlData.checkName,
-      taxAmount: urlData.taxAmount,
-      tipBeforeTax: urlData.tipBeforeTax,
-      tipAmount: urlData.tipAmount,
-      eaters: urlData.eaters,
-      items: urlData.items
+      checkName: initialData.checkName || "",
+      taxAmount: initialData.taxAmount || 0,
+      tipBeforeTax: initialData.tipBeforeTax ?? true,
+      tipAmount: initialData.tipAmount || 0,
+      eaters: initialData.eaters || [],
+      items: initialData.items || []
     }
   })
+
+  useEffect(() => {
+    if (Object.keys(initialData).length > 0) {
+      form.reset({
+        checkName: initialData.checkName || "",
+        taxAmount: initialData.taxAmount || 0,
+        tipBeforeTax: initialData.tipBeforeTax ?? true,
+        tipAmount: initialData.tipAmount || 0,
+        eaters: initialData.eaters || [],
+        items: initialData.items || []
+      })
+    }
+  }, [initialData, form])
 
   const {
     fields: eaterFields,
@@ -148,28 +131,6 @@ export function SplittingForm() {
     appendItem({ name: "", price: 0, eaters: [] })
   }, [appendItem, appendItemPlaceholder])
 
-  const updateUrl = useCallback(
-    (data: FormSchema) => {
-      const params = new URLSearchParams()
-      params.set("checkName", data.checkName || "")
-      params.set("taxAmount", data.taxAmount?.toString() || "")
-      params.set("tipBeforeTax", data.tipBeforeTax ? "true" : "false")
-      params.set("tipAmount", data.tipAmount?.toString() || "")
-      params.set("eaters", JSON.stringify(data.eaters))
-      params.set("items", JSON.stringify(data.items))
-
-      router.push(`?${params.toString()}`, { scroll: false })
-    },
-    [router]
-  )
-
-  useEffect(() => {
-    const subscription = form.watch((data) => {
-      updateUrl(data as FormSchema)
-    })
-    return () => subscription.unsubscribe()
-  }, [form, updateUrl])
-
   const onSubmit = useCallback(
     (values: FormSchema) => {
       const params = new URLSearchParams()
@@ -180,7 +141,7 @@ export function SplittingForm() {
       params.set("eaters", JSON.stringify(values.eaters))
       params.set("items", JSON.stringify(values.items))
 
-      router.push(`/split?${params.toString()}`)
+      router.push(`/split#${params.toString()}`)
     },
     [router]
   )

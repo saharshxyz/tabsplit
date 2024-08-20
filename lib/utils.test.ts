@@ -1,8 +1,8 @@
-import { logZodErrors, getSplitURL, calculateSplit } from "@/lib/utils"
+import { logZodErrors, getURLArgs, calculateSplit } from "@/lib/utils"
 import { formSchema, FormSchema, splitSchema } from "@/lib/schemas"
 import exampleChecks from "@/public/exampleChecks.json"
 
-describe("createSplitURL", () => {
+describe("getURLArgs", () => {
   it("should create a correctly formatted and encoded URL", () => {
     const testData: FormSchema = exampleChecks.joesDinner
 
@@ -16,7 +16,7 @@ describe("createSplitURL", () => {
       const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
         ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
         : process.env.NEXT_PUBLIC_BASE_URL || ""
-      const result = getSplitURL(testData)[0]
+      const result = getURLArgs(testData)[0]
 
       expect(result.startsWith(baseUrl)).toBe(true)
 
@@ -53,7 +53,7 @@ describe("createSplitURL", () => {
     expect(parseData.success).toBe(true)
 
     if (parseData.success) {
-      const result = getSplitURL(input)
+      const result = getURLArgs(input)
 
       console.log(result[0])
     }

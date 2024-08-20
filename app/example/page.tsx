@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
-import { getSplitURL } from "@/lib/utils"
+import { getURLArgs } from "@/lib/utils"
 import { useState, useEffect } from "react"
 
 function getRandomElement<T>(arr: T[]) {
@@ -22,11 +22,9 @@ export default function Example() {
         const exampleChecks = await import("@/public/exampleChecks.json")
         const exampleChecksArray = Object.values(exampleChecks.default)
 
-        setRandomFormParams(
-          getSplitURL(getRandomElement(exampleChecksArray))[1]
-        )
+        setRandomFormParams(getURLArgs(getRandomElement(exampleChecksArray))[1])
         setRandomSplitParams(
-          getSplitURL(getRandomElement(exampleChecksArray))[1]
+          getURLArgs(getRandomElement(exampleChecksArray))[1]
         )
       } catch (error) {
         console.error("Failed to load example checks:", error)
@@ -52,12 +50,12 @@ export default function Example() {
             </>
           ) : (
             <>
-              <Link href={`/?${randomFormParams}`}>
+              <Link href={`/#${randomFormParams}`}>
                 <Button className="w-full" variant="outline">
                   See Form
                 </Button>
               </Link>
-              <Link href={`/split?${randomSplitParams}`}>
+              <Link href={`/split#${randomSplitParams}`}>
                 <Button className="w-full">See Split</Button>
               </Link>
             </>

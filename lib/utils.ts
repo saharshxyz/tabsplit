@@ -125,7 +125,7 @@ export const getBaseUrl = (): string => {
   return `http://localhost:${process.env.PORT ?? 3000}`
 }
 
-export function getSplitURL(
+export function getURLArgs(
   data: FormSchema,
   baseUrl: string = getBaseUrl()
 ): [string, string] {
