@@ -9,6 +9,8 @@ export const useHash = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+
     const parseHash = () => {
       const currentHash = window.location.hash.slice(1) // Remove the leading '#'
       setHash(currentHash)
@@ -59,8 +61,6 @@ export const useHash = () => {
     }
 
     parseHash()
-    window.addEventListener("hashchange", parseHash)
-    return () => window.removeEventListener("hashchange", parseHash)
   }, [])
 
   function tryParseJSON(jsonString: string, defaultValue: any) {
