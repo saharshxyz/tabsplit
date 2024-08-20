@@ -15,26 +15,6 @@ export const logZodErrors = (error: ZodError, schemaName: string) => {
   console.groupEnd()
 }
 
-export function createSplitURL(
-  data: FormSchema,
-  baseUrl: string = "http://localhost:3000/split"
-): [string, URLSearchParams] {
-  const params = new URLSearchParams()
-
-  params.append("checkName", data.checkName)
-  params.append("taxAmount", data.taxAmount.toString())
-  params.append("tipAmount", data.tipAmount.toString())
-  params.append("tipBeforeTax", data.tipBeforeTax.toString())
-
-  params.append("items", JSON.stringify(data.items))
-
-  params.append("eaters", JSON.stringify(data.eaters))
-
-  const url = `${baseUrl}?${params.toString()}`
-
-  return [url.replace(/(\[|\])/g, encodeURIComponent("$1")), params]
-}
-
 export function calculateSplit(data: FormSchema): SplitSchema {
   const {
     checkName,
@@ -135,4 +115,34 @@ export function parseUrlData(
     eaters,
     items
   }
+}
+
+export const getBaseUrl = (): string => {
+  if (typeof window !== "undefined") {
+    return window.location.origin
+  }
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+  return `http://localhost:${process.env.PORT ?? 3000}`
+}
+
+export function getSplitURL(
+  data: FormSchema,
+  baseUrl: string = getBaseUrl()
+): [string, string] {
+  const params = new URLSearchParams()
+
+  params.append("checkName", data.checkName)
+  params.append("taxAmount", data.taxAmount.toString())
+  params.append("tipAmount", data.tipAmount.toString())
+  params.append("tipBeforeTax", data.tipBeforeTax.toString())
+
+  params.append("items", JSON.stringify(data.items))
+
+  params.append("eaters", JSON.stringify(data.eaters))
+
+  const encodedParams = params
+    .toString()
+    .replace(/(\[|\])/g, encodeURIComponent("$1"))
+
+  return [baseUrl, encodedParams]
 }

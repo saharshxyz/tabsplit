@@ -215,7 +215,7 @@ export function SplittingForm() {
                 <FormControl>
                   <Input
                     type="number"
-                    step="0.01"
+                    step="1"
                     {...field}
                     placeholder={randomPlaceholders.taxAmount}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
@@ -254,7 +254,7 @@ export function SplittingForm() {
                 <FormControl>
                   <Input
                     type="number"
-                    step="0.01"
+                    step="1"
                     placeholder={randomPlaceholders.tipAmount}
                     {...field}
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
@@ -354,7 +354,7 @@ export function SplittingForm() {
                           <FormControl>
                             <Input
                               type="number"
-                              step="0.01"
+                              step="1"
                               placeholder={
                                 itemPlaceholders[index]?.price ||
                                 randomPlaceholders.itemPrice

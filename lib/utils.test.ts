@@ -1,23 +1,10 @@
-import { logZodErrors, createSplitURL, calculateSplit } from "@/lib/utils"
+import { logZodErrors, getSplitURL, calculateSplit } from "@/lib/utils"
 import { formSchema, FormSchema, splitSchema } from "@/lib/schemas"
+import exampleChecks from "@/public/exampleChecks.json"
 
 describe("createSplitURL", () => {
   it("should create a correctly formatted and encoded URL", () => {
-    const testData: FormSchema = {
-      checkName: "Dinner at Joes",
-      taxAmount: 5.0,
-      tipBeforeTax: true,
-      tipAmount: 10.0,
-      items: [
-        {
-          name: "Pizza",
-          price: 20.0,
-          eaters: [{ name: "Alice" }, { name: "Bob" }]
-        },
-        { name: "Salad", price: 10.0, eaters: [{ name: "Charlie" }] }
-      ],
-      eaters: [{ name: "Alice" }, { name: "Bob" }, { name: "Charlie" }]
-    }
+    const testData: FormSchema = exampleChecks.joesDinner
 
     const parseData = formSchema.safeParse(testData)
     if (!parseData.success) {
@@ -29,7 +16,7 @@ describe("createSplitURL", () => {
       const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
         ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
         : process.env.NEXT_PUBLIC_BASE_URL || ""
-      const result = createSplitURL(testData)[0]
+      const result = getSplitURL(testData)[0]
 
       expect(result.startsWith(baseUrl)).toBe(true)
 
@@ -57,61 +44,7 @@ describe("createSplitURL", () => {
   })
 
   it("just log it", () => {
-    const input: FormSchema = {
-      checkName: "Wings Order",
-      taxAmount: 7.46,
-      tipAmount: 19.16,
-      tipBeforeTax: true,
-      items: [
-        {
-          name: "Large French Fries",
-          price: 7.49,
-          eaters: [
-            { name: "Vincent" },
-            { name: "Kyle" },
-            { name: "Samuel" },
-            { name: "Adam" }
-          ]
-        },
-        {
-          name: "30 Traditional Wings",
-          price: 40.99,
-          eaters: [
-            { name: "Vincent" },
-            { name: "Kyle" },
-            { name: "Samuel" },
-            { name: "Adam" }
-          ]
-        },
-        {
-          name: "10 Traditional Wings",
-          price: 15.99,
-          eaters: [{ name: "Karen" }]
-        },
-        {
-          name: "Michelob Ultra (2x)",
-          price: 13.5,
-          eaters: [{ name: "Adam" }, { name: "Kyle" }]
-        },
-        {
-          name: "20 Traditional Wings",
-          price: 28.49,
-          eaters: [
-            { name: "Vincent" },
-            { name: "Kyle" },
-            { name: "Samuel" },
-            { name: "Adam" }
-          ]
-        }
-      ],
-      eaters: [
-        { name: "Vincent" },
-        { name: "Karen" },
-        { name: "Samuel" },
-        { name: "Adam" },
-        { name: "Kyle" }
-      ]
-    }
+    const input: FormSchema = exampleChecks.wings
 
     const parseData = formSchema.safeParse(input)
     if (!parseData.success) {
@@ -120,7 +53,7 @@ describe("createSplitURL", () => {
     expect(parseData.success).toBe(true)
 
     if (parseData.success) {
-      const result = createSplitURL(input)
+      const result = getSplitURL(input)
 
       console.log(result[0])
     }
@@ -129,21 +62,7 @@ describe("createSplitURL", () => {
 
 describe("calculateSplit", () => {
   it("should accept valid input and produce correctly formatted output", () => {
-    const inputData = {
-      checkName: "Dinner at Joe's",
-      taxAmount: 5.0,
-      tipBeforeTax: true,
-      tipAmount: 10.0,
-      items: [
-        {
-          name: "Pizza",
-          price: 20.0,
-          eaters: [{ name: "Alice" }, { name: "Bob" }]
-        },
-        { name: "Salad", price: 10.0, eaters: [{ name: "Charlie" }] }
-      ],
-      eaters: [{ name: "Alice" }, { name: "Bob" }, { name: "Charlie" }]
-    }
+    const inputData = exampleChecks.joesDinner
 
     const parseResult = formSchema.safeParse(inputData)
     if (!parseResult.success) {
@@ -163,61 +82,7 @@ describe("calculateSplit", () => {
   })
 
   it("should correctly calculate the split for a given order", () => {
-    const input = {
-      checkName: "Wings Order",
-      taxAmount: 7.46,
-      tipAmount: 19.16,
-      tipBeforeTax: true,
-      items: [
-        {
-          name: "Large French Fries",
-          price: 7.49,
-          eaters: [
-            { name: "Vincent" },
-            { name: "Kyle" },
-            { name: "Samuel" },
-            { name: "Adam" }
-          ]
-        },
-        {
-          name: "30 Traditional Wings",
-          price: 40.99,
-          eaters: [
-            { name: "Vincent" },
-            { name: "Kyle" },
-            { name: "Samuel" },
-            { name: "Adam" }
-          ]
-        },
-        {
-          name: "10 Traditional Wings",
-          price: 15.99,
-          eaters: [{ name: "Karen" }]
-        },
-        {
-          name: "Michelob Ultra (2x)",
-          price: 13.5,
-          eaters: [{ name: "Adam" }, { name: "Kyle" }]
-        },
-        {
-          name: "20 Traditional Wings",
-          price: 28.49,
-          eaters: [
-            { name: "Vincent" },
-            { name: "Kyle" },
-            { name: "Samuel" },
-            { name: "Adam" }
-          ]
-        }
-      ],
-      eaters: [
-        { name: "Vincent" },
-        { name: "Karen" },
-        { name: "Samuel" },
-        { name: "Adam" },
-        { name: "Kyle" }
-      ]
-    }
+    const input = exampleChecks.wings
 
     const parseResult = formSchema.safeParse(input)
     if (!parseResult.success) {

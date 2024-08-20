@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { formSchema, splitSchema, FormSchema } from "@/lib/schemas"
 import { calculateSplit } from "@/lib/utils"
-import { createSplitURL, logZodErrors } from "@/lib/utils"
+import { getSplitURL, logZodErrors, getBaseUrl } from "@/lib/utils"
 import { ZodError } from "zod"
 import { headers } from "next/headers"
 
@@ -19,10 +19,11 @@ export async function POST(request: NextRequest) {
     const host = headersList.get("host")
     const protocol = headersList.get("x-forwarded-proto")
     const baseUrl =
+      getBaseUrl() ||
       `${protocol}://${host}/split` ||
       `${process.env.NEXT_PUBLIC_VERCEL_URL}/split`
 
-    const [link] = createSplitURL(validatedData, baseUrl)
+    const link = getSplitURL(validatedData).join("?")
 
     return NextResponse.json({
       link,

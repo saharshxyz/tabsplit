@@ -1,0 +1,263 @@
+{
+  "joesDinner": {
+    "checkName": "Dinner at Joes",
+    "taxAmount": 5,
+    "tipBeforeTax": true,
+    "tipAmount": 10,
+    "items": [
+      {
+        "name": "Pizza",
+        "price": 20,
+        "eaters": [
+          {
+            "name": "Alice"
+          },
+          {
+            "name": "Bob"
+          }
+        ]
+      },
+      {
+        "name": "Salad",
+        "price": 10,
+        "eaters": [
+          {
+            "name": "Charlie"
+          }
+        ]
+      }
+    ],
+    "eaters": [
+      {
+        "name": "Alice"
+      },
+      {
+        "name": "Bob"
+      },
+      {
+        "name": "Charlie"
+      }
+    ]
+  },
+  "wings": {
+    "checkName": "Wings Order",
+    "taxAmount": 7.46,
+    "tipAmount": 19.16,
+    "tipBeforeTax": true,
+    "items": [
+      {
+        "name": "Large French Fries",
+        "price": 7.49,
+        "eaters": [
+          {
+            "name": "Vincent"
+          },
+          {
+            "name": "Kyle"
+          },
+          {
+            "name": "Samuel"
+          },
+          {
+            "name": "Adam"
+          }
+        ]
+      },
+      {
+        "name": "30 Traditional Wings",
+        "price": 40.99,
+        "eaters": [
+          {
+            "name": "Vincent"
+          },
+          {
+            "name": "Kyle"
+          },
+          {
+            "name": "Samuel"
+          },
+          {
+            "name": "Adam"
+          }
+        ]
+      },
+      {
+        "name": "10 Traditional Wings",
+        "price": 15.99,
+        "eaters": [
+          {
+            "name": "Karen"
+          }
+        ]
+      },
+      {
+        "name": "Michelob Ultra (2x)",
+        "price": 13.5,
+        "eaters": [
+          {
+            "name": "Adam"
+          },
+          {
+            "name": "Kyle"
+          }
+        ]
+      },
+      {
+        "name": "20 Traditional Wings",
+        "price": 28.49,
+        "eaters": [
+          {
+            "name": "Vincent"
+          },
+          {
+            "name": "Kyle"
+          },
+          {
+            "name": "Samuel"
+          },
+          {
+            "name": "Adam"
+          }
+        ]
+      }
+    ],
+    "eaters": [
+      {
+        "name": "Vincent"
+      },
+      {
+        "name": "Karen"
+      },
+      {
+        "name": "Samuel"
+      },
+      {
+        "name": "Adam"
+      },
+      {
+        "name": "Kyle"
+      }
+    ]
+  },
+  "fridayGourmetFusion": {
+    "checkName": "Friday Night Dinner at Gourmet Fusion",
+    "taxAmount": 15.75,
+    "tipBeforeTax": true,
+    "tipAmount": 31.50,
+    "items": [
+      {
+        "name": "Truffle Infused Risotto",
+        "price": 24.99,
+        "eaters": [
+          { "name": "Alice" },
+          { "name": "Bob" },
+          { "name": "Charlie" }
+        ]
+      },
+      {
+        "name": "Seared Ahi Tuna",
+        "price": 28.50,
+        "eaters": [
+          { "name": "Diana" },
+          { "name": "Eve" }
+        ]
+      },
+      {
+        "name": "Wagyu Beef Sliders",
+        "price": 18.75,
+        "eaters": [
+          { "name": "Frank" },
+          { "name": "George" },
+          { "name": "Hannah" }
+        ]
+      },
+      {
+        "name": "Lobster Mac and Cheese",
+        "price": 22.99,
+        "eaters": [
+          { "name": "Alice" },
+          { "name": "Charlie" },
+          { "name": "Eve" },
+          { "name": "Isaac" }
+        ]
+      },
+      {
+        "name": "Grilled Vegetable Platter",
+        "price": 15.50,
+        "eaters": [
+          { "name": "Bob" },
+          { "name": "Diana" },
+          { "name": "Hannah" }
+        ]
+      },
+      {
+        "name": "Artisanal Cheese Board",
+        "price": 19.99,
+        "eaters": [
+          { "name": "Alice" },
+          { "name": "Bob" },
+          { "name": "Charlie" },
+          { "name": "Diana" },
+          { "name": "Eve" },
+          { "name": "Frank" },
+          { "name": "George" },
+          { "name": "Hannah" },
+          { "name": "Isaac" }
+        ]
+      },
+      {
+        "name": "Crispy Calamari",
+        "price": 16.50,
+        "eaters": [
+          { "name": "Charlie" },
+          { "name": "Frank" },
+          { "name": "Isaac" }
+        ]
+      },
+      {
+        "name": "Miso Glazed Black Cod",
+        "price": 32.00,
+        "eaters": [
+          { "name": "Diana" },
+          { "name": "George" }
+        ]
+      },
+      {
+        "name": "Truffled Pommes Frites",
+        "price": 9.99,
+        "eaters": [
+          { "name": "Alice" },
+          { "name": "Bob" },
+          { "name": "Charlie" },
+          { "name": "Diana" },
+          { "name": "Eve" },
+          { "name": "Frank" },
+          { "name": "George" },
+          { "name": "Hannah" },
+          { "name": "Isaac" }
+        ]
+      },
+      {
+        "name": "Chocolate Lava Cake",
+        "price": 11.99,
+        "eaters": [
+          { "name": "Alice" },
+          { "name": "Eve" },
+          { "name": "Hannah" },
+          { "name": "Isaac" }
+        ]
+      }
+    ],
+    "eaters": [
+      { "name": "Alice" },
+      { "name": "Bob" },
+      { "name": "Charlie" },
+      { "name": "Diana" },
+      { "name": "Eve" },
+      { "name": "Frank" },
+      { "name": "George" },
+      { "name": "Hannah" },
+      { "name": "Isaac" }
+    ]
+  }
+}
