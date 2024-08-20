@@ -143,7 +143,7 @@
     "checkName": "Friday Night Dinner at Gourmet Fusion",
     "taxAmount": 15.75,
     "tipBeforeTax": true,
-    "tipAmount": 31.50,
+    "tipAmount": 31.5,
     "items": [
       {
         "name": "Truffle Infused Risotto",
@@ -156,11 +156,8 @@
       },
       {
         "name": "Seared Ahi Tuna",
-        "price": 28.50,
-        "eaters": [
-          { "name": "Diana" },
-          { "name": "Eve" }
-        ]
+        "price": 28.5,
+        "eaters": [{ "name": "Diana" }, { "name": "Eve" }]
       },
       {
         "name": "Wagyu Beef Sliders",
@@ -183,12 +180,8 @@
       },
       {
         "name": "Grilled Vegetable Platter",
-        "price": 15.50,
-        "eaters": [
-          { "name": "Bob" },
-          { "name": "Diana" },
-          { "name": "Hannah" }
-        ]
+        "price": 15.5,
+        "eaters": [{ "name": "Bob" }, { "name": "Diana" }, { "name": "Hannah" }]
       },
       {
         "name": "Artisanal Cheese Board",
@@ -207,7 +200,7 @@
       },
       {
         "name": "Crispy Calamari",
-        "price": 16.50,
+        "price": 16.5,
         "eaters": [
           { "name": "Charlie" },
           { "name": "Frank" },
@@ -216,11 +209,8 @@
       },
       {
         "name": "Miso Glazed Black Cod",
-        "price": 32.00,
-        "eaters": [
-          { "name": "Diana" },
-          { "name": "George" }
-        ]
+        "price": 32.0,
+        "eaters": [{ "name": "Diana" }, { "name": "George" }]
       },
       {
         "name": "Truffled Pommes Frites",
