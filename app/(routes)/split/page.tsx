@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 import { LoadingCard } from "@/components/LoadingCard"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { PenSquare, ExternalLink } from "lucide-react"
+import { PenSquare, Link as LinkIcon } from "lucide-react"
 
 export default function Split() {
   const { hash, parsedData, error } = useHash()
@@ -34,7 +34,7 @@ export default function Split() {
         </Link>
         <Button onClick={copyUrlToClipboard} className="w-3/5">
           Share Split
-          <ExternalLink className="ml-2 h-4 w-4" strokeWidth={2} />
+          <LinkIcon className="ml-2 h-4 w-4" strokeWidth={2} />
         </Button>
       </div>
       {isLoading ? (

@@ -6,7 +6,7 @@ export const useCopyURLToClipboard = () => {
     navigator.clipboard
       .writeText(window.location.href)
       .then(() => {
-        toast.success("URL copied to clipboard")
+        toast.success("Link copied to clipboard")
       })
       .catch((err) => {
         console.error("Failed to copy: ", err)

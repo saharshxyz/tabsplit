@@ -1,7 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter
+} from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
 import { getURLArgs } from "@/lib/utils"
@@ -66,6 +72,9 @@ export default function Example() {
             </>
           )}
         </CardContent>
+        <CardFooter>
+          Returning to this page will show different examples each time.
+        </CardFooter>
       </Card>
     </main>
   )

@@ -5,7 +5,6 @@ import {
   CardContent,
   CardFooter
 } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RefreshCcw } from "lucide-react"
 import { Alert, AlertTitle } from "@/components/ui/alert"
