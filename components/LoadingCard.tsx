@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RefreshCcw } from "lucide-react"
+import { Alert, AlertTitle } from "@/components/ui/alert"
 
 interface LoadingCardProps {
   title: string
@@ -23,15 +24,11 @@ export const LoadingCard = ({ title }: LoadingCardProps) => (
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
     </CardContent>
-    <CardFooter className="flex justify-between">
-      <Button
-        variant="outline"
-        onClick={() => window.location.reload()}
-        className="w-full"
-      >
-        <RefreshCcw className="mr-2 h-4 w-4" />
-        Reload
-      </Button>
+    <CardFooter>
+      <Alert>
+        <RefreshCcw className="h-4 w-4" />
+        <AlertTitle>Try Reloading</AlertTitle>
+      </Alert>
     </CardFooter>
   </Card>
 )
