@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFieldArray, useWatch } from "react-hook-form"
 import { useEffect, useMemo, useRef, useCallback } from "react"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -24,7 +25,6 @@ import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
 import { ReceiptText } from "lucide-react"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 interface SplittingFormProps {
   initialData: Partial<FormSchema>
@@ -32,9 +32,6 @@ interface SplittingFormProps {
 
 export function SplittingForm({ initialData }: SplittingFormProps) {
   const router = useRouter()
-
-  const [eaterParent] = useAutoAnimate()
-  const [itemParent] = useAutoAnimate()
 
   const {
     randomPlaceholders,
@@ -55,6 +52,24 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
       items: initialData.items || []
     }
   })
+
+  const isInitialLoad = useRef(true)
+  const [eaterParentRef, enableEaterAnimations] =
+    useAutoAnimate<HTMLDivElement>()
+  const [itemParentRef, enableItemAnimations] = useAutoAnimate<HTMLDivElement>()
+
+  useEffect(() => {
+    if (isInitialLoad.current) {
+      enableEaterAnimations(false)
+      enableItemAnimations(false)
+
+      setTimeout(() => {
+        enableEaterAnimations(true)
+        enableItemAnimations(true)
+        isInitialLoad.current = false
+      }, 100)
+    }
+  }, [enableEaterAnimations, enableItemAnimations])
 
   useEffect(() => {
     if (Object.keys(initialData).length > 0) {
@@ -233,7 +248,7 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
         </div>
         <div>
           <FormLabel>Eaters</FormLabel>
-          <div className="space-y-2" ref={eaterParent}>
+          <div className="space-y-2" ref={eaterParentRef}>
             {eaterFields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-2">
                 <FormField
@@ -287,7 +302,7 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
 
         <div>
           <h3 className="mb-2 text-lg font-semibold">Items</h3>
-          <div className="space-y-4" ref={itemParent}>
+          <div className="space-y-4" ref={itemParentRef}>
             {itemFields.map((field, index) => (
               <Card key={field.id}>
                 <CardContent className="p-6 px-4 sm:px-6">
