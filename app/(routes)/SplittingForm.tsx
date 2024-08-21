@@ -25,6 +25,7 @@ import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
 import { ReceiptText } from "lucide-react"
+import { useState } from "react"
 
 interface SplittingFormProps {
   initialData: Partial<FormSchema>
@@ -32,6 +33,7 @@ interface SplittingFormProps {
 
 export function SplittingForm({ initialData }: SplittingFormProps) {
   const router = useRouter()
+  const [isMobile, setIsMobile] = useState(false)
 
   const {
     randomPlaceholders,
@@ -52,6 +54,17 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
       items: initialData.items || []
     }
   })
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia("(max-width: 640px)").matches)
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   const isInitialLoad = useRef(true)
   const [eaterParentRef, enableEaterAnimations] =
@@ -143,13 +156,13 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
 
   const appendEaterWithPlaceholder = useCallback(() => {
     appendEaterPlaceholder()
-    appendEater({ name: "" })
-  }, [appendEater, appendEaterPlaceholder])
+    appendEater({ name: "" }, { shouldFocus: !isMobile })
+  }, [appendEater, appendEaterPlaceholder, isMobile])
 
   const appendItemWithPlaceholder = useCallback(() => {
     appendItemPlaceholder()
-    appendItem({ name: "", price: 0, eaters: [] })
-  }, [appendItem, appendItemPlaceholder])
+    appendItem({ name: "", price: 0, eaters: [] }, { shouldFocus: !isMobile })
+  }, [appendItem, appendItemPlaceholder, isMobile])
 
   const onSubmit = useCallback(
     (values: FormSchema) => {
