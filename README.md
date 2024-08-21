@@ -6,6 +6,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - [ ] Create favicon/logo (Update OG image to use logo)
 - [ ] Add charts to split screen. One pie chart for how much each portion of the bill is and another for how much of the total each person has to pay (maybe used stacked pie chart)
 - [ ] Fix dark theme
+- [ ] Prevent zooming on input field on mobile
 
 Example: [Random bill](https://multisplit.saharsh.xyz/example)
 

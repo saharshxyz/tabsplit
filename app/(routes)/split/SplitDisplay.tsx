@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Users, User } from "lucide-react"
 import { SplitSchema } from "@/lib/schemas"
+import { SplitCharts } from "./Charts"
 
 interface ItemRowProps {
   item: {
@@ -135,7 +136,7 @@ interface SplitDisplayProps {
 
 export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
   <Card>
-    <CardHeader>
+    <CardHeader className="pb-0">
       <div className="flex items-center justify-between">
         <CardTitle>{splitResult.checkName} - Check Split</CardTitle>
       </div>
@@ -148,7 +149,9 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
         ))}
       </div>
     </CardHeader>
+
     <CardContent>
+      <SplitCharts splitResult={splitResult} />
       <div className="space-y-6">
         <SplitTable
           items={splitResult.items}
