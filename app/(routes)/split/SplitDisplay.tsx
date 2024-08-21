@@ -26,7 +26,9 @@ interface ItemRowProps {
 
 const ItemRow: React.FC<ItemRowProps> = ({ item, showEaters = false }) => (
   <TableRow className="w-full border-0 leading-tight">
-    <TableCell className="py-2">{item.name}</TableCell>
+    <TableCell className={`${showEaters ? "w-3/12" : "w-full"} py-2 pr-1.5`}>
+      {item.name}
+    </TableCell>
     <TableCell className={`${showEaters ? "w-full" : ""} py-2 text-right`}>
       {showEaters && item.eaters && (
         <div className="flex items-center justify-end">
@@ -137,10 +139,9 @@ interface SplitDisplayProps {
 export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
   <Card>
     <CardHeader className="pb-0">
-      <div className="flex items-center justify-between">
-        <CardTitle>{splitResult.checkName} - Check Split</CardTitle>
-      </div>
-
+      <CardTitle className="mb-1.5">
+        {splitResult.checkName} - Check Split
+      </CardTitle>
       <div className="flex flex-wrap gap-2">
         {splitResult.eaters.map((eater) => (
           <Badge key={eater.name} variant="secondary" className="text-sm">

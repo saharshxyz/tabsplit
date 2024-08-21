@@ -122,10 +122,10 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
   }, [itemData])
 
   return (
-    <div className="hidden sm:flex">
+    <div className="hidden pb-3 pt-6 sm:flex">
       <ChartContainer
         config={config}
-        className="aspect-square min-h-[50%] w-full max-w-[50%]"
+        className="aspect-[4/3] min-h-[50%] w-full max-w-[50%]"
       >
         <PieChart>
           <ChartTooltip
@@ -147,7 +147,7 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
             data={itemData}
             dataKey="dollar"
             nameKey="name"
-            innerRadius={total > 100 ? (total > 1000 ? 60 : 55) : 50}
+            innerRadius={total < 100 ? 50 : total < 1000 ? 60 : 63.5}
             outerRadius={95}
             strokeWidth={5}
             paddingAngle={3}
@@ -180,7 +180,7 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
       </ChartContainer>
       <ChartContainer
         config={config}
-        className="aspect-square min-h-[50%] w-full max-w-[50%] [&_.recharts-pie-label-line]:stroke-foreground"
+        className="aspect-[4/3] min-h-[50%] w-full max-w-[50%] [&_.recharts-pie-label-line]:stroke-foreground"
       >
         <PieChart>
           <ChartTooltip
@@ -210,7 +210,7 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
             <LabelList
               dataKey="name"
               position="outside"
-              offset={8}
+              offset={10}
               className="fill-foreground"
               stroke="none"
               fontSize={12}
