@@ -21,14 +21,18 @@ export function calculateSplit(data: FormSchema): SplitSchema {
     taxAmount,
     tipBeforeTax,
     tipAmount,
-    items,
-    eaters: formEaters
+    items: unsortedItems,
+    eaters: unsortedEaters
   } = data
 
-  const subTotal = items.reduce(
-    (acc: number, curr: { price: number }) => acc + curr.price,
-    0
+  // sort items and eaters alphabetically
+  const items = [...unsortedItems].sort((a, b) => a.name.localeCompare(b.name))
+  const formEaters = [...unsortedEaters].sort((a, b) =>
+    a.name.localeCompare(b.name)
   )
+
+  const subTotal = items.reduce((acc, curr) => acc + curr.price, 0)
+
   const taxPercentage = (taxAmount / subTotal) * 100
   const tipPercentage =
     (tipAmount / (tipBeforeTax ? subTotal : subTotal + taxAmount)) * 100
@@ -37,7 +41,7 @@ export function calculateSplit(data: FormSchema): SplitSchema {
   const eaterMap = new Map<string, EaterSchema>()
 
   // initialize eaters
-  formEaters.forEach(({ name }: { name: string }) => {
+  formEaters.forEach(({ name }) => {
     eaterMap.set(name.toLowerCase(), {
       name,
       taxAmount: 0,
@@ -49,16 +53,14 @@ export function calculateSplit(data: FormSchema): SplitSchema {
   })
 
   // calculate individual shares
-  items.forEach(
-    (item: { name: string; price: number; eaters: { name: string }[] }) => {
-      const portionCost = item.price / item.eaters.length
-      item.eaters.forEach(({ name }: { name: string }) => {
-        const eater = eaterMap.get(name.toLowerCase())!
-        eater.subtotal += portionCost
-        eater.items.push({ name: item.name, portionCost })
-      })
-    }
-  )
+  items.forEach((item) => {
+    const portionCost = item.price / item.eaters.length
+    item.eaters.forEach(({ name }) => {
+      const eater = eaterMap.get(name.toLowerCase())!
+      eater.subtotal += portionCost
+      eater.items.push({ name: item.name, portionCost })
+    })
+  })
 
   // calculate tax, tip, and total for each eater
   eaterMap.forEach((eater) => {
@@ -67,6 +69,9 @@ export function calculateSplit(data: FormSchema): SplitSchema {
       (tipBeforeTax ? eater.subtotal : eater.subtotal + eater.taxAmount) *
       (tipPercentage / 100)
     eater.total = eater.subtotal + eater.taxAmount + eater.tipAmount
+
+    // Sort eater's items by name
+    eater.items.sort((a, b) => a.name.localeCompare(b.name))
   })
 
   const split: SplitSchema = {

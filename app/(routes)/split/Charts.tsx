@@ -88,15 +88,7 @@ const getCharts = (
     })
   })
 
-  // Typescript throws errors if I combine these two into one
-  itemData.forEach((element: chartData) => {
-    config[element.name] = {
-      label: element.name,
-      color: element.fill
-    }
-  })
-
-  eaterData.forEach((element: chartData) => {
+  itemData.concat(eaterData).forEach((element: chartData) => {
     config[element.name] = {
       label: element.name,
       color: element.fill
