@@ -24,6 +24,7 @@ import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
 import { ReceiptText } from "lucide-react"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 interface SplittingFormProps {
   initialData: Partial<FormSchema>
@@ -31,6 +32,9 @@ interface SplittingFormProps {
 
 export function SplittingForm({ initialData }: SplittingFormProps) {
   const router = useRouter()
+
+  const [eaterParent] = useAutoAnimate()
+  const [itemParent] = useAutoAnimate()
 
   const {
     randomPlaceholders,
@@ -229,7 +233,7 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
         </div>
         <div>
           <FormLabel>Eaters</FormLabel>
-          <div className="space-y-2">
+          <div className="space-y-2" ref={eaterParent}>
             {eaterFields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-2">
                 <FormField
@@ -283,7 +287,7 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
 
         <div>
           <h3 className="mb-2 text-lg font-semibold">Items</h3>
-          <div className="space-y-4">
+          <div className="space-y-4" ref={itemParent}>
             {itemFields.map((field, index) => (
               <Card key={field.id}>
                 <CardContent className="p-6 px-4 sm:px-6">
