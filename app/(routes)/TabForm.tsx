@@ -32,50 +32,32 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
-import { tabSchema, TabSchema, descriptionTypes } from "@/lib/schemas"
+import {
+  tabSchema,
+  TabSchema,
+  DescriptionType,
+  descriptionTypes
+} from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
 import { ReceiptText } from "lucide-react"
+import { PaymentLink } from "@/components/PaymentLink"
 
 function DescriptionDisplay({
   type,
   details
 }: {
-  type: string
+  type: DescriptionType
   details: string | undefined
 }) {
-  if (!details) return "Will display"
+  if (!details) return null
 
-  const urlMap: Record<string, string> = {
-    Venmo: `https://venmo.com/${details}`,
-    PayPal: `https://paypal.me/${details}`,
-    "Cash App": `https://cash.app/${details}`
-  }
-
-  const displayMap: Record<string, string> = {
-    Venmo: `@${details}`,
-    PayPal: `@${details}`,
-    "Cash App": `$${details}`
-  }
-
-  if (urlMap[type]) {
-    return (
-      <>
-        Will display:{" "}
-        <a
-          href={urlMap[type]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline underline-offset-4 duration-200 ease-in-out hover:underline-offset-1"
-        >
-          {displayMap[type]}
-        </a>
-      </>
-    )
-  }
-
-  return "Will display"
+  return (
+    <>
+      Will display: <PaymentLink type={type} details={details} />
+    </>
+  )
 }
 
 interface TabFormProps {
@@ -99,7 +81,9 @@ export function TabForm({ initialData }: TabFormProps) {
     resolver: zodResolver(tabSchema),
     defaultValues: {
       tabName: initialData.tabName || "",
-      tabDescription: initialData.tabDescription || {},
+      tabDescription: initialData.tabDescription || {
+        type: "None"
+      },
       taxAmount: initialData.taxAmount || 0,
       tipBeforeTax: initialData.tipBeforeTax ?? true,
       tipAmount: initialData.tipAmount || 0,
@@ -150,7 +134,9 @@ export function TabForm({ initialData }: TabFormProps) {
     if (Object.keys(initialData).length > 0) {
       form.reset({
         tabName: initialData.tabName || "",
-        tabDescription: initialData.tabDescription || {},
+        tabDescription: initialData.tabDescription || {
+          type: "None"
+        },
         taxAmount: initialData.taxAmount || 0,
         tipBeforeTax: initialData.tipBeforeTax ?? true,
         tipAmount: initialData.tipAmount || 0,
@@ -291,7 +277,7 @@ export function TabForm({ initialData }: TabFormProps) {
               >
                 <FormLabel>Description Type</FormLabel>
                 <Select
-                  onValueChange={(value) => {
+                  onValueChange={(value: DescriptionType) => {
                     field.onChange(value)
                     if (value === "None") {
                       form.setValue("tabDescription.details", undefined)

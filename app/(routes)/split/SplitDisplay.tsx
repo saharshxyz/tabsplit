@@ -9,9 +9,10 @@ import { SplitTable } from "./Table"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
-import { SplitSchema } from "@/lib/schemas"
+import { SplitSchema, DescriptionType } from "@/lib/schemas"
 import { SplitCharts } from "./Charts"
 import { ExternalLink } from "lucide-react"
+import { PaymentLink } from "@/components/PaymentLink"
 
 interface SplitDisplayProps {
   splitResult: SplitSchema
@@ -19,7 +20,7 @@ interface SplitDisplayProps {
 
 interface TabDescriptionProps {
   tabDescription: {
-    type: "None" | "Venmo" | "Cash App" | "PayPal" | "Other"
+    type: DescriptionType
     details?: string
   }
 }
@@ -27,45 +28,15 @@ interface TabDescriptionProps {
 const TabDescription: React.FC<TabDescriptionProps> = ({ tabDescription }) => {
   if (tabDescription.type === "None" || !tabDescription.details) return null
 
-  const getPaymentLink = () => {
-    switch (tabDescription.type) {
-      case "Venmo":
-        return `https://venmo.com/u/${tabDescription.details}`
-      case "Cash App":
-        return `https://cash.app/$${tabDescription.details}`
-      case "PayPal":
-        return `https://paypal.me/${tabDescription.details}`
-      default:
-        return "#"
-    }
-  }
-
-  const getDisplayDetails = () => {
-    switch (tabDescription.type) {
-      case "Venmo":
-      case "PayPal":
-        return `@${tabDescription.details}`
-      case "Cash App":
-        return `$${tabDescription.details}`
-      default:
-        return tabDescription.details
-    }
-  }
-
   return (
     <CardDescription>
       {tabDescription.type !== "Other" ? (
         <>
           {tabDescription.type}:{" "}
-          <Link
-            href={getPaymentLink()}
-            target="_blank"
-            rel="noopener"
-            className="inline-flex flex-row items-center border-b-2 border-transparent transition-colors duration-200 ease-in-out hover:border-current"
-          >
-            {getDisplayDetails()}
-            <ExternalLink className="ml-2 h-4 w-auto" strokeWidth={2.25} />
-          </Link>
+          <PaymentLink
+            type={tabDescription.type}
+            details={tabDescription.details}
+          />
         </>
       ) : (
         tabDescription.details

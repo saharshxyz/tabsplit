@@ -67,6 +67,7 @@ export const descriptionTypes = [
   "PayPal",
   "Other"
 ] as const
+export type DescriptionType = (typeof descriptionTypes)[number]
 
 const baseSchema = z.object({
   tabName: nameSchema,
