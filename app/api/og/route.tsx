@@ -3,12 +3,27 @@ import { NextRequest } from "next/server"
 
 export const runtime = "edge"
 
+// Load the font files
+const interRegularFontP = fetch(
+  new URL("../../../public/Inter-Regular.otf", import.meta.url)
+).then((res) => res.arrayBuffer())
+
+const interBoldFontP = fetch(
+  new URL("../../../public/Inter-Bold.otf", import.meta.url)
+).then((res) => res.arrayBuffer())
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const title = searchParams.get("title") || "TabSplit"
   const description = searchParams.get("description") || "Split Tabs with ease"
   const width = parseInt(searchParams.get("width") || "1200", 10)
   const height = parseInt(searchParams.get("height") || "630", 10)
+
+  // Load the fonts
+  const [interRegularFont, interBoldFont] = await Promise.all([
+    interRegularFontP,
+    interBoldFontP
+  ])
 
   return new ImageResponse(
     (
@@ -23,7 +38,8 @@ export async function GET(request: NextRequest) {
           backgroundColor: "white",
           backgroundImage:
             "radial-gradient(circle at 20px 20px, #a0a0a0 3%, transparent 0%), radial-gradient(circle at 60px 60px, #a0a0a0 3%, transparent 0%)",
-          backgroundSize: "80px 80px"
+          backgroundSize: "80px 80px",
+          fontFamily: "Inter"
         }}
       >
         <div
@@ -58,7 +74,7 @@ export async function GET(request: NextRequest) {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="#1a202c"
-                strokeWidth="2"
+                strokeWidth="2.25"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -71,7 +87,7 @@ export async function GET(request: NextRequest) {
             <h1
               style={{
                 fontSize: "6rem",
-                fontWeight: 800,
+                fontWeight: 700, // Changed to 700 for bold
                 color: "#1a202c",
                 backgroundColor: "rgba(255, 255, 255, 0.75)",
                 borderRadius: "16px",
@@ -84,7 +100,7 @@ export async function GET(request: NextRequest) {
           <p
             style={{
               fontSize: "3.75rem",
-              fontWeight: 700,
+              fontWeight: 400, // Changed to 400 for regular
               color: "#4a5568",
               backgroundColor: "rgba(255, 255, 255, 0.75)",
               borderRadius: "16px",
@@ -98,7 +114,21 @@ export async function GET(request: NextRequest) {
     ),
     {
       width,
-      height
+      height,
+      fonts: [
+        {
+          name: "Inter",
+          data: interRegularFont,
+          style: "normal",
+          weight: 400
+        },
+        {
+          name: "Inter",
+          data: interBoldFont,
+          style: "normal",
+          weight: 700
+        }
+      ]
     }
   )
 }
