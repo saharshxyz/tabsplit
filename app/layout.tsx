@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <head />
       <body className="flex items-center justify-center">
-        <div className="mb-5 mt-5 min-h-screen w-full max-w-prose p-3 pt-0">
+        <div className="min-h-screen w-full max-w-prose">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

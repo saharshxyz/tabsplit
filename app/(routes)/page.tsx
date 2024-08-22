@@ -17,7 +17,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto">
+    <main className="mx-auto mt-5">
       <div className="m-2 flex space-x-2">
         <Link href={`/example`} className="flex-shrink-0">
           <Button variant="outline">
