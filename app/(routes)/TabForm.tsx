@@ -20,18 +20,18 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
-import { formSchema, FormSchema } from "@/lib/schemas"
+import { tabSchema, TabSchema } from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
 import { ReceiptText } from "lucide-react"
 import { useState } from "react"
 
-interface SplittingFormProps {
-  initialData: Partial<FormSchema>
+interface TabFormProps {
+  initialData: Partial<TabSchema>
 }
 
-export function SplittingForm({ initialData }: SplittingFormProps) {
+export function TabForm({ initialData }: TabFormProps) {
   const router = useRouter()
   const [isMobile, setIsMobile] = useState(false)
 
@@ -43,10 +43,10 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
     appendItemPlaceholder
   } = usePlaceholders()
 
-  const form = useForm<FormSchema>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<TabSchema>({
+    resolver: zodResolver(tabSchema),
     defaultValues: {
-      checkName: initialData.checkName || "",
+      tabName: initialData.tabName || "",
       taxAmount: initialData.taxAmount || 0,
       tipBeforeTax: initialData.tipBeforeTax ?? true,
       tipAmount: initialData.tipAmount || 0,
@@ -87,7 +87,7 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
   useEffect(() => {
     if (Object.keys(initialData).length > 0) {
       form.reset({
-        checkName: initialData.checkName || "",
+        tabName: initialData.tabName || "",
         taxAmount: initialData.taxAmount || 0,
         tipBeforeTax: initialData.tipBeforeTax ?? true,
         tipAmount: initialData.tipAmount || 0,
@@ -165,9 +165,9 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
   }, [appendItem, appendItemPlaceholder, isMobile])
 
   const onSubmit = useCallback(
-    (values: FormSchema) => {
+    (values: TabSchema) => {
       const params = new URLSearchParams()
-      params.set("checkName", values.checkName || "")
+      params.set("tabName", values.tabName || "")
       params.set("taxAmount", values.taxAmount?.toString() || "")
       params.set("tipBeforeTax", values.tipBeforeTax ? "true" : "false")
       params.set("tipAmount", values.tipAmount?.toString() || "")
@@ -185,15 +185,12 @@ export function SplittingForm({ initialData }: SplittingFormProps) {
         <div className="flex space-x-4">
           <FormField
             control={form.control}
-            name="checkName"
+            name="tabName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Check Name</FormLabel>
+                <FormLabel>Tab Name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder={randomPlaceholders.checkName}
-                    {...field}
-                  />
+                  <Input placeholder={randomPlaceholders.tabName} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

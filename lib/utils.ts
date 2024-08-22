@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ZodError } from "zod"
-import { EaterSchema, FormSchema, SplitSchema } from "@/lib/schemas"
+import { EaterSchema, TabSchema, SplitSchema } from "@/lib/schemas"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -15,9 +15,9 @@ export const logZodErrors = (error: ZodError, schemaName: string) => {
   console.groupEnd()
 }
 
-export function calculateSplit(data: FormSchema): SplitSchema {
+export function calculateSplit(data: TabSchema): SplitSchema {
   const {
-    checkName,
+    tabName,
     taxAmount,
     tipBeforeTax,
     tipAmount,
@@ -75,7 +75,7 @@ export function calculateSplit(data: FormSchema): SplitSchema {
   })
 
   const split: SplitSchema = {
-    checkName,
+    tabName,
     taxPercentage,
     taxAmount,
     tipBeforeTax,
@@ -92,8 +92,8 @@ export function calculateSplit(data: FormSchema): SplitSchema {
 
 export function parseUrlData(
   searchParams: URLSearchParams
-): Partial<FormSchema> {
-  const checkName = searchParams.get("checkName") || ""
+): Partial<TabSchema> {
+  const tabName = searchParams.get("tabName") || ""
   const taxAmount = parseFloat(searchParams.get("taxAmount") || "0")
   const tipBeforeTax = searchParams.get("tipBeforeTax") === "true"
   const tipAmount = parseFloat(searchParams.get("tipAmount") || "0")
@@ -113,7 +113,7 @@ export function parseUrlData(
   }
 
   return {
-    checkName,
+    tabName,
     taxAmount,
     tipBeforeTax,
     tipAmount,
@@ -131,12 +131,12 @@ export const getBaseUrl = (): string => {
 }
 
 export function getURLArgs(
-  data: FormSchema,
+  data: TabSchema,
   baseUrl: string = getBaseUrl()
 ): [string, string] {
   const params = new URLSearchParams()
 
-  params.append("checkName", data.checkName)
+  params.append("tabName", data.tabName)
   params.append("taxAmount", data.taxAmount.toString())
   params.append("tipAmount", data.tipAmount.toString())
   params.append("tipBeforeTax", data.tipBeforeTax.toString())

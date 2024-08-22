@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
-import { formSchema, FormSchema } from "@/lib/schemas"
+import { tabSchema, TabSchema } from "@/lib/schemas"
 import { ZodError } from "zod"
 import { logZodErrors } from "@/lib/utils"
 
 export const useHash = () => {
   const [hash, setHash] = useState<string>("")
-  const [parsedData, setParsedData] = useState<Partial<FormSchema>>({})
+  const [parsedData, setParsedData] = useState<Partial<TabSchema>>({})
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -34,12 +34,12 @@ export const useHash = () => {
           })
 
           try {
-            const validatedData = formSchema.parse(parsedParams)
+            const validatedData = tabSchema.parse(parsedParams)
             setParsedData(validatedData)
             setError(null)
           } catch (validationError) {
             if (validationError instanceof ZodError) {
-              logZodErrors(validationError, "FormSchema")
+              logZodErrors(validationError, "TabSchema")
               setError(JSON.stringify(validationError.issues, null, 2))
             } else {
               setError("An unknown validation error occurred")

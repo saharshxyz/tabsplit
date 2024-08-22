@@ -5,7 +5,7 @@ import { ErrorDisplay } from "./ErrorDisplay"
 import { SplitDisplay } from "./SplitDisplay"
 import { calculateSplit } from "@/lib/utils"
 import { useCopyURLToClipboard } from "@/lib/useCopyURLToClipboard"
-import { FormSchema } from "@/lib/schemas"
+import { TabSchema } from "@/lib/schemas"
 import { useEffect, useState } from "react"
 import { LoadingCard } from "@/components/LoadingCard"
 import Link from "next/link"
@@ -28,7 +28,7 @@ export default function Split() {
       <div className="m-2 flex space-x-2">
         <Link href={`/#${hash}`} className="w-2/5">
           <Button variant="outline" className="w-full">
-            Edit Bill
+            Edit Tab
             <PenSquare className="ml-2 h-4 w-4" strokeWidth={2} />
           </Button>
         </Link>
@@ -42,7 +42,7 @@ export default function Split() {
       ) : error ? (
         <ErrorDisplay error={error} />
       ) : (
-        <SplitDisplay splitResult={calculateSplit(parsedData as FormSchema)} />
+        <SplitDisplay splitResult={calculateSplit(parsedData as TabSchema)} />
       )}
     </main>
   )

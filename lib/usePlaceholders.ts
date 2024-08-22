@@ -41,7 +41,7 @@ const getRandomAmount = (upperLimit: number) =>
   (Math.random() * upperLimit + 5).toFixed(2)
 
 export interface Placeholder {
-  checkName: string
+  tabName: string
   taxAmount: string
   tipAmount: string
   eaterName: string
@@ -68,7 +68,7 @@ export function usePlaceholders() {
 
   const randomPlaceholders = useMemo<Placeholder>(
     () => ({
-      checkName: `Dinner at ${getRandomElement(restaurants)}`,
+      tabName: `Dinner at ${getRandomElement(restaurants)}`,
       taxAmount: getRandomAmount(23),
       tipAmount: getRandomAmount(40),
       eaterName: getRandomElement(names),

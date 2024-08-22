@@ -1,22 +1,22 @@
 import type { Metadata } from "next"
 
 export function generateMetadata(
-  title: string = "MultiSplit",
-  description: string = "Split checks with ease"
+  title: string = "TabSplit",
+  description: string = "Split tabs with ease"
 ): Metadata {
-  const fullTitle = title === "MultiSplit" ? title : `${title} | MultiSplit`
+  const fullTitle = title === "TabSplit" ? title : `${title} | TabSplit`
 
   return {
-    metadataBase: new URL("https://multisplit.saharsh.xyz"),
+    metadataBase: new URL("https://tabsplit.saharsh.xyz"),
     title: {
       default: fullTitle,
-      template: "%s | MultiSplit"
+      template: "%s | TabSplit"
     },
     description,
     openGraph: {
       title: {
         default: fullTitle,
-        template: "%s | MultiSplit"
+        template: "%s | TabSplit"
       },
       description,
       images: [

@@ -5,9 +5,8 @@ export const runtime = "edge"
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const title = searchParams.get("title") || "Multisplit"
-  const description =
-    searchParams.get("description") || "Split Checks with ease"
+  const title = searchParams.get("title") || "TabSplit"
+  const description = searchParams.get("description") || "Split Tabs with ease"
   const width = parseInt(searchParams.get("width") || "1200", 10)
   const height = parseInt(searchParams.get("height") || "630", 10)
 

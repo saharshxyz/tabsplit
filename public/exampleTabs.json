@@ -1,6 +1,6 @@
 {
   "joesDinner": {
-    "checkName": "Dinner at Joes",
+    "tabName": "Dinner at Joes",
     "taxAmount": 5,
     "tipBeforeTax": true,
     "tipAmount": 10,
@@ -40,7 +40,7 @@
     ]
   },
   "wings": {
-    "checkName": "Wings Order",
+    "tabName": "Wings Order",
     "taxAmount": 7.46,
     "tipAmount": 19.16,
     "tipBeforeTax": true,
@@ -140,7 +140,7 @@
     ]
   },
   "fridayGourmetFusion": {
-    "checkName": "Friday Night Dinner at Gourmet Fusion",
+    "tabName": "Friday Night Dinner at Gourmet Fusion",
     "taxAmount": 15.75,
     "tipBeforeTax": true,
     "tipAmount": 31.5,

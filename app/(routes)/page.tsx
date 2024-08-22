@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { SplittingForm } from "./SplittingForm"
+import { TabForm } from "./TabForm"
 import { useHash } from "@/lib/useHash"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -35,7 +35,7 @@ export default function Home() {
 
       <Card>
         <CardContent>
-          <SplittingForm initialData={parsedData} />
+          <TabForm initialData={parsedData} />
         </CardContent>
       </Card>
     </main>

@@ -140,7 +140,7 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
   <Card>
     <CardHeader className="pb-0">
       <CardTitle className="mb-1.5">
-        {splitResult.checkName} - Check Split
+        {splitResult.tabName} - Tab Split
       </CardTitle>
       <div className="flex flex-wrap gap-2">
         {splitResult.eaters.map((eater) => (

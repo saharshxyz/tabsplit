@@ -61,7 +61,7 @@ const eaterSchema = z
 export type EaterSchema = z.infer<typeof eaterSchema>
 
 const baseSchema = z.object({
-  checkName: nameSchema,
+  tabName: nameSchema,
   taxPercentage: percentageSchema,
   taxAmount: dollarAmountSchema,
   tipBeforeTax: z.boolean().default(true),
@@ -81,9 +81,9 @@ const eatersAndItemsRefine = (
     item.eaters.every((eater) => eaters.some((e) => e.name === eater.name))
   )
 
-export const formSchema = baseSchema
+export const tabSchema = baseSchema
   .pick({
-    checkName: true,
+    tabName: true,
     taxAmount: true,
     tipBeforeTax: true,
     tipAmount: true,
@@ -100,7 +100,7 @@ export const formSchema = baseSchema
     message: "Item names must be unique.",
     path: ["items"]
   })
-export type FormSchema = z.infer<typeof formSchema>
+export type TabSchema = z.infer<typeof tabSchema>
 
 export const splitSchema = baseSchema
   .refine(

@@ -1,12 +1,12 @@
 import { logZodErrors, getURLArgs, calculateSplit } from "@/lib/utils"
-import { formSchema, FormSchema, splitSchema } from "@/lib/schemas"
-import exampleChecks from "@/public/exampleChecks.json"
+import { tabSchema, TabSchema, splitSchema } from "@/lib/schemas"
+import exampleTabs from "@/public/exampleTabs.json"
 
 describe("getURLArgs", () => {
   it("should create a correctly formatted and encoded URL", () => {
-    const testData: FormSchema = exampleChecks.joesDinner
+    const testData: TabSchema = exampleTabs.joesDinner
 
-    const parseData = formSchema.safeParse(testData)
+    const parseData = tabSchema.safeParse(testData)
     if (!parseData.success) {
       logZodErrors(parseData.error, "FormSchema")
     }
@@ -16,16 +16,13 @@ describe("getURLArgs", () => {
       const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
         ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
         : process.env.NEXT_PUBLIC_BASE_URL || ""
-      const result = getURLArgs(testData)[0]
+      const [resultBaseUrl, encodedParams] = getURLArgs(testData, baseUrl)
 
-      expect(result.startsWith(baseUrl)).toBe(true)
+      expect(resultBaseUrl).toBe(baseUrl)
 
-      console.log(result)
+      const params = new URLSearchParams(encodedParams)
 
-      const url = new URL(result)
-      const params = new URLSearchParams(url.search)
-
-      expect(params.get("checkName")).toBe("Dinner at Joes")
+      expect(params.get("tabName")).toBe("Dinner at Joes")
       expect(params.get("taxAmount")).toBe("5")
       expect(params.get("tipBeforeTax")).toBe("true")
       expect(params.get("tipAmount")).toBe("10")
@@ -36,35 +33,19 @@ describe("getURLArgs", () => {
       const decodedEaters = JSON.parse(params.get("eaters") || "[]")
       expect(decodedEaters).toEqual(testData.eaters)
 
-      expect(result).not.toContain("[")
-      expect(result).not.toContain("]")
-      expect(result).toContain("%5B") // encoded '['
-      expect(result).toContain("%5D") // encoded ']'
-    }
-  })
-
-  it("just log it", () => {
-    const input: FormSchema = exampleChecks.wings
-
-    const parseData = formSchema.safeParse(input)
-    if (!parseData.success) {
-      logZodErrors(parseData.error, "FormSchema")
-    }
-    expect(parseData.success).toBe(true)
-
-    if (parseData.success) {
-      const result = getURLArgs(input)
-
-      console.log(result[0])
+      expect(encodedParams).not.toContain("[")
+      expect(encodedParams).not.toContain("]")
+      expect(encodedParams).toContain("%5B") // encoded '['
+      expect(encodedParams).toContain("%5D") // encoded ']'
     }
   })
 })
 
 describe("calculateSplit", () => {
   it("should accept valid input and produce correctly formatted output", () => {
-    const inputData = exampleChecks.joesDinner
+    const inputData = exampleTabs.joesDinner
 
-    const parseResult = formSchema.safeParse(inputData)
+    const parseResult = tabSchema.safeParse(inputData)
     if (!parseResult.success) {
       logZodErrors(parseResult.error, "FormSchema")
     }
@@ -82,9 +63,9 @@ describe("calculateSplit", () => {
   })
 
   it("should correctly calculate the split for a given order", () => {
-    const input = exampleChecks.wings
+    const input = exampleTabs.wings
 
-    const parseResult = formSchema.safeParse(input)
+    const parseResult = tabSchema.safeParse(input)
     if (!parseResult.success) {
       logZodErrors(parseResult.error, "FormSchema")
     }
@@ -100,7 +81,7 @@ describe("calculateSplit", () => {
       expect(splitParseResult.success).toBe(true)
 
       if (splitParseResult.success) {
-        expect(split.checkName).toBe(input.checkName)
+        expect(split.tabName).toBe(input.tabName)
         expect(split.taxPercentage).toBeCloseTo(7, 1)
         expect(split.taxAmount).toBe(input.taxAmount)
         expect(split.tipPercentage).toBeGreaterThanOrEqual(15)

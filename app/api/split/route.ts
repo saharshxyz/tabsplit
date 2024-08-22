@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { formSchema, splitSchema, FormSchema } from "@/lib/schemas"
+import { tabSchema, splitSchema, TabSchema } from "@/lib/schemas"
 import { calculateSplit } from "@/lib/utils"
 import { getURLArgs, logZodErrors, getBaseUrl } from "@/lib/utils"
 import { ZodError } from "zod"
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    const validatedData: FormSchema = formSchema.parse(body)
+    const validatedData: TabSchema = tabSchema.parse(body)
 
     const result = calculateSplit(validatedData)
 
