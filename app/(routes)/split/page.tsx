@@ -29,12 +29,12 @@ export default function Split() {
         <Link href={`/#${hash}`} className="w-2/5">
           <Button variant="outline" className="w-full">
             Edit Tab
-            <PenSquare className="ml-2 h-4 w-4" strokeWidth={2} />
+            <PenSquare className="ml-2 h-4 w-4" strokeWidth={2.25} />
           </Button>
         </Link>
         <Button onClick={copyUrlToClipboard} className="w-3/5">
           Share Split
-          <LinkIcon className="ml-2 h-4 w-4" strokeWidth={2} />
+          <LinkIcon className="ml-2 h-4 w-4" strokeWidth={2.25} />
         </Button>
       </div>
       {isLoading ? (

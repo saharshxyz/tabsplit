@@ -2,13 +2,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## TODO
 
-- [ ] Create favicon/logo (Update OG image to use logo)
-- [ ] Fix `metadataBase` in `generateMetadata.ts`
-- [ ] Select all eaters button
+- [ ] Randomly generate examples each time instead of loading a massive JSON (fakerjs?)
 - [ ] Stacked pie chart on mobile
 - [ ] CLI
-- [ ] Optional form field of how the tab creator wants to get paid. Make it so that there's a couple different options and in the split page, it shows who to pay and can link to their preferred payment.
-- [ ] Randomly generate examples each time instead of loading a massive JSON (fakerjs?)
+- [ ] Select all eaters button
+- [ ] Create favicon/logo (Update OG image to use logo)
+- [ ] Fix `metadataBase` in `generateMetadata.ts`
 
 Example: [Random tab](https://tabsplit.saharsh.xyz/example)
 

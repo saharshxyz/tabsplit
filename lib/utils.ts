@@ -18,6 +18,7 @@ export const logZodErrors = (error: ZodError, schemaName: string) => {
 export function calculateSplit(data: TabSchema): SplitSchema {
   const {
     tabName,
+    tabDescription,
     taxAmount,
     tipBeforeTax,
     tipAmount,
@@ -76,6 +77,7 @@ export function calculateSplit(data: TabSchema): SplitSchema {
 
   const split: SplitSchema = {
     tabName,
+    tabDescription,
     taxPercentage,
     taxAmount,
     tipBeforeTax,
@@ -137,6 +139,7 @@ export function getURLArgs(
   const params = new URLSearchParams()
 
   params.append("tabName", data.tabName)
+  params.append("tabDescription", JSON.stringify(data.tabDescription))
   params.append("taxAmount", data.taxAmount.toString())
   params.append("tipAmount", data.tipAmount.toString())
   params.append("tipBeforeTax", data.tipBeforeTax.toString())

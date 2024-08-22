@@ -197,7 +197,7 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
             innerRadius={80}
             outerRadius={95}
             strokeWidth={5}
-            paddingAngle={3}
+            paddingAngle={5}
           >
             <LabelList
               dataKey="name"

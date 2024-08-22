@@ -60,8 +60,42 @@ const eaterSchema = z
   )
 export type EaterSchema = z.infer<typeof eaterSchema>
 
+export const descriptionTypes = [
+  "None",
+  "Venmo",
+  "Cash App",
+  "PayPal",
+  "Other"
+] as const
+
 const baseSchema = z.object({
   tabName: nameSchema,
+  tabDescription: z
+    .object({
+      type: z
+        .enum(descriptionTypes, {
+          required_error: "Description type is required"
+        })
+        .default("None"),
+      details: z
+        .string()
+        .optional()
+        .refine((val) => !val || !(val.includes("@") || val.includes("$")), {
+          message: "Details must not include @ or $"
+        })
+    })
+    .refine(
+      (data) => {
+        if (data.type !== "None") {
+          return !!data.details && data.details.trim().length > 0
+        }
+        return true
+      },
+      {
+        message: "Details are required when type is not None",
+        path: ["details"]
+      }
+    ),
   taxPercentage: percentageSchema,
   taxAmount: dollarAmountSchema,
   tipBeforeTax: z.boolean().default(true),
@@ -84,6 +118,7 @@ const eatersAndItemsRefine = (
 export const tabSchema = baseSchema
   .pick({
     tabName: true,
+    tabDescription: true,
     taxAmount: true,
     tipBeforeTax: true,
     tipAmount: true,

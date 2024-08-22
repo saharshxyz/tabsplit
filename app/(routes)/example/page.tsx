@@ -56,13 +56,16 @@ export default function Example() {
               <Link href={`/#${randomTabParams}`}>
                 <Button className="w-full" variant="outline">
                   See Tab
-                  <TextCursorInput className="ml-2 h-4 w-4" strokeWidth={2} />
+                  <TextCursorInput
+                    className="ml-2 h-4 w-4"
+                    strokeWidth={2.25}
+                  />
                 </Button>
               </Link>
               <Link href={`/split#${randomTabParams}`}>
                 <Button className="w-full">
                   See Split
-                  <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2} />
+                  <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2.25} />
                 </Button>
               </Link>
             </>

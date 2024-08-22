@@ -24,6 +24,8 @@ export const useHash = () => {
           params.forEach((value, key) => {
             if (key === "items" || key === "eaters") {
               parsedParams[key] = tryParseJSON(value, [])
+            } else if (key === "tabDescription") {
+              parsedParams[key] = tryParseJSON(value, {})
             } else if (key === "tipBeforeTax") {
               parsedParams[key] = value === "true"
             } else if (key === "taxAmount" || key === "tipAmount") {

@@ -1,8 +1,13 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useFieldArray, useWatch } from "react-hook-form"
-import { useEffect, useMemo, useRef, useCallback } from "react"
+import {
+  useForm,
+  useFieldArray,
+  useWatch,
+  useFormContext
+} from "react-hook-form"
+import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 import { Button } from "@/components/ui/button"
@@ -15,17 +20,63 @@ import {
   FormMessage,
   FormDescription
 } from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
-import { tabSchema, TabSchema } from "@/lib/schemas"
+import { tabSchema, TabSchema, descriptionTypes } from "@/lib/schemas"
 import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
 import { ReceiptText } from "lucide-react"
-import { useState } from "react"
+
+function DescriptionDisplay({
+  type,
+  details
+}: {
+  type: string
+  details: string | undefined
+}) {
+  if (!details) return "Will display"
+
+  const urlMap: Record<string, string> = {
+    Venmo: `https://venmo.com/${details}`,
+    PayPal: `https://paypal.me/${details}`,
+    "Cash App": `https://cash.app/${details}`
+  }
+
+  const displayMap: Record<string, string> = {
+    Venmo: `@${details}`,
+    PayPal: `@${details}`,
+    "Cash App": `$${details}`
+  }
+
+  if (urlMap[type]) {
+    return (
+      <>
+        Will display:{" "}
+        <a
+          href={urlMap[type]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4 duration-200 ease-in-out hover:underline-offset-1"
+        >
+          {displayMap[type]}
+        </a>
+      </>
+    )
+  }
+
+  return "Will display"
+}
 
 interface TabFormProps {
   initialData: Partial<TabSchema>
@@ -34,6 +85,7 @@ interface TabFormProps {
 export function TabForm({ initialData }: TabFormProps) {
   const router = useRouter()
   const [isMobile, setIsMobile] = useState(false)
+  const [showDetailsField, setShowDetailsField] = useState(false)
 
   const {
     randomPlaceholders,
@@ -47,12 +99,18 @@ export function TabForm({ initialData }: TabFormProps) {
     resolver: zodResolver(tabSchema),
     defaultValues: {
       tabName: initialData.tabName || "",
+      tabDescription: initialData.tabDescription || {},
       taxAmount: initialData.taxAmount || 0,
       tipBeforeTax: initialData.tipBeforeTax ?? true,
       tipAmount: initialData.tipAmount || 0,
       eaters: initialData.eaters || [],
       items: initialData.items || []
     }
+  })
+
+  const descriptionType = useWatch({
+    control: form.control,
+    name: "tabDescription.type"
   })
 
   useEffect(() => {
@@ -65,6 +123,10 @@ export function TabForm({ initialData }: TabFormProps) {
 
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
+
+  useEffect(() => {
+    setShowDetailsField(descriptionType !== "None")
+  }, [descriptionType])
 
   const isInitialLoad = useRef(true)
   const [eaterParentRef, enableEaterAnimations] =
@@ -88,6 +150,7 @@ export function TabForm({ initialData }: TabFormProps) {
     if (Object.keys(initialData).length > 0) {
       form.reset({
         tabName: initialData.tabName || "",
+        tabDescription: initialData.tabDescription || {},
         taxAmount: initialData.taxAmount || 0,
         tipBeforeTax: initialData.tipBeforeTax ?? true,
         tipAmount: initialData.tipAmount || 0,
@@ -168,6 +231,7 @@ export function TabForm({ initialData }: TabFormProps) {
     (values: TabSchema) => {
       const params = new URLSearchParams()
       params.set("tabName", values.tabName || "")
+      params.set("tabDescription", JSON.stringify(values.tabDescription))
       params.set("taxAmount", values.taxAmount?.toString() || "")
       params.set("tipBeforeTax", values.tipBeforeTax ? "true" : "false")
       params.set("tipAmount", values.tipAmount?.toString() || "")
@@ -217,6 +281,70 @@ export function TabForm({ initialData }: TabFormProps) {
             )}
           />
         </div>
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="tabDescription.type"
+            render={({ field }) => (
+              <FormItem
+                className={`flex-shrink-0 ${showDetailsField ? "w-32" : "w-full"}`}
+              >
+                <FormLabel>Description Type</FormLabel>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value)
+                    if (value === "None") {
+                      form.setValue("tabDescription.details", undefined)
+                    }
+                  }}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        placeholder={field.value || "None"}
+                      ></SelectValue>
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {descriptionTypes.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {showDetailsField && (
+            <FormField
+              control={form.control}
+              name="tabDescription.details"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Description Details</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter description details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                  {!form.formState.errors.tabDescription?.details &&
+                    form.getValues("tabDescription.type") !== "Other" && (
+                      <FormDescription>
+                        <DescriptionDisplay
+                          type={form.getValues("tabDescription.type")}
+                          details={form.getValues("tabDescription.details")}
+                        />
+                      </FormDescription>
+                    )}
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
+
         <div className="flex flex-col space-y-4">
           <div className="flex items-center justify-between">
             <FormLabel>Tip Amount</FormLabel>
@@ -457,7 +585,7 @@ export function TabForm({ initialData }: TabFormProps) {
 
         <Button type="submit" className="w-full">
           Submit
-          <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2} />
+          <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2.25} />
         </Button>
       </form>
     </Form>

@@ -22,13 +22,13 @@ export default function Home() {
         <Link href={`/example`} className="flex-shrink-0">
           <Button variant="outline">
             See Example
-            <Shapes className="ml-2 h-4 w-4" strokeWidth={2} />
+            <Shapes className="ml-2 h-4 w-4" strokeWidth={2.25} />
           </Button>
         </Link>
         <Link href={`/`} className="flex-grow" onClick={handleClearForm}>
           <Button className="w-full">
             Clear Form
-            <Eraser className="ml-2 h-4 w-4" strokeWidth={2} />
+            <Eraser className="ml-2 h-4 w-4" strokeWidth={2.25} />
           </Button>
         </Link>
       </div>

@@ -1,139 +1,77 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import {
-  Table,
-  TableHeader,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableRow
-} from "@/components/ui/table"
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent
+} from "@/components/ui/card"
+import { SplitTable } from "./Table"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Users, User } from "lucide-react"
+import Link from "next/link"
 import { SplitSchema } from "@/lib/schemas"
 import { SplitCharts } from "./Charts"
-
-interface ItemRowProps {
-  item: {
-    name: string
-    price?: number
-    portionCost?: number
-    eaters?: { name: string }[]
-  }
-  showEaters?: boolean
-}
-
-const ItemRow: React.FC<ItemRowProps> = ({ item, showEaters = false }) => (
-  <TableRow className="w-full border-0 leading-tight">
-    <TableCell className={`${showEaters ? "w-3/12" : "w-full"} py-2 pr-1.5`}>
-      {item.name}
-    </TableCell>
-    <TableCell className={`${showEaters ? "w-full" : ""} py-2 text-right`}>
-      {showEaters && item.eaters && (
-        <div className="flex items-center justify-end">
-          {item.eaters.length > 1 ? (
-            <Users className="mr-2 hidden h-4 w-4 sm:inline-block" />
-          ) : (
-            <User className="mr-2 hidden h-4 w-4 sm:inline-block" />
-          )}
-          {item.eaters.map((eater) => eater.name).join(", ")}
-        </div>
-      )}
-    </TableCell>
-    <TableCell className="w-24 py-2 pl-0 text-right">
-      ${item.price ? item.price.toFixed(2) : item.portionCost?.toFixed(2)}
-    </TableCell>
-  </TableRow>
-)
-
-interface SummaryRowProps {
-  label: string
-  amount: number
-  variant?: "muted" | "emphasis" | "bold" | "normal"
-}
-
-const SummaryRow: React.FC<SummaryRowProps> = ({
-  label,
-  amount,
-  variant = "normal"
-}) => {
-  const variantClasses: Record<
-    NonNullable<SummaryRowProps["variant"]>,
-    string
-  > = {
-    muted: "text-sm text-muted-foreground",
-    emphasis: "font-medium",
-    bold: "font-bold",
-    normal: ""
-  }
-
-  return (
-    <TableRow
-      className={`${variant === "bold" ? "!border-t" : "border-0"} leading-tight ${variantClasses[variant]}`}
-    >
-      <TableCell className="py-2" colSpan={2}>
-        {label}
-      </TableCell>
-      <TableCell className="py-2 text-right">${amount.toFixed(2)}</TableCell>
-    </TableRow>
-  )
-}
-
-interface SplitTableProps {
-  items: ItemRowProps["item"][]
-  showEaters?: boolean
-  summary: {
-    subTotal: number
-    taxPercentage: number | undefined
-    taxAmount: number
-    tipPercentage: number | undefined
-    tipAmount: number
-    total: number
-  }
-}
-
-const SplitTable: React.FC<SplitTableProps> = ({
-  items,
-  showEaters = false,
-  summary
-}) => (
-  <Table>
-    {showEaters && (
-      <TableHeader>
-        <TableRow>
-          <TableHead>Item</TableHead>
-          <TableHead className="w-full text-right">Eaters</TableHead>
-          <TableHead className="w-24 text-right">Price</TableHead>
-        </TableRow>
-      </TableHeader>
-    )}
-    <TableBody>
-      {items.map((item, index) => (
-        <ItemRow key={index} item={item} showEaters={showEaters} />
-      ))}
-      <SummaryRow
-        label="Subtotal"
-        amount={summary.subTotal}
-        variant="emphasis"
-      />
-      <SummaryRow
-        label={`Tax${summary.taxPercentage ? ` (${summary.taxPercentage.toFixed(2)}%)` : ""}`}
-        amount={summary.taxAmount}
-        variant="muted"
-      />
-      <SummaryRow
-        label={`Tip${summary.tipPercentage ? ` (${summary.tipPercentage.toFixed(2)}%)` : ""}`}
-        amount={summary.tipAmount}
-        variant="muted"
-      />
-      <SummaryRow label="Total" amount={summary.total} variant="bold" />
-    </TableBody>
-  </Table>
-)
+import { ExternalLink } from "lucide-react"
 
 interface SplitDisplayProps {
   splitResult: SplitSchema
+}
+
+interface TabDescriptionProps {
+  tabDescription: {
+    type: "None" | "Venmo" | "Cash App" | "PayPal" | "Other"
+    details?: string
+  }
+}
+
+const TabDescription: React.FC<TabDescriptionProps> = ({ tabDescription }) => {
+  if (tabDescription.type === "None" || !tabDescription.details) return null
+
+  const getPaymentLink = () => {
+    switch (tabDescription.type) {
+      case "Venmo":
+        return `https://venmo.com/u/${tabDescription.details}`
+      case "Cash App":
+        return `https://cash.app/$${tabDescription.details}`
+      case "PayPal":
+        return `https://paypal.me/${tabDescription.details}`
+      default:
+        return "#"
+    }
+  }
+
+  const getDisplayDetails = () => {
+    switch (tabDescription.type) {
+      case "Venmo":
+      case "PayPal":
+        return `@${tabDescription.details}`
+      case "Cash App":
+        return `$${tabDescription.details}`
+      default:
+        return tabDescription.details
+    }
+  }
+
+  return (
+    <CardDescription>
+      {tabDescription.type !== "Other" ? (
+        <>
+          {tabDescription.type}:{" "}
+          <Link
+            href={getPaymentLink()}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex flex-row items-center border-b-2 border-transparent transition-colors duration-200 ease-in-out hover:border-current"
+          >
+            {getDisplayDetails()}
+            <ExternalLink className="ml-2 h-4 w-auto" strokeWidth={2.25} />
+          </Link>
+        </>
+      ) : (
+        tabDescription.details
+      )}
+    </CardDescription>
+  )
 }
 
 export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
@@ -142,13 +80,7 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
       <CardTitle className="mb-1.5">
         {splitResult.tabName} - Tab Split
       </CardTitle>
-      <div className="flex flex-wrap gap-2">
-        {splitResult.eaters.map((eater) => (
-          <Badge key={eater.name} variant="secondary" className="text-sm">
-            {eater.name}: ${Math.ceil(eater.total)}
-          </Badge>
-        ))}
-      </div>
+      <TabDescription tabDescription={splitResult.tabDescription} />
     </CardHeader>
 
     <CardContent>
