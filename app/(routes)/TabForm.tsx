@@ -588,7 +588,7 @@ export function TabForm({ initialData }: TabFormProps) {
 
         <Button type="submit" className="w-full">
           Submit
-          <ReceiptText className="ml-2" strokeWidth={2.25} />
+          <ReceiptText className="ml-2" />
         </Button>
       </form>
     </Form>

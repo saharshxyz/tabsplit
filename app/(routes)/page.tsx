@@ -21,14 +21,14 @@ export default function Home() {
       <div className="m-2 flex space-x-2">
         <Link href={`/example`} className="flex-shrink-0">
           <Button variant="outline">
-            See Example
-            <Shapes className="ml-2" strokeWidth={2.25} />
+            See Examples
+            <Shapes className="ml-2" />
           </Button>
         </Link>
         <Link href={`/`} className="flex-grow" onClick={handleClearForm}>
           <Button className="w-full">
             Clear Form
-            <Eraser className="ml-2" strokeWidth={2.25} />
+            <Eraser className="ml-2" />
           </Button>
         </Link>
       </div>

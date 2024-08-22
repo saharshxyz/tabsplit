@@ -13,33 +13,21 @@ import Link from "next/link"
 import { getURLArgs } from "@/lib/utils"
 import { useState, useEffect } from "react"
 import { TextCursorInput, ReceiptText } from "lucide-react"
-import { TabSchema } from "@/lib/schemas"
+
+import { generateExampleTab } from "@/lib/utils"
 
 export default function Example() {
   const [randomTabParams, setRandomTabParams] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadRandomTab = async () => {
-      function getRandomElement<T>(arr: T[]) {
-        return arr[Math.floor(Math.random() * arr.length)]
-      }
-
-      try {
-        const exampleTabs = await import("@/public/exampleTabs.json")
-        const exampleTabsArray = Object.values(exampleTabs.default)
-
-        setRandomTabParams(
-          getURLArgs(getRandomElement(exampleTabsArray) as TabSchema)[1]
-        )
-      } catch (error) {
-        console.error("Failed to load example checks:", error)
-      } finally {
-        setIsLoading(false)
-      }
+    const generateRandomTab = () => {
+      const exampleTab = generateExampleTab()
+      setRandomTabParams(getURLArgs(exampleTab)[1])
+      setIsLoading(false)
     }
 
-    loadRandomTab()
+    generateRandomTab()
   }, [])
 
   return (
@@ -73,6 +61,7 @@ export default function Example() {
         </CardContent>
         <CardFooter>
           Returning to this page will show different examples each time.
+          Examples are randomly generated and may be illogical.
         </CardFooter>
       </Card>
     </main>

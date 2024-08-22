@@ -192,7 +192,11 @@
       {
         "name": "Grilled Vegetable Platter",
         "price": 15.5,
-        "splitters": [{ "name": "Bob" }, { "name": "Diana" }, { "name": "Hannah" }]
+        "splitters": [
+          { "name": "Bob" },
+          { "name": "Diana" },
+          { "name": "Hannah" }
+        ]
       },
       {
         "name": "Artisanal Cheese Board",

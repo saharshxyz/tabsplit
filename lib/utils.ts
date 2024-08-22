@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ZodError } from "zod"
 import { SplitterSchema, TabSchema, SplitSchema } from "@/lib/schemas"
+import { faker } from "@faker-js/faker"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -155,4 +156,64 @@ export function getURLArgs(
     .replace(/(\[|\])/g, encodeURIComponent("$1"))
 
   return [baseUrl, encodedParams]
+}
+
+export const capitalizeFirstLetter = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1)
+
+export const generateExampleTab = (): TabSchema => {
+  const mealTypes = [
+    "Dinner at",
+    "Lunch at",
+    "Brunch at",
+    "Breakfast at",
+    "Drinks at",
+    "Snacks at",
+    "Party at",
+    "Meetup at",
+    "Celebration at",
+    "Gathering at"
+  ]
+
+  const numItems = faker.number.int({ min: 2, max: 25 })
+  const numSplitters = faker.number.int({ min: 2, max: 20 })
+
+  const splitters = Array.from({ length: numSplitters }, () => ({
+    name: faker.person.firstName()
+  }))
+
+  const items = Array.from({ length: numItems }, () => ({
+    name: faker.commerce.productName(),
+    price: parseFloat(faker.commerce.price({ min: 5, max: 70, dec: 2 })),
+    splitters: faker.helpers
+      .shuffle([...splitters])
+      .slice(0, faker.number.int({ min: 1, max: numSplitters }))
+  }))
+
+  const tabDescriptionType = faker.helpers.arrayElement([
+    "None",
+    "Venmo",
+    "Cash App",
+    "PayPal",
+    "Other"
+  ] as const)
+
+  const tabDescriptionDetails = ["Venmo", "Cash App", "PayPal"].includes(
+    tabDescriptionType
+  )
+    ? "saharshxyz"
+    : faker.lorem.sentence()
+
+  return {
+    tabName: `${faker.date.weekday()} ${faker.helpers.arrayElement(mealTypes)} ${faker.commerce.department()} ${capitalizeFirstLetter(faker.lorem.word({ length: { min: 5, max: 7 } }))}`,
+    tabDescription: {
+      type: tabDescriptionType,
+      details: tabDescriptionDetails
+    },
+    taxAmount: parseFloat(faker.finance.amount({ min: 2, max: 20, dec: 2 })),
+    tipBeforeTax: faker.datatype.boolean(),
+    tipAmount: parseFloat(faker.finance.amount({ min: 5, max: 30, dec: 2 })),
+    items,
+    splitters
+  }
 }

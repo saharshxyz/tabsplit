@@ -1,44 +1,7 @@
 import { useState, useCallback, useMemo } from "react"
-
-const names = [
-  "Alex",
-  "Sam",
-  "Jordan",
-  "Taylor",
-  "Casey",
-  "Morgan",
-  "Riley",
-  "Jamie",
-  "Quinn",
-  "Avery"
-]
-const restaurants = [
-  "Pizzeria",
-  "Sushi Bar",
-  "Cafe",
-  "Steakhouse",
-  "Bistro",
-  "Diner",
-  "Taco Place",
-  "Burger Joint"
-]
-const items = [
-  "Pizza",
-  "Salad",
-  "Burger",
-  "Pasta",
-  "Sushi",
-  "Steak",
-  "Sandwich",
-  "Soup",
-  "Fries",
-  "Dessert"
-]
-
-const getRandomElement = (array: string[]) =>
-  array[Math.floor(Math.random() * array.length)]
-const getRandomAmount = (upperLimit: number) =>
-  (Math.random() * upperLimit + 5).toFixed(2)
+import { faker } from "@faker-js/faker"
+import { TabSchema } from "@/lib/schemas"
+import { generateExampleTab } from "@/lib/utils"
 
 export interface Placeholder {
   tabName: string
@@ -49,63 +12,53 @@ export interface Placeholder {
   itemPrice: string
 }
 
-export interface EaterPlaceholder {
-  name: string
-}
-
-export interface ItemPlaceholder {
-  name: string
-  price: string
-}
-
 export function usePlaceholders() {
-  const [splitterPlaceholders, setEaterPlaceholders] = useState<
-    EaterPlaceholder[]
-  >([])
-  const [itemPlaceholders, setItemPlaceholders] = useState<ItemPlaceholder[]>(
-    []
-  )
+  const [exampleTab, setExampleTab] = useState<TabSchema>(generateExampleTab())
 
-  const randomPlaceholders = useMemo<Placeholder>(
-    () => ({
-      tabName: `Dinner at ${getRandomElement(restaurants)}`,
-      taxAmount: getRandomAmount(23),
-      tipAmount: getRandomAmount(40),
-      splitterName: getRandomElement(names),
-      itemName: getRandomElement(items),
-      itemPrice: getRandomAmount(30)
-    }),
-    []
-  )
+  const randomPlaceholders = useMemo<Placeholder>(() => {
+    return {
+      tabName: exampleTab.tabName,
+      taxAmount: exampleTab.taxAmount.toFixed(2),
+      tipAmount: exampleTab.tipAmount.toFixed(2),
+      splitterName: exampleTab.splitters[0]?.name || "",
+      itemName: exampleTab.items[0]?.name || "",
+      itemPrice: exampleTab.items[0]?.price.toFixed(2) || ""
+    }
+  }, [exampleTab])
 
-  const generateEaterPlaceholder = useCallback(
-    (): EaterPlaceholder => ({
-      name: getRandomElement(names)
-    }),
-    []
-  )
+  const generateNewExampleTab = useCallback(() => {
+    setExampleTab(generateExampleTab())
+  }, [])
 
-  const generateItemPlaceholder = useCallback(
-    (): ItemPlaceholder => ({
-      name: getRandomElement(items),
-      price: getRandomAmount(30)
-    }),
-    []
-  )
-
-  const appendEaterPlaceholder = useCallback(() => {
-    setEaterPlaceholders((prev) => [...prev, generateEaterPlaceholder()])
-  }, [generateEaterPlaceholder])
+  const appendSplitterPlaceholder = useCallback(() => {
+    setExampleTab((prev) => ({
+      ...prev,
+      splitters: [...prev.splitters, { name: faker.person.firstName() }]
+    }))
+  }, [])
 
   const appendItemPlaceholder = useCallback(() => {
-    setItemPlaceholders((prev) => [...prev, generateItemPlaceholder()])
-  }, [generateItemPlaceholder])
+    setExampleTab((prev) => ({
+      ...prev,
+      items: [
+        ...prev.items,
+        {
+          name: faker.commerce.productName(),
+          price: parseFloat(faker.commerce.price({ min: 5, max: 70, dec: 2 })),
+          splitters: faker.helpers
+            .shuffle([...prev.splitters])
+            .slice(0, faker.number.int({ min: 1, max: prev.splitters.length }))
+        }
+      ]
+    }))
+  }, [])
 
   return {
     randomPlaceholders,
-    splitterPlaceholders,
-    itemPlaceholders,
-    appendSplitterPlaceholder: appendEaterPlaceholder,
-    appendItemPlaceholder
+    splitterPlaceholders: exampleTab.splitters,
+    itemPlaceholders: exampleTab.items,
+    appendSplitterPlaceholder,
+    appendItemPlaceholder,
+    generateNewExampleTab
   }
 }
