@@ -116,19 +116,27 @@ export function TabForm({ initialData }: TabFormProps) {
   const [splitterParentRef, enableSplitterAnimations] =
     useAutoAnimate<HTMLDivElement>()
   const [itemParentRef, enableItemAnimations] = useAutoAnimate<HTMLDivElement>()
+  const [descriptionParentRef, enableDescriptionAnimations] =
+    useAutoAnimate<HTMLDivElement>()
 
   useEffect(() => {
     if (isInitialLoad.current) {
       enableSplitterAnimations(false)
       enableItemAnimations(false)
+      enableDescriptionAnimations(false)
 
       setTimeout(() => {
         enableSplitterAnimations(true)
         enableItemAnimations(true)
+        enableDescriptionAnimations(true)
         isInitialLoad.current = false
       }, 100)
     }
-  }, [enableSplitterAnimations, enableItemAnimations])
+  }, [
+    enableSplitterAnimations,
+    enableItemAnimations,
+    enableDescriptionAnimations
+  ])
 
   useEffect(() => {
     if (Object.keys(initialData).length > 0) {
@@ -275,7 +283,7 @@ export function TabForm({ initialData }: TabFormProps) {
             )}
           />
         </div>
-        <div className="flex space-x-4">
+        <div ref={descriptionParentRef} className="flex space-x-4">
           <FormField
             control={form.control}
             name="tabDescription.type"
