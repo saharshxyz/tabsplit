@@ -476,10 +476,10 @@ export function TabForm({ initialData }: TabFormProps) {
                             <Input
                               type="number"
                               step="1"
-                              placeholder={
+                              placeholder={(
                                 itemPlaceholders[index]?.price ||
                                 randomPlaceholders.itemPrice
-                              }
+                              ).toString()}
                               {...field}
                               onChange={(e) =>
                                 field.onChange(parseFloat(e.target.value))
