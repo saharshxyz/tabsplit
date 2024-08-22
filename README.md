@@ -4,8 +4,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 - [ ] CLI
 - [ ] Select all splitters button
-- [ ] Create favicon/logo (Update OG image to use logo)
-- [ ] Fix `metadataBase` in `generateMetadata.ts`
 
 Example: [Random tab](https://tabsplit.saharsh.xyz/example)
 

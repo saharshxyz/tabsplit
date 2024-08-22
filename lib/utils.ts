@@ -191,11 +191,9 @@ export const generateExampleTab = (): TabSchema => {
   }))
 
   const tabDescriptionType = faker.helpers.arrayElement([
-    "None",
     "Venmo",
     "Cash App",
-    "PayPal",
-    "Other"
+    "PayPal"
   ] as const)
 
   const tabDescriptionDetails = ["Venmo", "Cash App"].includes(

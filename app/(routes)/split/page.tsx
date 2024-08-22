@@ -21,6 +21,60 @@ export default function Split() {
     if (Object.keys(parsedData).length > 0 || error) {
       setIsLoading(false)
     }
+
+    if (parsedData.tabName) {
+      document.title = `${parsedData.tabName} | TabSplit`
+
+      const metaDescription = document.querySelector('meta[name="description"]')
+      if (metaDescription) {
+        metaDescription.setAttribute(
+          "content",
+          `View the split for ${parsedData.tabName}`
+        )
+      }
+
+      updateSocialMetadata(parsedData.tabName)
+    }
+  }, [parsedData, error])
+
+  const updateSocialMetadata = (tabName: string) => {
+    const updateMetaTag = (
+      selector: string,
+      attribute: string,
+      value: string
+    ) => {
+      const tag = document.querySelector(selector)
+      if (tag) {
+        tag.setAttribute(attribute, value)
+      }
+    }
+
+    updateMetaTag(
+      'meta[property="og:title"]',
+      "content",
+      `${tabName} | TabSplit`
+    )
+    updateMetaTag(
+      'meta[property="og:description"]',
+      "content",
+      `View and share the split for ${tabName}`
+    )
+    updateMetaTag(
+      'meta[name="twitter:title"]',
+      "content",
+      `${tabName} | TabSplit`
+    )
+    updateMetaTag(
+      'meta[name="twitter:description"]',
+      "content",
+      `View and share the split for ${tabName}`
+    )
+  }
+
+  useEffect(() => {
+    if (Object.keys(parsedData).length > 0 || error) {
+      setIsLoading(false)
+    }
   }, [parsedData, error])
 
   return (
