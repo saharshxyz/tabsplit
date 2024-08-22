@@ -16,7 +16,7 @@ export const logZodErrors = (error: ZodError, schemaName: string) => {
   console.groupEnd()
 }
 
-export function calculateSplit(data: TabSchema): SplitSchema {
+export const calculateSplit = (data: TabSchema): SplitSchema => {
   const {
     tabName,
     tabDescription,
@@ -95,9 +95,9 @@ export function calculateSplit(data: TabSchema): SplitSchema {
   return split
 }
 
-export function parseUrlData(
+export const parseUrlData = (
   searchParams: URLSearchParams
-): Partial<TabSchema> {
+): Partial<TabSchema> => {
   const tabName = searchParams.get("tabName") || ""
   const taxAmount = parseFloat(searchParams.get("taxAmount") || "0")
   const tipBeforeTax = searchParams.get("tipBeforeTax") === "true"
@@ -135,10 +135,10 @@ export const getBaseUrl = (): string => {
   return `http://localhost:${process.env.PORT ?? 3000}`
 }
 
-export function getURLArgs(
+export const getURLArgs = (
   data: TabSchema,
   baseUrl: string = getBaseUrl()
-): [string, string] {
+): [string, string] => {
   const params = new URLSearchParams()
 
   params.append("tabName", data.tabName)
