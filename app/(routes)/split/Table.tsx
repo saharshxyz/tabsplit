@@ -31,9 +31,9 @@ export const ItemRow: React.FC<ItemRowProps> = ({
       {showSplitters && item.splitters && (
         <div className="flex items-center justify-end">
           {item.splitters.length > 1 ? (
-            <Users className="mr-2 hidden h-4 w-4 sm:inline-block" />
+            <Users className="mr-2 hidden sm:inline-block" />
           ) : (
-            <User className="mr-2 hidden h-4 w-4 sm:inline-block" />
+            <User className="mr-2 hidden sm:inline-block" />
           )}
           {item.splitters.map((splitter) => splitter.name).join(", ")}
         </div>

@@ -32,7 +32,7 @@ export const PaymentLink: React.FC<PaymentLinkProps> = ({ type, details }) => {
       className="inline-flex items-center border-b-2 border-transparent transition-colors duration-200 ease-in-out hover:border-current"
     >
       {displayMap[type as Exclude<DescriptionType, "None" | "Other">]}
-      <ExternalLink className="ml-2 h-4 w-auto" strokeWidth={2.25} />
+      <ExternalLink className="ml-2" strokeWidth={2.25} />
     </a>
   )
 }

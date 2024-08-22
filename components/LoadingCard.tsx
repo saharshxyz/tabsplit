@@ -25,7 +25,7 @@ export const LoadingCard = ({ title }: LoadingCardProps) => (
     </CardContent>
     <CardFooter>
       <Alert>
-        <RefreshCcw className="h-4 w-4" />
+        <RefreshCcw />
         <AlertTitle>Try Reloading</AlertTitle>
       </Alert>
     </CardFooter>

@@ -13,6 +13,7 @@ import Link from "next/link"
 import { getURLArgs } from "@/lib/utils"
 import { useState, useEffect } from "react"
 import { TextCursorInput, ReceiptText } from "lucide-react"
+import { TabSchema } from "@/lib/schemas"
 
 export default function Example() {
   const [randomTabParams, setRandomTabParams] = useState("")
@@ -26,9 +27,11 @@ export default function Example() {
 
       try {
         const exampleTabs = await import("@/public/exampleTabs.json")
-        const exampleChecksArray = Object.values(exampleTabs.default)
+        const exampleTabsArray = Object.values(exampleTabs.default)
 
-        setRandomTabParams(getURLArgs(getRandomElement(exampleChecksArray))[1])
+        setRandomTabParams(
+          getURLArgs(getRandomElement(exampleTabsArray) as TabSchema)[1]
+        )
       } catch (error) {
         console.error("Failed to load example checks:", error)
       } finally {
@@ -56,16 +59,13 @@ export default function Example() {
               <Link href={`/#${randomTabParams}`}>
                 <Button className="w-full" variant="outline">
                   See Tab
-                  <TextCursorInput
-                    className="ml-2 h-4 w-4"
-                    strokeWidth={2.25}
-                  />
+                  <TextCursorInput className="ml-2" strokeWidth={2.25} />
                 </Button>
               </Link>
               <Link href={`/split#${randomTabParams}`}>
                 <Button className="w-full">
                   See Split
-                  <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2.25} />
+                  <ReceiptText className="ml-2" strokeWidth={2.25} />
                 </Button>
               </Link>
             </>

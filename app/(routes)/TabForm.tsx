@@ -419,7 +419,7 @@ export function TabForm({ initialData }: TabFormProps) {
                   className="h-10 w-10 p-1"
                   variant="ghost"
                 >
-                  <X className="h-4 w-4" />
+                  <X />
                 </Button>
               </div>
             ))}
@@ -433,7 +433,7 @@ export function TabForm({ initialData }: TabFormProps) {
             className="mt-2 w-full"
             variant="secondary"
           >
-            <PlusIcon className="mr-2 h-4 w-4" />
+            <PlusIcon className="mr-2" />
             Add Splitter
           </Button>
         </div>
@@ -496,7 +496,7 @@ export function TabForm({ initialData }: TabFormProps) {
                       className="mt-6 hidden h-10 w-10 p-1 sm:flex"
                       variant="ghost"
                     >
-                      <X className="h-4 w-4" />
+                      <X />
                     </Button>
                   </div>
                   <FormField
@@ -555,7 +555,7 @@ export function TabForm({ initialData }: TabFormProps) {
                     className="mt-4 w-full sm:hidden"
                     variant="outline"
                   >
-                    <X className="mr-2 h-4 w-4" />
+                    <X className="mr-2" />
                     Remove Item
                   </Button>
                 </CardContent>
@@ -567,7 +567,7 @@ export function TabForm({ initialData }: TabFormProps) {
               className="w-full"
               variant="secondary"
             >
-              <PlusIcon className="mr-2 h-4 w-4" />
+              <PlusIcon className="mr-2" />
               Add Item
             </Button>
           </div>
@@ -588,7 +588,7 @@ export function TabForm({ initialData }: TabFormProps) {
 
         <Button type="submit" className="w-full">
           Submit
-          <ReceiptText className="ml-2 h-4 w-4" strokeWidth={2.25} />
+          <ReceiptText className="ml-2" strokeWidth={2.25} />
         </Button>
       </form>
     </Form>
