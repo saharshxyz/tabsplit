@@ -44,7 +44,7 @@ export interface Placeholder {
   tabName: string
   taxAmount: string
   tipAmount: string
-  eaterName: string
+  splitterName: string
   itemName: string
   itemPrice: string
 }
@@ -59,7 +59,7 @@ export interface ItemPlaceholder {
 }
 
 export function usePlaceholders() {
-  const [eaterPlaceholders, setEaterPlaceholders] = useState<
+  const [splitterPlaceholders, setEaterPlaceholders] = useState<
     EaterPlaceholder[]
   >([])
   const [itemPlaceholders, setItemPlaceholders] = useState<ItemPlaceholder[]>(
@@ -71,7 +71,7 @@ export function usePlaceholders() {
       tabName: `Dinner at ${getRandomElement(restaurants)}`,
       taxAmount: getRandomAmount(23),
       tipAmount: getRandomAmount(40),
-      eaterName: getRandomElement(names),
+      splitterName: getRandomElement(names),
       itemName: getRandomElement(items),
       itemPrice: getRandomAmount(30)
     }),
@@ -103,9 +103,9 @@ export function usePlaceholders() {
 
   return {
     randomPlaceholders,
-    eaterPlaceholders,
+    splitterPlaceholders,
     itemPlaceholders,
-    appendEaterPlaceholder,
+    appendSplitterPlaceholder: appendEaterPlaceholder,
     appendItemPlaceholder
   }
 }

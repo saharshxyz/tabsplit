@@ -1,6 +1,9 @@
 {
   "joesDinner": {
     "tabName": "Dinner at Joes",
+    "tabDescription": {
+      "type": "None"
+    },
     "taxAmount": 5,
     "tipBeforeTax": true,
     "tipAmount": 10,
@@ -8,7 +11,7 @@
       {
         "name": "Pizza",
         "price": 20,
-        "eaters": [
+        "splitters": [
           {
             "name": "Alice"
           },
@@ -20,14 +23,14 @@
       {
         "name": "Salad",
         "price": 10,
-        "eaters": [
+        "splitters": [
           {
             "name": "Charlie"
           }
         ]
       }
     ],
-    "eaters": [
+    "splitters": [
       {
         "name": "Alice"
       },
@@ -41,6 +44,10 @@
   },
   "wings": {
     "tabName": "Wings Order",
+    "tabDescription": {
+      "type": "Venmo",
+      "details": "saharshxyz"
+    },
     "taxAmount": 7.46,
     "tipAmount": 19.16,
     "tipBeforeTax": true,
@@ -48,7 +55,7 @@
       {
         "name": "Large French Fries",
         "price": 7.49,
-        "eaters": [
+        "splitters": [
           {
             "name": "Vincent"
           },
@@ -66,7 +73,7 @@
       {
         "name": "30 Traditional Wings",
         "price": 40.99,
-        "eaters": [
+        "splitters": [
           {
             "name": "Vincent"
           },
@@ -84,7 +91,7 @@
       {
         "name": "10 Traditional Wings",
         "price": 15.99,
-        "eaters": [
+        "splitters": [
           {
             "name": "Karen"
           }
@@ -93,7 +100,7 @@
       {
         "name": "Michelob Ultra (2x)",
         "price": 13.5,
-        "eaters": [
+        "splitters": [
           {
             "name": "Adam"
           },
@@ -105,7 +112,7 @@
       {
         "name": "20 Traditional Wings",
         "price": 28.49,
-        "eaters": [
+        "splitters": [
           {
             "name": "Vincent"
           },
@@ -121,7 +128,7 @@
         ]
       }
     ],
-    "eaters": [
+    "splitters": [
       {
         "name": "Vincent"
       },
@@ -141,6 +148,10 @@
   },
   "fridayGourmetFusion": {
     "tabName": "Friday Night Dinner at Gourmet Fusion",
+    "tabDescription": {
+      "type": "Cash App",
+      "details": "saharshxyz"
+    },
     "taxAmount": 15.75,
     "tipBeforeTax": true,
     "tipAmount": 31.5,
@@ -148,7 +159,7 @@
       {
         "name": "Truffle Infused Risotto",
         "price": 24.99,
-        "eaters": [
+        "splitters": [
           { "name": "Alice" },
           { "name": "Bob" },
           { "name": "Charlie" }
@@ -157,12 +168,12 @@
       {
         "name": "Seared Ahi Tuna",
         "price": 28.5,
-        "eaters": [{ "name": "Diana" }, { "name": "Eve" }]
+        "splitters": [{ "name": "Diana" }, { "name": "Eve" }]
       },
       {
         "name": "Wagyu Beef Sliders",
         "price": 18.75,
-        "eaters": [
+        "splitters": [
           { "name": "Frank" },
           { "name": "George" },
           { "name": "Hannah" }
@@ -171,7 +182,7 @@
       {
         "name": "Lobster Mac and Cheese",
         "price": 22.99,
-        "eaters": [
+        "splitters": [
           { "name": "Alice" },
           { "name": "Charlie" },
           { "name": "Eve" },
@@ -181,12 +192,12 @@
       {
         "name": "Grilled Vegetable Platter",
         "price": 15.5,
-        "eaters": [{ "name": "Bob" }, { "name": "Diana" }, { "name": "Hannah" }]
+        "splitters": [{ "name": "Bob" }, { "name": "Diana" }, { "name": "Hannah" }]
       },
       {
         "name": "Artisanal Cheese Board",
         "price": 19.99,
-        "eaters": [
+        "splitters": [
           { "name": "Alice" },
           { "name": "Bob" },
           { "name": "Charlie" },
@@ -201,7 +212,7 @@
       {
         "name": "Crispy Calamari",
         "price": 16.5,
-        "eaters": [
+        "splitters": [
           { "name": "Charlie" },
           { "name": "Frank" },
           { "name": "Isaac" }
@@ -210,12 +221,12 @@
       {
         "name": "Miso Glazed Black Cod",
         "price": 32.0,
-        "eaters": [{ "name": "Diana" }, { "name": "George" }]
+        "splitters": [{ "name": "Diana" }, { "name": "George" }]
       },
       {
         "name": "Truffled Pommes Frites",
         "price": 9.99,
-        "eaters": [
+        "splitters": [
           { "name": "Alice" },
           { "name": "Bob" },
           { "name": "Charlie" },
@@ -230,7 +241,7 @@
       {
         "name": "Chocolate Lava Cake",
         "price": 11.99,
-        "eaters": [
+        "splitters": [
           { "name": "Alice" },
           { "name": "Eve" },
           { "name": "Hannah" },
@@ -238,7 +249,7 @@
         ]
       }
     ],
-    "eaters": [
+    "splitters": [
       { "name": "Alice" },
       { "name": "Bob" },
       { "name": "Charlie" },

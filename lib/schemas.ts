@@ -29,20 +29,20 @@ const uniqueNameArraySchema = <T extends { name: string }>(
 const itemSchema = z.object({
   name: nameSchema,
   price: dollarAmountSchema,
-  eaters: uniqueNameArraySchema(z.object({ name: nameSchema })).describe(
-    "People who ate this item"
+  splitters: uniqueNameArraySchema(z.object({ name: nameSchema })).describe(
+    "People who split this item"
   )
 })
 
-const eaterItemSchema = z.object({
+const splitItemSchema = z.object({
   name: nameSchema,
   portionCost: dollarAmountSchema
 })
 
-const eaterSchema = z
+const splitterSchema = z
   .object({
     name: nameSchema,
-    items: uniqueNameArraySchema(eaterItemSchema),
+    items: uniqueNameArraySchema(splitItemSchema),
     subtotal: dollarAmountSchema,
     taxAmount: dollarAmountSchema,
     tipAmount: dollarAmountSchema,
@@ -58,7 +58,7 @@ const eaterSchema = z
       message: "Portion costs should equal subtotal"
     }
   )
-export type EaterSchema = z.infer<typeof eaterSchema>
+export type SplitterSchema = z.infer<typeof splitterSchema>
 
 export const descriptionTypes = [
   "None",
@@ -105,15 +105,17 @@ const baseSchema = z.object({
   subTotal: dollarAmountSchema,
   total: dollarAmountSchema,
   items: z.array(itemSchema).min(1, { message: "Must have at least one item" }),
-  eaters: z.array(eaterSchema).min(1)
+  splitters: z.array(splitterSchema).min(1)
 })
 
-const eatersAndItemsRefine = (
+const splittersAndItemsRefine = (
   items: z.infer<typeof itemSchema>[],
-  eaters: { name: string }[]
+  splitters: { name: string }[]
 ) =>
   items.every((item) =>
-    item.eaters.every((eater) => eaters.some((e) => e.name === eater.name))
+    item.splitters.every((splitter) =>
+      splitters.some((e) => e.name === splitter.name)
+    )
   )
 
 export const tabSchema = baseSchema
@@ -126,11 +128,11 @@ export const tabSchema = baseSchema
     items: true
   })
   .extend({
-    eaters: uniqueNameArraySchema(z.object({ name: nameSchema }))
+    splitters: uniqueNameArraySchema(z.object({ name: nameSchema }))
   })
-  .refine(({ items, eaters }) => eatersAndItemsRefine(items, eaters), {
-    message: "All eaters must be present in the items' eaters arrays.",
-    path: ["items", "eaters"]
+  .refine(({ items, splitters }) => splittersAndItemsRefine(items, splitters), {
+    message: "All splitters must be present in the items' splitters arrays.",
+    path: ["items", "splitters"]
   })
   .refine(({ items }) => uniqueArray(items.map((item) => item.name)), {
     message: "Item names must be unique.",
@@ -140,27 +142,27 @@ export type TabSchema = z.infer<typeof tabSchema>
 
 export const splitSchema = baseSchema
   .refine(
-    ({ items, eaters }) =>
-      eatersAndItemsRefine(
+    ({ items, splitters }) =>
+      splittersAndItemsRefine(
         items,
-        eaters.map((e) => ({ name: e.name }))
+        splitters.map((e) => ({ name: e.name }))
       ),
     {
-      message: "All eaters must be present in the 'eaters' array.",
-      path: ["items", "eaters"]
+      message: "All splitters must be present in the 'splitters' array.",
+      path: ["items", "splitters"]
     }
   )
   .refine(
-    ({ items, eaters }) => {
-      const itemEaters = new Set(
-        items.flatMap((item) => item.eaters.map((e) => e.name))
+    ({ items, splitters }) => {
+      const itemSplitters = new Set(
+        items.flatMap((item) => item.splitters.map((e) => e.name))
       )
-      return eaters.every((eater) => itemEaters.has(eater.name))
+      return splitters.every((splitter) => itemSplitters.has(splitter.name))
     },
     {
       message:
-        "All eaters must be included in at least one item's eaters array.",
-      path: ["items", "eaters"]
+        "All splitters must be included in at least one item's splitters array.",
+      path: ["items", "splitters"]
     }
   )
   .refine(
@@ -177,14 +179,14 @@ export const splitSchema = baseSchema
     path: ["total", "subTotal"]
   })
   .refine(
-    ({ total, eaters }) =>
+    ({ total, splitters }) =>
       roughlyEqual(
         total,
-        eaters.reduce((sum, eater) => sum + eater.total, 0)
+        splitters.reduce((sum, splitter) => sum + splitter.total, 0)
       ),
     {
-      message: "Sum of eater totals must equal the overall total.",
-      path: ["total", "eaters"]
+      message: "Sum of splitter totals must equal the overall total.",
+      path: ["total", "splitters"]
     }
   )
   .refine(

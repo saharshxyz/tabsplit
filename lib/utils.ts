@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ZodError } from "zod"
-import { EaterSchema, TabSchema, SplitSchema } from "@/lib/schemas"
+import { SplitterSchema, TabSchema, SplitSchema } from "@/lib/schemas"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -23,12 +23,12 @@ export function calculateSplit(data: TabSchema): SplitSchema {
     tipBeforeTax,
     tipAmount,
     items: unsortedItems,
-    eaters: unsortedEaters
+    splitters: unsortedSplitters
   } = data
 
-  // sort items and eaters alphabetically
+  // sort items and splitters alphabetically
   const items = [...unsortedItems].sort((a, b) => a.name.localeCompare(b.name))
-  const formEaters = [...unsortedEaters].sort((a, b) =>
+  const formSplitters = [...unsortedSplitters].sort((a, b) =>
     a.name.localeCompare(b.name)
   )
 
@@ -39,11 +39,11 @@ export function calculateSplit(data: TabSchema): SplitSchema {
     (tipAmount / (tipBeforeTax ? subTotal : subTotal + taxAmount)) * 100
   const total = subTotal + taxAmount + tipAmount
 
-  const eaterMap = new Map<string, EaterSchema>()
+  const splitterMap = new Map<string, SplitterSchema>()
 
-  // initialize eaters
-  formEaters.forEach(({ name }) => {
-    eaterMap.set(name.toLowerCase(), {
+  // initialize splittes
+  formSplitters.forEach(({ name }) => {
+    splitterMap.set(name.toLowerCase(), {
       name,
       taxAmount: 0,
       tipAmount: 0,
@@ -55,24 +55,26 @@ export function calculateSplit(data: TabSchema): SplitSchema {
 
   // calculate individual shares
   items.forEach((item) => {
-    const portionCost = item.price / item.eaters.length
-    item.eaters.forEach(({ name }) => {
-      const eater = eaterMap.get(name.toLowerCase())!
-      eater.subtotal += portionCost
-      eater.items.push({ name: item.name, portionCost })
+    const portionCost = item.price / item.splitters.length
+    item.splitters.forEach(({ name }) => {
+      const splitter = splitterMap.get(name.toLowerCase())!
+      splitter.subtotal += portionCost
+      splitter.items.push({ name: item.name, portionCost })
     })
   })
 
-  // calculate tax, tip, and total for each eater
-  eaterMap.forEach((eater) => {
-    eater.taxAmount = eater.subtotal * (taxPercentage / 100)
-    eater.tipAmount =
-      (tipBeforeTax ? eater.subtotal : eater.subtotal + eater.taxAmount) *
+  // calculate tax, tip, and total for each splitter
+  splitterMap.forEach((splitter) => {
+    splitter.taxAmount = splitter.subtotal * (taxPercentage / 100)
+    splitter.tipAmount =
+      (tipBeforeTax
+        ? splitter.subtotal
+        : splitter.subtotal + splitter.taxAmount) *
       (tipPercentage / 100)
-    eater.total = eater.subtotal + eater.taxAmount + eater.tipAmount
+    splitter.total = splitter.subtotal + splitter.taxAmount + splitter.tipAmount
 
-    // Sort eater's items by name
-    eater.items.sort((a, b) => a.name.localeCompare(b.name))
+    // Sort splitter's items by name
+    splitter.items.sort((a, b) => a.name.localeCompare(b.name))
   })
 
   const split: SplitSchema = {
@@ -86,7 +88,7 @@ export function calculateSplit(data: TabSchema): SplitSchema {
     subTotal,
     total,
     items,
-    eaters: Array.from(eaterMap.values())
+    splitters: Array.from(splitterMap.values())
   }
 
   return split
@@ -100,11 +102,11 @@ export function parseUrlData(
   const tipBeforeTax = searchParams.get("tipBeforeTax") === "true"
   const tipAmount = parseFloat(searchParams.get("tipAmount") || "0")
 
-  let eaters = []
+  let splitters = []
   try {
-    eaters = JSON.parse(searchParams.get("eaters") || "[]")
+    splitters = JSON.parse(searchParams.get("splitters") || "[]")
   } catch (e) {
-    console.error("Failed to parse eaters from URL")
+    console.error("Failed to parse splitters from URL")
   }
 
   let items = []
@@ -119,7 +121,7 @@ export function parseUrlData(
     taxAmount,
     tipBeforeTax,
     tipAmount,
-    eaters,
+    splitters: splitters,
     items
   }
 }
@@ -146,7 +148,7 @@ export function getURLArgs(
 
   params.append("items", JSON.stringify(data.items))
 
-  params.append("eaters", JSON.stringify(data.eaters))
+  params.append("splitters", JSON.stringify(data.splitters))
 
   const encodedParams = params
     .toString()

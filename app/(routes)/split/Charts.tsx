@@ -23,7 +23,7 @@ const getCharts = (
   data: SplitSchema
 ): {
   itemData: chartData[]
-  eaterData: chartData[]
+  splitterData: chartData[]
   config: ChartConfig
 } => {
   function generateGrayscaleColors(count: number) {
@@ -55,9 +55,9 @@ const getCharts = (
   }
 
   const itemData: chartData[] = []
-  const eaterData: chartData[] = []
+  const splitterData: chartData[] = []
   const itemColors = generateGrayscaleColors(data.items.length + 2) // +2 for tax and tip
-  const eaterColors = generateGrayscaleColors(data.eaters.length)
+  const splitterColors = generateGrayscaleColors(data.splitters.length)
 
   itemData.push({
     name: "Tax",
@@ -80,15 +80,15 @@ const getCharts = (
     })
   )
 
-  data.eaters.forEach((eater, i) => {
-    eaterData.push({
-      name: eater.name,
-      dollar: Math.round(eater.total * 100) / 100,
-      fill: eaterColors[i]
+  data.splitters.forEach((splitter, i) => {
+    splitterData.push({
+      name: splitter.name,
+      dollar: Math.round(splitter.total * 100) / 100,
+      fill: splitterColors[i]
     })
   })
 
-  itemData.concat(eaterData).forEach((element: chartData) => {
+  itemData.concat(splitterData).forEach((element: chartData) => {
     config[element.name] = {
       label: element.name,
       color: element.fill
@@ -97,7 +97,7 @@ const getCharts = (
 
   return {
     itemData: shuffleArray(itemData),
-    eaterData: shuffleArray(eaterData),
+    splitterData: shuffleArray(splitterData),
     config
   }
 }
@@ -107,7 +107,7 @@ interface SplitChartsProps {
 }
 
 export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
-  const { itemData, eaterData, config } = getCharts(splitResult)
+  const { itemData, splitterData, config } = getCharts(splitResult)
 
   const total = React.useMemo(() => {
     return itemData.reduce((acc, curr) => acc + curr.dollar, 0)
@@ -192,7 +192,7 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
             />
 
             <Pie
-              data={eaterData}
+              data={splitterData}
               dataKey="dollar"
               nameKey="name"
               innerRadius={80}
@@ -268,7 +268,7 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
               />
             </Pie>
             <Pie
-              data={eaterData}
+              data={splitterData}
               dataKey="dollar"
               nameKey="name"
               innerRadius={80}

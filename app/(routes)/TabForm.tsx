@@ -71,9 +71,9 @@ export function TabForm({ initialData }: TabFormProps) {
 
   const {
     randomPlaceholders,
-    eaterPlaceholders,
+    splitterPlaceholders,
     itemPlaceholders,
-    appendEaterPlaceholder,
+    appendSplitterPlaceholder,
     appendItemPlaceholder
   } = usePlaceholders()
 
@@ -87,7 +87,7 @@ export function TabForm({ initialData }: TabFormProps) {
       taxAmount: initialData.taxAmount || 0,
       tipBeforeTax: initialData.tipBeforeTax ?? true,
       tipAmount: initialData.tipAmount || 0,
-      eaters: initialData.eaters || [],
+      splitters: initialData.splitters || [],
       items: initialData.items || []
     }
   })
@@ -113,22 +113,22 @@ export function TabForm({ initialData }: TabFormProps) {
   }, [descriptionType])
 
   const isInitialLoad = useRef(true)
-  const [eaterParentRef, enableEaterAnimations] =
+  const [splitterParentRef, enableSplitterAnimations] =
     useAutoAnimate<HTMLDivElement>()
   const [itemParentRef, enableItemAnimations] = useAutoAnimate<HTMLDivElement>()
 
   useEffect(() => {
     if (isInitialLoad.current) {
-      enableEaterAnimations(false)
+      enableSplitterAnimations(false)
       enableItemAnimations(false)
 
       setTimeout(() => {
-        enableEaterAnimations(true)
+        enableSplitterAnimations(true)
         enableItemAnimations(true)
         isInitialLoad.current = false
       }, 100)
     }
-  }, [enableEaterAnimations, enableItemAnimations])
+  }, [enableSplitterAnimations, enableItemAnimations])
 
   useEffect(() => {
     if (Object.keys(initialData).length > 0) {
@@ -140,19 +140,19 @@ export function TabForm({ initialData }: TabFormProps) {
         taxAmount: initialData.taxAmount || 0,
         tipBeforeTax: initialData.tipBeforeTax ?? true,
         tipAmount: initialData.tipAmount || 0,
-        eaters: initialData.eaters || [],
+        splitters: initialData.splitters || [],
         items: initialData.items || []
       })
     }
   }, [initialData, form])
 
   const {
-    fields: eaterFields,
-    append: appendEater,
-    remove: removeEater
+    fields: splitterFields,
+    append: appendSplitter,
+    remove: removeSplitter
   } = useFieldArray({
     control: form.control,
-    name: "eaters"
+    name: "splitters"
   })
 
   const {
@@ -165,52 +165,60 @@ export function TabForm({ initialData }: TabFormProps) {
     name: "items"
   })
 
-  const watchedEaters = useWatch({
+  const watchedSplitters = useWatch({
     control: form.control,
-    name: "eaters"
+    name: "splitters"
   })
 
-  const validEaters = useMemo(
+  const validSplitters = useMemo(
     () =>
-      watchedEaters.filter(
-        (eater) => typeof eater.name === "string" && eater.name.trim() !== ""
+      watchedSplitters.filter(
+        (splitter) =>
+          typeof splitter.name === "string" && splitter.name.trim() !== ""
       ),
-    [watchedEaters]
+    [watchedSplitters]
   )
 
-  const previousValidEatersRef = useRef(validEaters)
+  const previousValidSplittersRef = useRef(validSplitters)
 
   useEffect(() => {
     if (
-      JSON.stringify(previousValidEatersRef.current) !==
-      JSON.stringify(validEaters)
+      JSON.stringify(previousValidSplittersRef.current) !==
+      JSON.stringify(validSplitters)
     ) {
       itemFields.forEach((item, index) => {
-        const updatedEaters = item.eaters.filter((eater) =>
-          validEaters.some((validEater) => validEater.name === eater.name)
+        const updatedSplitters = item.splitters.filter((splitter) =>
+          validSplitters.some(
+            (validSplitter) => validSplitter.name === splitter.name
+          )
         )
-        if (JSON.stringify(updatedEaters) !== JSON.stringify(item.eaters)) {
-          updateItem(index, { ...item, eaters: updatedEaters })
+        if (
+          JSON.stringify(updatedSplitters) !== JSON.stringify(item.splitters)
+        ) {
+          updateItem(index, { ...item, splitters: updatedSplitters })
         }
       })
-      previousValidEatersRef.current = validEaters
+      previousValidSplittersRef.current = validSplitters
     }
-  }, [validEaters, itemFields, updateItem])
+  }, [validSplitters, itemFields, updateItem])
 
   useEffect(() => {
-    if (eaterFields.length > 1) {
-      form.trigger("eaters")
+    if (splitterFields.length > 1) {
+      form.trigger("splitters")
     }
-  }, [eaterFields, form])
+  }, [splitterFields, form])
 
-  const appendEaterWithPlaceholder = useCallback(() => {
-    appendEaterPlaceholder()
-    appendEater({ name: "" }, { shouldFocus: !isMobile })
-  }, [appendEater, appendEaterPlaceholder, isMobile])
+  const appendSplitterWithPlaceholder = useCallback(() => {
+    appendSplitterPlaceholder()
+    appendSplitter({ name: "" }, { shouldFocus: !isMobile })
+  }, [appendSplitter, appendSplitterPlaceholder, isMobile])
 
   const appendItemWithPlaceholder = useCallback(() => {
     appendItemPlaceholder()
-    appendItem({ name: "", price: 0, eaters: [] }, { shouldFocus: !isMobile })
+    appendItem(
+      { name: "", price: 0, splitters: [] },
+      { shouldFocus: !isMobile }
+    )
   }, [appendItem, appendItemPlaceholder, isMobile])
 
   const onSubmit = useCallback(
@@ -221,7 +229,7 @@ export function TabForm({ initialData }: TabFormProps) {
       params.set("taxAmount", values.taxAmount?.toString() || "")
       params.set("tipBeforeTax", values.tipBeforeTax ? "true" : "false")
       params.set("tipAmount", values.tipAmount?.toString() || "")
-      params.set("eaters", JSON.stringify(values.eaters))
+      params.set("splitters", JSON.stringify(values.splitters))
       params.set("items", JSON.stringify(values.items))
 
       router.push(`/split#${params.toString()}`)
@@ -371,25 +379,25 @@ export function TabForm({ initialData }: TabFormProps) {
           />
         </div>
         <div>
-          <FormLabel>Eaters</FormLabel>
-          <div className="space-y-2" ref={eaterParentRef}>
-            {eaterFields.map((field, index) => (
+          <FormLabel>Splitters</FormLabel>
+          <div className="space-y-2" ref={splitterParentRef}>
+            {splitterFields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-2">
                 <FormField
                   control={form.control}
-                  name={`eaters.${index}.name`}
+                  name={`splitters.${index}.name`}
                   render={({ field }) => (
                     <FormItem className="mb-0 flex-grow">
                       <FormControl>
                         <Input
                           {...field}
                           placeholder={
-                            eaterPlaceholders[index]?.name ||
-                            randomPlaceholders.eaterName
+                            splitterPlaceholders[index]?.name ||
+                            randomPlaceholders.splitterName
                           }
                           onChange={(e) => {
                             field.onChange(e)
-                            form.trigger("eaters")
+                            form.trigger("splitters")
                           }}
                         />
                       </FormControl>
@@ -399,7 +407,7 @@ export function TabForm({ initialData }: TabFormProps) {
                 />
                 <Button
                   type="button"
-                  onClick={() => removeEater(index)}
+                  onClick={() => removeSplitter(index)}
                   className="h-10 w-10 p-1"
                   variant="ghost"
                 >
@@ -409,16 +417,16 @@ export function TabForm({ initialData }: TabFormProps) {
             ))}
           </div>
           <FormMessage className="mt-1">
-            {form.formState.errors.eaters?.root?.message}
+            {form.formState.errors.splitters?.root?.message}
           </FormMessage>
           <Button
             type="button"
-            onClick={appendEaterWithPlaceholder}
+            onClick={appendSplitterWithPlaceholder}
             className="mt-2 w-full"
             variant="secondary"
           >
             <PlusIcon className="mr-2 h-4 w-4" />
-            Add Eater
+            Add Splitter
           </Button>
         </div>
 
@@ -485,45 +493,46 @@ export function TabForm({ initialData }: TabFormProps) {
                   </div>
                   <FormField
                     control={form.control}
-                    name={`items.${index}.eaters`}
+                    name={`items.${index}.splitters`}
                     render={({ field }) => (
                       <FormItem>
                         <div className="mb-4">
-                          <FormLabel className="text-base">Eaters</FormLabel>
+                          <FormLabel className="text-base">Splitters</FormLabel>
                           <FormDescription>
                             Select who ate this item
                           </FormDescription>
                         </div>
                         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-                          {validEaters.map((eater) => (
+                          {validSplitters.map((splitter) => (
                             <FormItem
-                              key={eater.name}
+                              key={splitter.name}
                               className="flex flex-row items-start space-x-3 space-y-0"
                             >
                               <FormControl>
                                 <Checkbox
                                   checked={field.value?.some(
-                                    (e) => e.name === eater.name
+                                    (e) => e.name === splitter.name
                                   )}
                                   onCheckedChange={(checked) => {
-                                    const currentEaters = field.value || []
-                                    let updatedEaters
+                                    const currentSplitters = field.value || []
+                                    let updatedSplitters
                                     if (checked) {
-                                      updatedEaters = [
-                                        ...currentEaters,
-                                        { name: eater.name }
+                                      updatedSplitters = [
+                                        ...currentSplitters,
+                                        { name: splitter.name }
                                       ]
                                     } else {
-                                      updatedEaters = currentEaters.filter(
-                                        (e) => e.name !== eater.name
-                                      )
+                                      updatedSplitters =
+                                        currentSplitters.filter(
+                                          (e) => e.name !== splitter.name
+                                        )
                                     }
-                                    field.onChange(updatedEaters)
+                                    field.onChange(updatedSplitters)
                                   }}
                                 />
                               </FormControl>
                               <FormLabel className="font-normal">
-                                {eater.name}
+                                {splitter.name}
                               </FormLabel>
                             </FormItem>
                           ))}

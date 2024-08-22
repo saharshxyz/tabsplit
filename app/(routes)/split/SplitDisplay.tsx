@@ -59,7 +59,7 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
       <div className="space-y-6">
         <SplitTable
           items={splitResult.items}
-          showEaters={true}
+          showSplitters={true}
           summary={{
             subTotal: splitResult.subTotal,
             taxPercentage: splitResult.taxPercentage,
@@ -73,30 +73,30 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => (
 
         <div>
           <h3 className="mb-2 text-lg font-semibold">Individual Splits</h3>
-          {splitResult.eaters.map((eater, index) => (
+          {splitResult.splitters.map((splitter, index) => (
             <Card key={index} className="mb-4">
               <CardHeader>
                 <div className="flex items-center space-x-4">
                   <Avatar>
                     <AvatarFallback>
-                      {eater.name.substring(0, 2).toUpperCase()}
+                      {splitter.name.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <CardTitle className="text-xl">{eater.name}</CardTitle>
+                    <CardTitle className="text-xl">{splitter.name}</CardTitle>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <SplitTable
-                  items={eater.items}
+                  items={splitter.items}
                   summary={{
-                    subTotal: eater.subtotal,
+                    subTotal: splitter.subtotal,
                     taxPercentage: 0,
-                    taxAmount: eater.taxAmount,
+                    taxAmount: splitter.taxAmount,
                     tipPercentage: 0,
-                    tipAmount: eater.tipAmount,
-                    total: eater.total
+                    tipAmount: splitter.tipAmount,
+                    total: splitter.total
                   }}
                 />
               </CardContent>

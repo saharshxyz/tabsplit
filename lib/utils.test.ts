@@ -4,7 +4,7 @@ import exampleTabs from "@/public/exampleTabs.json"
 
 describe("getURLArgs", () => {
   it("should create a correctly formatted and encoded URL", () => {
-    const testData: TabSchema = exampleTabs.joesDinner
+    const testData: TabSchema = exampleTabs.joesDinner as TabSchema
 
     const parseData = tabSchema.safeParse(testData)
     if (!parseData.success) {
@@ -30,8 +30,8 @@ describe("getURLArgs", () => {
       const decodedItems = JSON.parse(params.get("items") || "[]")
       expect(decodedItems).toEqual(testData.items)
 
-      const decodedEaters = JSON.parse(params.get("eaters") || "[]")
-      expect(decodedEaters).toEqual(testData.eaters)
+      const decodedSplitters = JSON.parse(params.get("splitters") || "[]")
+      expect(decodedSplitters).toEqual(testData.splitters)
 
       expect(encodedParams).not.toContain("[")
       expect(encodedParams).not.toContain("]")
@@ -88,12 +88,12 @@ describe("calculateSplit", () => {
         expect(split.tipPercentage).toBeLessThanOrEqual(20)
         expect(split.tipAmount).toBe(input.tipAmount)
 
-        const eatersByName = split.eaters.reduce(
-          (acc, eater) => {
-            acc[eater.name] = eater
+        const splittersByName = split.splitters.reduce(
+          (acc, splitter) => {
+            acc[splitter.name] = splitter
             return acc
           },
-          {} as Record<string, (typeof split.eaters)[0]>
+          {} as Record<string, (typeof split.splitters)[0]>
         )
 
         const [karen, samuel, adam, vincent, kyle] = [
@@ -102,7 +102,7 @@ describe("calculateSplit", () => {
           "Adam",
           "Vincent",
           "Kyle"
-        ].map((name) => split.eaters.find((e) => e.name === name)!)
+        ].map((name) => split.splitters.find((e) => e.name === name)!)
 
         expect(karen.total).toBeLessThan(20)
         expect(adam.total).toBeCloseTo(kyle.total)

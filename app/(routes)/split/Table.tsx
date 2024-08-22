@@ -14,28 +14,28 @@ interface ItemRowProps {
     name: string
     price?: number
     portionCost?: number
-    eaters?: { name: string }[]
+    splitters?: { name: string }[]
   }
-  showEaters?: boolean
+  showSplitters?: boolean
 }
 
 export const ItemRow: React.FC<ItemRowProps> = ({
   item,
-  showEaters = false
+  showSplitters = false
 }) => (
   <TableRow className="w-full border-0 leading-tight">
-    <TableCell className={`${showEaters ? "w-3/12" : "w-full"} py-2 pr-1.5`}>
+    <TableCell className={`${showSplitters ? "w-3/12" : "w-full"} py-2 pr-1.5`}>
       {item.name}
     </TableCell>
-    <TableCell className={`${showEaters ? "w-full" : ""} py-2 text-right`}>
-      {showEaters && item.eaters && (
+    <TableCell className={`${showSplitters ? "w-full" : ""} py-2 text-right`}>
+      {showSplitters && item.splitters && (
         <div className="flex items-center justify-end">
-          {item.eaters.length > 1 ? (
+          {item.splitters.length > 1 ? (
             <Users className="mr-2 hidden h-4 w-4 sm:inline-block" />
           ) : (
             <User className="mr-2 hidden h-4 w-4 sm:inline-block" />
           )}
-          {item.eaters.map((eater) => eater.name).join(", ")}
+          {item.splitters.map((splitter) => splitter.name).join(", ")}
         </div>
       )}
     </TableCell>
@@ -80,7 +80,7 @@ export const SummaryRow: React.FC<SummaryRowProps> = ({
 
 interface SplitTableProps {
   items: ItemRowProps["item"][]
-  showEaters?: boolean
+  showSplitters?: boolean
   summary: {
     subTotal: number
     taxPercentage: number | undefined
@@ -93,22 +93,22 @@ interface SplitTableProps {
 
 export const SplitTable: React.FC<SplitTableProps> = ({
   items,
-  showEaters = false,
+  showSplitters = false,
   summary
 }) => (
   <Table>
-    {showEaters && (
+    {showSplitters && (
       <TableHeader>
         <TableRow>
           <TableHead>Item</TableHead>
-          <TableHead className="w-full text-right">Eaters</TableHead>
+          <TableHead className="w-full text-right">Splitters</TableHead>
           <TableHead className="w-24 text-right">Price</TableHead>
         </TableRow>
       </TableHeader>
     )}
     <TableBody>
       {items.map((item, index) => (
-        <ItemRow key={index} item={item} showEaters={showEaters} />
+        <ItemRow key={index} item={item} showSplitters={showSplitters} />
       ))}
       <SummaryRow
         label="Subtotal"

@@ -22,7 +22,7 @@ export const useHash = () => {
           const parsedParams: Record<string, any> = {}
 
           params.forEach((value, key) => {
-            if (key === "items" || key === "eaters") {
+            if (key === "items" || key === "splitters") {
               parsedParams[key] = tryParseJSON(value, [])
             } else if (key === "tabDescription") {
               parsedParams[key] = tryParseJSON(value, {})
