@@ -7,7 +7,7 @@ export function generateMetadata(
   const fullTitle = title === "TabSplit" ? title : `${title} | TabSplit`
 
   return {
-    metadataBase: new URL(`https://tabsplit.saharsh.xyz`),
+    metadataBase: new URL(`https://tabsplit.xyz`),
     title: {
       default: fullTitle,
       template: "%s | TabSplit"
