@@ -114,102 +114,180 @@ export const SplitCharts: React.FC<SplitChartsProps> = ({ splitResult }) => {
   }, [itemData])
 
   return (
-    <div className="hidden pb-3 pt-6 sm:flex">
-      <ChartContainer
-        config={config}
-        className="aspect-[4/3] min-h-[50%] w-full max-w-[50%]"
-      >
-        <PieChart>
-          <ChartTooltip
-            content={
-              <ChartTooltipContent
-                nameKey="name"
-                indicator="line"
-                labelFormatter={(_, payload) => {
-                  return (
-                    config[payload?.[0].name as keyof typeof config]?.label ||
-                    ""
-                  )
-                }}
-              />
-            }
-          />
+    <>
+      <div className="hidden pb-3 pt-6 sm:flex">
+        <ChartContainer
+          config={config}
+          className="aspect-[4/3] min-h-[50%] w-full max-w-[50%]"
+        >
+          <PieChart>
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey="name"
+                  indicator="line"
+                  labelFormatter={(_, payload) => {
+                    return (
+                      config[payload?.[0].name as keyof typeof config]?.label ||
+                      ""
+                    )
+                  }}
+                />
+              }
+            />
 
-          <Pie
-            data={itemData}
-            dataKey="dollar"
-            nameKey="name"
-            innerRadius={total < 100 ? 50 : total < 1000 ? 60 : 63.5}
-            outerRadius={95}
-            strokeWidth={5}
-            paddingAngle={3}
-          >
-            <Label
-              content={({ viewBox }) => {
-                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                  return (
-                    <text
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                    >
-                      <tspan
+            <Pie
+              data={itemData}
+              dataKey="dollar"
+              nameKey="name"
+              innerRadius={total < 100 ? 50 : total < 1000 ? 60 : 63.5}
+              outerRadius={95}
+              strokeWidth={5}
+              paddingAngle={5}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        className="fill-foreground text-3xl font-bold"
+                        textAnchor="middle"
                         dominantBaseline="central"
                       >
-                        ${total.toFixed(0)}
-                      </tspan>
-                    </text>
-                  )
-                }
-              }}
-            />
-          </Pie>
-        </PieChart>
-      </ChartContainer>
-      <ChartContainer
-        config={config}
-        className="aspect-[4/3] min-h-[50%] w-full max-w-[50%] [&_.recharts-pie-label-line]:stroke-foreground"
-      >
-        <PieChart>
-          <ChartTooltip
-            content={
-              <ChartTooltipContent
-                nameKey="name"
-                indicator="line"
-                labelFormatter={(_, payload) => {
-                  return (
-                    config[payload?.[0].name as keyof typeof config]?.label ||
-                    ""
-                  )
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                          dominantBaseline="central"
+                        >
+                          ${total.toFixed(0)}
+                        </tspan>
+                      </text>
+                    )
+                  }
                 }}
               />
-            }
-          />
-
-          <Pie
-            data={eaterData}
-            dataKey="dollar"
-            nameKey="name"
-            innerRadius={80}
-            outerRadius={95}
-            strokeWidth={5}
-            paddingAngle={5}
-          >
-            <LabelList
-              dataKey="name"
-              position="outside"
-              offset={10}
-              className="fill-foreground"
-              stroke="none"
-              fontSize={12}
+            </Pie>
+          </PieChart>
+        </ChartContainer>
+        <ChartContainer
+          config={config}
+          className="aspect-[4/3] min-h-[50%] w-full max-w-[50%] [&_.recharts-pie-label-line]:stroke-foreground"
+        >
+          <PieChart>
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey="name"
+                  indicator="line"
+                  labelFormatter={(_, payload) => {
+                    return (
+                      config[payload?.[0].name as keyof typeof config]?.label ||
+                      ""
+                    )
+                  }}
+                />
+              }
             />
-          </Pie>
-        </PieChart>
-      </ChartContainer>
-    </div>
+
+            <Pie
+              data={eaterData}
+              dataKey="dollar"
+              nameKey="name"
+              innerRadius={80}
+              outerRadius={95}
+              strokeWidth={5}
+              paddingAngle={5}
+            >
+              <LabelList
+                dataKey="name"
+                position="outside"
+                offset={10}
+                className="fill-foreground"
+                stroke="none"
+                fontSize={12}
+              />
+            </Pie>
+          </PieChart>
+        </ChartContainer>
+      </div>
+
+      <div className="pb-3 pt-6 sm:hidden">
+        <ChartContainer
+          config={config}
+          className="aspect-[4/3] min-h-[50%] w-full"
+        >
+          <PieChart>
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey="name"
+                  indicator="line"
+                  labelFormatter={(_, payload) => {
+                    return (
+                      config[payload?.[0].name as keyof typeof config]?.label ||
+                      ""
+                    )
+                  }}
+                />
+              }
+            />
+
+            <Pie
+              data={itemData}
+              dataKey="dollar"
+              nameKey="name"
+              innerRadius={total < 100 ? 50 : total < 1000 ? 60 : 63.5}
+              outerRadius={70}
+              strokeWidth={5}
+              paddingAngle={5}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                          dominantBaseline="central"
+                        >
+                          ${total.toFixed(0)}
+                        </tspan>
+                      </text>
+                    )
+                  }
+                }}
+              />
+            </Pie>
+            <Pie
+              data={eaterData}
+              dataKey="dollar"
+              nameKey="name"
+              innerRadius={80}
+              outerRadius={95}
+              strokeWidth={5}
+              paddingAngle={5}
+            >
+              <LabelList
+                dataKey="name"
+                position="outside"
+                offset={10}
+                className="fill-foreground"
+                stroke="none"
+                fontSize={12}
+              />
+            </Pie>
+          </PieChart>
+        </ChartContainer>
+      </div>
+    </>
   )
 }

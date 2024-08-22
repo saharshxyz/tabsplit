@@ -14,7 +14,7 @@ interface LoadingCardProps {
 }
 
 export const LoadingCard = ({ title }: LoadingCardProps) => (
-  <Card className="m-4">
+  <Card>
     <CardHeader>
       <CardTitle>{title}</CardTitle>
     </CardHeader>

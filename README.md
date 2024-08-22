@@ -3,7 +3,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## TODO
 
 - [ ] Randomly generate examples each time instead of loading a massive JSON (fakerjs?)
-- [ ] Stacked pie chart on mobile
 - [ ] CLI
 - [ ] Select all eaters button
 - [ ] Create favicon/logo (Update OG image to use logo)
