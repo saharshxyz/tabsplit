@@ -198,11 +198,13 @@ export const generateExampleTab = (): TabSchema => {
     "Other"
   ] as const)
 
-  const tabDescriptionDetails = ["Venmo", "Cash App", "PayPal"].includes(
+  const tabDescriptionDetails = ["Venmo", "Cash App"].includes(
     tabDescriptionType
   )
     ? "saharshxyz"
-    : faker.lorem.sentence()
+    : ["PayPal"].includes(tabDescriptionType)
+      ? "saharshy"
+      : faker.lorem.sentence()
 
   return {
     tabName: `${faker.date.weekday()} ${faker.helpers.arrayElement(mealTypes)} ${faker.commerce.department()} ${capitalizeFirstLetter(faker.lorem.word({ length: { min: 5, max: 7 } }))}`,
