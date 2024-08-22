@@ -35,7 +35,7 @@ export const ItemRow: React.FC<ItemRowProps> = ({
           ) : (
             <User className="mr-2 hidden sm:inline-block" />
           )}
-          {item.splitters.map((splitter) => splitter.name).join(", ")}
+          <p>{item.splitters.map((splitter) => splitter.name).join(", ")}</p>
         </div>
       )}
     </TableCell>

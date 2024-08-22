@@ -175,8 +175,8 @@ export const generateExampleTab = (): TabSchema => {
     "Gathering at"
   ]
 
-  const numItems = faker.number.int({ min: 2, max: 25 })
-  const numSplitters = faker.number.int({ min: 2, max: 20 })
+  const numItems = faker.number.int({ min: 2, max: 15 })
+  const numSplitters = faker.number.int({ min: 2, max: 10 })
 
   const splitters = Array.from({ length: numSplitters }, () => ({
     name: faker.person.firstName()
@@ -184,7 +184,7 @@ export const generateExampleTab = (): TabSchema => {
 
   const items = Array.from({ length: numItems }, () => ({
     name: faker.commerce.productName(),
-    price: parseFloat(faker.commerce.price({ min: 5, max: 70, dec: 2 })),
+    price: parseFloat(faker.finance.amount({ min: 5, max: 70, dec: 2 })),
     splitters: faker.helpers
       .shuffle([...splitters])
       .slice(0, faker.number.int({ min: 1, max: numSplitters }))
