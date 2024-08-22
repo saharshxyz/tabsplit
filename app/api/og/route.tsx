@@ -3,11 +3,6 @@ import { NextRequest } from "next/server"
 
 export const runtime = "edge"
 
-// Load the font files
-const interRegularFontP = fetch(
-  new URL("../../../public/Inter-Regular.otf", import.meta.url)
-).then((res) => res.arrayBuffer())
-
 const interBoldFontP = fetch(
   new URL("../../../public/Inter-Bold.otf", import.meta.url)
 ).then((res) => res.arrayBuffer())
@@ -19,11 +14,7 @@ export async function GET(request: NextRequest) {
   const width = parseInt(searchParams.get("width") || "1200", 10)
   const height = parseInt(searchParams.get("height") || "630", 10)
 
-  // Load the fonts
-  const [interRegularFont, interBoldFont] = await Promise.all([
-    interRegularFontP,
-    interBoldFontP
-  ])
+  const [interBoldFont] = await Promise.all([interBoldFontP])
 
   return new ImageResponse(
     (
@@ -87,7 +78,7 @@ export async function GET(request: NextRequest) {
             <h1
               style={{
                 fontSize: "6rem",
-                fontWeight: 700, // Changed to 700 for bold
+                fontWeight: 700,
                 color: "#1a202c",
                 backgroundColor: "rgba(255, 255, 255, 0.75)",
                 borderRadius: "16px",
@@ -100,7 +91,7 @@ export async function GET(request: NextRequest) {
           <p
             style={{
               fontSize: "3.75rem",
-              fontWeight: 400, // Changed to 400 for regular
+              fontWeight: 700,
               color: "#4a5568",
               backgroundColor: "rgba(255, 255, 255, 0.75)",
               borderRadius: "16px",
@@ -116,12 +107,6 @@ export async function GET(request: NextRequest) {
       width,
       height,
       fonts: [
-        {
-          name: "Inter",
-          data: interRegularFont,
-          style: "normal",
-          weight: 400
-        },
         {
           name: "Inter",
           data: interBoldFont,

@@ -7,7 +7,7 @@ export function generateMetadata(
   const fullTitle = title === "TabSplit" ? title : `${title} | TabSplit`
 
   return {
-    metadataBase: new URL(`https://${process.env.VERCEL_URL}`),
+    metadataBase: new URL(`https://tabsplit.saharsh.xyz`),
     title: {
       default: fullTitle,
       template: "%s | TabSplit"
