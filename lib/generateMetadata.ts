@@ -8,9 +8,7 @@ export function generateMetadata(
   const ogImageUrl = `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
 
   return {
-    metadataBase: new URL(
-      `https://${process.env.NEXT_PUBLIC_VERCEL_URL || `tabsplit.xyz`}`
-    ),
+    metadataBase: new URL(`https://tabsplit.xyz`),
     title: {
       default: fullTitle,
       template: "%s | TabSplit"
