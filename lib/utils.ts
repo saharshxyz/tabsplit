@@ -95,38 +95,6 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
   return split
 }
 
-export const parseUrlData = (
-  searchParams: URLSearchParams
-): Partial<TabSchema> => {
-  const tabName = searchParams.get("tabName") || ""
-  const taxAmount = parseFloat(searchParams.get("taxAmount") || "0")
-  const tipBeforeTax = searchParams.get("tipBeforeTax") === "true"
-  const tipAmount = parseFloat(searchParams.get("tipAmount") || "0")
-
-  let splitters = []
-  try {
-    splitters = JSON.parse(searchParams.get("splitters") || "[]")
-  } catch (e) {
-    console.error("Failed to parse splitters from URL")
-  }
-
-  let items = []
-  try {
-    items = JSON.parse(searchParams.get("items") || "[]")
-  } catch (e) {
-    console.error("Failed to parse items from URL")
-  }
-
-  return {
-    tabName,
-    taxAmount,
-    tipBeforeTax,
-    tipAmount,
-    splitters: splitters,
-    items
-  }
-}
-
 export const getBaseUrl = (): string => {
   if (typeof window !== "undefined") {
     return window.location.origin
