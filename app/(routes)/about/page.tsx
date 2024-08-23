@@ -53,7 +53,7 @@ const FeatureItem = ({
 
 export default function AboutPage() {
   return (
-    <main className="mx-auto mt-5 max-w-3xl">
+    <main className="mx-auto my-5 mb-10 max-w-3xl">
       <BackButton />
 
       <Card>
