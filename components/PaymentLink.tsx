@@ -29,7 +29,7 @@ export const PaymentLink: React.FC<PaymentLinkProps> = ({ type, details }) => {
       href={urlMap[type as Exclude<DescriptionType, "None" | "Other">]}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center border-b-2 border-transparent transition-colors duration-200 ease-in-out hover:border-current"
+      className="text-link inline-flex items-center"
     >
       {displayMap[type as Exclude<DescriptionType, "None" | "Other">]}
       <ExternalLink className="ml-2" />

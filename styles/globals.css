@@ -83,3 +83,7 @@
   @apply h-4 w-auto;
   stroke-width: 2.25px;
 }
+
+.text-link {
+  @apply border-b-2 border-transparent transition-all duration-200 ease-in-out hover:border-current;
+}

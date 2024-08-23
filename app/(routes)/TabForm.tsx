@@ -387,7 +387,7 @@ export function TabForm({ initialData }: TabFormProps) {
           />
         </div>
         <div>
-          <FormLabel>Splitters</FormLabel>
+          <FormLabel className="font-semibold">Splitters</FormLabel>
           <div className="space-y-2" ref={splitterParentRef}>
             {splitterFields.map((field, index) => (
               <div key={field.id} className="flex items-center gap-2">
@@ -441,7 +441,7 @@ export function TabForm({ initialData }: TabFormProps) {
         <Separator />
 
         <div>
-          <h3 className="mb-2 text-lg font-semibold">Items</h3>
+          <h3 className="mb-2 font-semibold">Items</h3>
           <div className="space-y-4" ref={itemParentRef}>
             {itemFields.map((field, index) => (
               <Card key={field.id}>

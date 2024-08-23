@@ -6,10 +6,10 @@ import { useHash } from "@/lib/useHash"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
-import { Shapes, Eraser } from "lucide-react"
+import { Shapes, Eraser, Info } from "lucide-react"
 
 export default function Home() {
-  const { hash, parsedData, error } = useHash()
+  const { parsedData } = useHash()
 
   const handleClearForm = () => {
     window.location.hash = ""
@@ -21,7 +21,7 @@ export default function Home() {
       <div className="m-2 flex space-x-2">
         <Link href={`/example`} className="flex-shrink-0">
           <Button variant="outline">
-            See Examples
+            View Examples
             <Shapes className="ml-2" />
           </Button>
         </Link>
@@ -29,6 +29,12 @@ export default function Home() {
           <Button className="w-full">
             Clear Form
             <Eraser className="ml-2" />
+          </Button>
+        </Link>
+        <Link href="/about" className="flex-shrink-0">
+          <Button variant="outline">
+            <span className="hidden sm:block">About</span>
+            <Info className="sm:ml-2" />
           </Button>
         </Link>
       </div>
