@@ -5,9 +5,10 @@ export function generateMetadata(
   description: string = "Split tabs with ease"
 ): Metadata {
   const fullTitle = title === "TabSplit" ? title : `${title} | TabSplit`
+  const ogImageUrl = `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
 
   return {
-    metadataBase: new URL(`https://tabsplit.xyz`),
+    metadataBase: new URL(`https://${process.env.NEXT_PUBLIC_VERCEL_URL}`),
     title: {
       default: fullTitle,
       template: "%s | TabSplit"
@@ -21,7 +22,7 @@ export function generateMetadata(
       description,
       images: [
         {
-          url: `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
+          url: ogImageUrl,
           width: 1200,
           height: 630
         }
@@ -31,9 +32,7 @@ export function generateMetadata(
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [
-        `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
-      ]
+      images: [ogImageUrl]
     }
   }
 }

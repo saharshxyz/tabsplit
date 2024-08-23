@@ -30,16 +30,20 @@ export async function GET(request: NextRequest) {
           backgroundImage:
             "radial-gradient(circle at 20px 20px, #a0a0a0 3%, transparent 0%), radial-gradient(circle at 60px 60px, #a0a0a0 3%, transparent 0%)",
           backgroundSize: "80px 80px",
-          fontFamily: "Inter"
+          fontFamily: "Inter",
+          border: "12px solid #020817",
+          borderRadius: "48px"
         }}
       >
         <div
           style={{
-            margin: "64px",
+            marginLeft: "100px",
             padding: "32px",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start"
+            justifyContent: "center",
+            alignItems: "flex-start",
+            width: "100%"
           }}
         >
           <div
@@ -55,7 +59,9 @@ export async function GET(request: NextRequest) {
                 borderRadius: "16px",
                 padding: "16px",
                 marginRight: "24px",
-                display: "flex"
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
               }}
             >
               <svg
@@ -64,7 +70,7 @@ export async function GET(request: NextRequest) {
                 height="96"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#1a202c"
+                stroke="#020817"
                 strokeWidth="2.25"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -79,7 +85,7 @@ export async function GET(request: NextRequest) {
               style={{
                 fontSize: "6rem",
                 fontWeight: 700,
-                color: "#1a202c",
+                color: "#020817",
                 backgroundColor: "rgba(255, 255, 255, 0.75)",
                 borderRadius: "16px",
                 padding: "0 16px"
