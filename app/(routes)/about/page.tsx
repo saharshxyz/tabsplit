@@ -114,7 +114,7 @@ export default function AboutPage() {
                 <>
                   TabSplit was created by{" "}
                   <a
-                    href="https://saharsh.xyz?ref=tabsplit"
+                    href="https://saharsh.xyz"
                     className="text-link text-muted-foreground"
                     target="_blank"
                     rel="noopener"
