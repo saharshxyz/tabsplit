@@ -194,7 +194,8 @@ export const generateExampleTab = (): TabSchema => {
   const tabDescriptionType = faker.helpers.arrayElement([
     "Venmo",
     "Cash App",
-    "PayPal"
+    "PayPal",
+    "Other"
   ] as const)
 
   const tabDescriptionDetails = ["Venmo", "Cash App"].includes(
@@ -203,7 +204,8 @@ export const generateExampleTab = (): TabSchema => {
     ? "saharshxyz"
     : ["PayPal"].includes(tabDescriptionType)
       ? "saharshy"
-      : faker.lorem.sentence()
+      : `${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  // : faker.lorem.sentence()
 
   return {
     tabName: `${faker.date.weekday()} ${faker.helpers.arrayElement(mealTypes)} ${faker.commerce.department()} ${capitalizeFirstLetter(faker.lorem.word({ length: { min: 5, max: 7 } }))}`,
