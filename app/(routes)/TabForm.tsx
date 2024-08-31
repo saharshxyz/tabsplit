@@ -1,12 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  useForm,
-  useFieldArray,
-  useWatch,
-  useFormContext
-} from "react-hook-form"
+import { useForm, useFieldArray, useWatch } from "react-hook-form"
 import { useState, useEffect, useMemo, useRef, useCallback } from "react"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
 
@@ -33,6 +28,12 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
+import {
   tabSchema,
   TabSchema,
   DescriptionType,
@@ -41,8 +42,9 @@ import {
 import { PlusIcon, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { usePlaceholders } from "@/lib/usePlaceholders"
-import { ReceiptText } from "lucide-react"
+import { ReceiptText, Upload } from "lucide-react"
 import { PaymentLink } from "@/components/PaymentLink"
+import Link from "next/link"
 
 function DescriptionDisplay({
   type,
@@ -248,13 +250,27 @@ export function TabForm({ initialData }: TabFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5 space-y-8">
-        <div className="flex space-x-4">
+        <div className="flex items-center space-x-4">
           <FormField
             control={form.control}
             name="tabName"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Tab Name</FormLabel>
+                <FormLabel className="flex items-center">
+                  Tab Name
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link href="/upload" className="ml-2">
+                          <Upload className="h-4 w-4 cursor-pointer text-muted-foreground hover:text-foreground" />
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Upload receipt</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder={randomPlaceholders.tabName} {...field} />
                 </FormControl>
