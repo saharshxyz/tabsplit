@@ -9,7 +9,7 @@ import {
   CardTitle
 } from "@/components/ui/card"
 import {
-  UploadIcon,
+  Upload,
   AlertCircle,
   ArrowLeft,
   LoaderCircle,
@@ -134,7 +134,7 @@ export default function Component() {
   }
 
   return (
-    <main className="mx-auto mt-5 flex min-h-screen max-w-3xl items-center justify-center overflow-hidden">
+    <main className="mx-auto flex min-h-screen max-w-3xl items-center justify-center overflow-hidden">
       <div className="w-full max-w-md">
         <Link href="/" className="mb-4 inline-block">
           <Button variant="link">
@@ -171,7 +171,7 @@ export default function Component() {
                       <FormControl>
                         <div
                           {...getRootProps()}
-                          className={`flex h-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
+                          className={`flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors sm:h-64 ${
                             isDragActive
                               ? "border-primary bg-primary/10"
                               : isDragReject
@@ -200,7 +200,7 @@ export default function Component() {
                           ) : isDragReject ? (
                             <AlertCircle className="mb-4 !h-10 text-destructive" />
                           ) : (
-                            <UploadIcon className="mb-4 !h-8 text-muted-foreground" />
+                            <Upload className="mb-4 !h-8 text-muted-foreground" />
                           )}
                           <p className="mb-2 font-semibold">
                             {form.watch("receipt")

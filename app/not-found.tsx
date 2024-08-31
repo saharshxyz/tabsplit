@@ -12,7 +12,7 @@ import { Shapes, Info, ArrowLeft } from "lucide-react"
 
 export default function NotFound() {
   return (
-    <main className="mx-auto mt-5 flex min-h-screen max-w-3xl items-center justify-center overflow-hidden">
+    <main className="mx-auto flex min-h-screen max-w-3xl items-center justify-center overflow-hidden">
       <div className="w-full max-w-md">
         <Link href="/" className="mb-4 inline-block">
           <Button variant="link">
