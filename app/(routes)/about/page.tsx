@@ -44,8 +44,9 @@ const FeatureItem = ({
 
 export default function AboutPage() {
   return (
-    <div className="mx-2 my-5">
+    <main className="mx-auto my-5 mb-10 max-w-3xl">
       <BackButton link="/" text="Back to Home" />
+
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">About TabSplit</CardTitle>
@@ -149,6 +150,6 @@ export default function AboutPage() {
           </Section>
         </CardContent>
       </Card>
-    </div>
+    </main>
   )
 }

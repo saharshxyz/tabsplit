@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <head />
       <body className="flex items-center justify-center">
-        <main className="mx-auto flex min-h-dvh max-w-prose items-center justify-center overflow-hidden">
+        <div className="min-h-screen w-full max-w-prose">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -33,7 +33,7 @@ export default function RootLayout({
             <SpeedInsights />
             <Analytics />
           </ThemeProvider>
-        </main>
+        </div>
       </body>
     </html>
   )
