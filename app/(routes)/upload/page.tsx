@@ -8,16 +8,9 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
-import {
-  Upload,
-  AlertCircle,
-  ArrowLeft,
-  LoaderCircle,
-  CheckCircle
-} from "lucide-react"
+import { Upload, AlertCircle, LoaderCircle, CheckCircle } from "lucide-react"
 import { useDropzone, FileRejection, DropEvent } from "react-dropzone"
 import { useCallback, useState } from "react"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -40,6 +33,7 @@ import {
   transformPartialToFullTab
 } from "@/lib/utils"
 import { PartialTabSchema } from "@/lib/schemas"
+import { BackButton } from "@/components/BackButton"
 
 const ACCEPTED_FILE_TYPES = [".jpeg", ".jpg", ".png", ".gif", ".webp"]
 
@@ -135,11 +129,7 @@ export default function Component() {
 
   return (
     <div className="mx-2">
-      <Link href="/" className="mb-4 inline-block">
-        <Button variant="link">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Fill out manually
-        </Button>
-      </Link>
+      <BackButton link="/" text="Fill Out Manually" />
 
       <Card className="w-full p-6">
         <CardHeader>
@@ -167,7 +157,7 @@ export default function Component() {
                     <FormControl>
                       <div
                         {...getRootProps()}
-                        className={`flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors sm:h-64 ${
+                        className={`flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-colors sm:h-64 ${
                           isDragActive
                             ? "border-primary bg-primary/10"
                             : isDragReject
@@ -207,7 +197,7 @@ export default function Component() {
                                 ? "File uploaded successfully"
                                 : "Drag & Drop your receipt here"}
                         </p>
-                        <p className="text-center text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                           {isDragReject
                             ? "Invalid file type. Please upload an image."
                             : form.watch("receipt")

@@ -8,16 +8,13 @@ import {
   CardContent,
   CardFooter
 } from "@/components/ui/card"
-import { Shapes, Info, ArrowLeft } from "lucide-react"
+import { Shapes, Info } from "lucide-react"
+import { BackButton } from "@/components/BackButton"
 
 export default function NotFound() {
   return (
     <div className="mx-2">
-      <Link href="/" className="mb-4 inline-block">
-        <Button variant="link">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
-        </Button>
-      </Link>
+      <BackButton link="/" text="Back to Home" />
 
       <Card className="w-full p-6">
         <CardHeader className="text-center">

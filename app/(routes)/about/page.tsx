@@ -1,8 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { BackButton } from "@/components/BackButton"
 import {
-  ArrowLeft,
   Lock,
   Globe,
   Calculator,
@@ -12,14 +10,6 @@ import {
   LucideIcon
 } from "lucide-react"
 import { ReactNode } from "react"
-
-const BackButton = () => (
-  <Link href="/" className="m-2 mb-4 inline-block">
-    <Button variant="link">
-      <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
-    </Button>
-  </Link>
-)
 
 const Section = ({
   title,
@@ -55,8 +45,7 @@ const FeatureItem = ({
 export default function AboutPage() {
   return (
     <div className="mx-2 my-5">
-      <BackButton />
-
+      <BackButton link="/" text="Back to Home" />
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">About TabSplit</CardTitle>
