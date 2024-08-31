@@ -1,7 +1,12 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ZodError } from "zod"
-import { SplitterSchema, TabSchema, SplitSchema } from "@/lib/schemas"
+import {
+  SplitterSchema,
+  PartialTabSchema,
+  TabSchema,
+  SplitSchema
+} from "@/lib/schemas"
 import { faker } from "@faker-js/faker"
 
 export function cn(...inputs: ClassValue[]) {
@@ -127,10 +132,27 @@ export const getURLArgs = (
   return [baseUrl, encodedParams]
 }
 
-export const capitalizeFirstLetter = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1)
+export const transformPartialToFullTab = (
+  partialTab: PartialTabSchema
+): TabSchema => {
+  return {
+    ...partialTab,
+    tabDescription: {
+      type: "None"
+    },
+    tipBeforeTax: true,
+    splitters: [],
+    items: partialTab.items.map((item) => ({
+      ...item,
+      splitters: []
+    }))
+  }
+}
 
 export const generateExampleTab = (): TabSchema => {
+  const capitalizeFirstLetter = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1)
+
   const mealTypes = [
     "Dinner at",
     "Lunch at",
