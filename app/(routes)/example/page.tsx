@@ -31,7 +31,7 @@ export default function Example() {
   }, [])
 
   return (
-    <main className="flex min-h-screen items-center justify-center overflow-hidden">
+    <main className="flex min-h-dvh items-center justify-center overflow-hidden">
       <Card className="w-full max-w-md p-6">
         <CardHeader>
           <CardTitle className="text-center">See Example TabSplits</CardTitle>

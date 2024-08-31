@@ -13,7 +13,7 @@ import { BackButton } from "@/components/BackButton"
 
 export default function NotFound() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl items-center justify-center overflow-hidden">
+    <main className="mx-auto flex min-h-dvh max-w-3xl items-center justify-center overflow-hidden">
       <div className="w-full max-w-md">
         <BackButton link="/" text="Back to Home" />
 
