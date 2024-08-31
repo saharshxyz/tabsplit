@@ -17,7 +17,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto mt-5">
+    <div className="mx-2 my-5">
       <div className="m-2 flex space-x-2">
         <Link href={`/example`} className="flex-shrink-0">
           <Button variant="outline">
@@ -44,6 +44,6 @@ export default function Home() {
           <TabForm initialData={parsedData} />
         </CardContent>
       </Card>
-    </main>
+    </div>
   )
 }

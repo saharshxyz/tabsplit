@@ -54,7 +54,7 @@ const FeatureItem = ({
 
 export default function AboutPage() {
   return (
-    <main className="mx-auto my-5 mb-10 max-w-3xl">
+    <div className="mx-2 my-5">
       <BackButton />
 
       <Card>
@@ -160,6 +160,6 @@ export default function AboutPage() {
           </Section>
         </CardContent>
       </Card>
-    </main>
+    </div>
   )
 }

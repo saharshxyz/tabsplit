@@ -78,7 +78,7 @@ export default function Split() {
   }, [parsedData, error])
 
   return (
-    <main className="mx-auto mt-5 max-w-3xl">
+    <div className="mx-2 my-5">
       <div className="m-2 flex space-x-2">
         <Link href={`/#${hash}`} className="w-2/5">
           <Button variant="outline" className="w-full">
@@ -98,6 +98,6 @@ export default function Split() {
       ) : (
         <SplitDisplay splitResult={calculateSplit(parsedData as TabSchema)} />
       )}
-    </main>
+    </div>
   )
 }
