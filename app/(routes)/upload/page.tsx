@@ -148,8 +148,9 @@ export default function Component() {
               Upload Receipt
             </CardTitle>
             <CardDescription>
-              Upload a picture of your receipt and you will be sent to a
+              Upload a picture of your receipt and you will be redirected to a
               pre-filled form. Note that this uses OpenAI and results may vary.
+              It is advised that you double-check the pre-filled details.
             </CardDescription>
           </CardHeader>
           <CardContent>

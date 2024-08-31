@@ -8,6 +8,7 @@ import {
   Calculator,
   User,
   Share2,
+  Upload,
   LucideIcon
 } from "lucide-react"
 import { ReactNode } from "react"
@@ -63,45 +64,75 @@ export default function AboutPage() {
         <CardContent className="space-y-6">
           <Section title="How TabSplit Works">
             <p>
-              TabSplit is a simple, user-friendly tool that helps you split
-              bills with friends without any fuss. Here&apos;s how easy it is:
+              TabSplit is a simple, user-friendly tool designed with your
+              privacy in mind. Here&apos;s how it works:
             </p>
             <ul className="mt-1 list-inside list-disc space-y-2 pl-4">
               <li>
-                Just enter what you bought, how much it cost, and who&apos;s
-                paying for each item.
+                Choose to either manually enter your bill details or upload a
+                picture of your receipt for automatic processing.
               </li>
-              <li>TabSplit does the math for you, including tax and tip.</li>
-              <li>See exactly who owes what, down to the last cent.</li>
-              <li>Share the results with your friends using a simple link.</li>
+              <li>
+                Specify what was bought, the cost, and who&apos;s paying for
+                each item.
+              </li>
+              <li>
+                TabSplit calculates the split, including tax and tip, right in
+                your browser.
+              </li>
+              <li>View a detailed breakdown of who owes what.</li>
+              <li>
+                Share the results with your friends using a secure,
+                information-packed link.
+              </li>
             </ul>
           </Section>
 
-          <Section title="Your Data Stays With You">
+          <Section title="Your Privacy and Security">
             <p className="mb-4">
-              We take your privacy seriously. TabSplit is designed to be 100%
-              secure and private:
+              We&apos;ve built TabSplit with a strong focus on privacy and
+              security. Here&apos;s what you need to know:
             </p>
             <div className="space-y-4">
               <FeatureItem
                 icon={Lock}
-                title="No Data Storage, Period"
-                description="TabSplit doesn't have a database. We don't store any of your information anywhere. Everything happens right in your browser."
+                title="No Data Storage"
+                description="TabSplit doesn't have a database. We don't store any of your information. All calculations and data handling happen directly in your browser."
               />
               <FeatureItem
                 icon={Share2}
-                title="Magic Links"
-                description="When you share your split, all the information is contained in the link itself. No data is sent to or stored on our servers."
+                title="Secure Sharing"
+                description="When you share your split, all the information is encoded in the link itself. No data is sent to or stored on our servers, ensuring your bill details remain private."
               />
               <FeatureItem
                 icon={Calculator}
-                title="Calculations You Can Trust"
-                description="All the math happens on your device. You can always double-check our work!"
+                title="Local Processing"
+                description="All calculations occur on your device. You can verify the math yourself for complete transparency."
               />
               <FeatureItem
                 icon={Globe}
-                title="Works Offline"
-                description="Once the page is loaded, TabSplit works without an internet connection. Your data never leaves your device."
+                title="Offline Functionality"
+                description="Once loaded, TabSplit works without an internet connection. Your data stays on your device, enhancing privacy and allowing use anywhere."
+              />
+              <FeatureItem
+                icon={Upload}
+                title="Optional Receipt Upload"
+                description={
+                  <>
+                    This feature uses OpenAI&apos;s API to process receipts. No
+                    data is stored, and you can always opt for manual entry to
+                    keep everything local. For details, see{" "}
+                    <a
+                      href="https://openai.com/policies/privacy-policy"
+                      className="text-link text-muted-foreground"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      OpenAI&apos;s privacy policy
+                    </a>
+                    .
+                  </>
+                }
               />
             </div>
           </Section>
@@ -121,8 +152,8 @@ export default function AboutPage() {
                   >
                     @saharshxyz
                   </a>
-                  . If you have any questions or feedback, feel free to reach
-                  out!
+                  . If you have any questions or feedback, please don&apos;t
+                  hesitate to reach out!
                 </>
               }
             />
