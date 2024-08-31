@@ -161,7 +161,7 @@ export default function Component() {
                       <FormControl>
                         <div
                           {...getRootProps()}
-                          className={`flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors sm:h-64 ${
+                          className={`flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-colors sm:h-64 ${
                             isDragActive
                               ? "border-primary bg-primary/10"
                               : isDragReject
@@ -201,7 +201,7 @@ export default function Component() {
                                   ? "File uploaded successfully"
                                   : "Drag & Drop your receipt here"}
                           </p>
-                          <p className="text-center text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground">
                             {isDragReject
                               ? "Invalid file type. Please upload an image."
                               : form.watch("receipt")
