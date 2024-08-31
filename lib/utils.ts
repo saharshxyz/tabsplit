@@ -226,35 +226,19 @@ export const fileToBase64 = (file: File): Promise<string> => {
 
 export const convertReceiptToStructuredOutput = async (base64Image: string) => {
   try {
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
+    const response = await fetch("/api/processReceiptUpload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ base64Image })
     })
 
-    const chatCompletion = await openai.beta.chat.completions.parse({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "Extract the tab information." },
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: "Extract information from this receipt image:"
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: base64Image
-              }
-            }
-          ]
-        }
-      ],
-      response_format: zodResponseFormat(partialTabSchema, "tab"),
-      max_tokens: 16384
-    })
+    if (!response.ok) {
+      throw new Error("Failed to process receipt")
+    }
 
-    return chatCompletion.choices[0].message.parsed
+    return await response.json()
   } catch (error) {
     console.error("Error processing receipt:", error)
     throw error

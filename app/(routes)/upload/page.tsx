@@ -128,7 +128,7 @@ export default function Component() {
       )
     } catch (error) {
       setError(
-        "An error occurred while processing your request. Please try again."
+        "An error occurred while processing your request. Please try again or fill out manually."
       )
     }
   }
@@ -149,7 +149,7 @@ export default function Component() {
             </CardTitle>
             <CardDescription>
               Upload a picture of your receipt and you will be sent to a
-              pre-filled form. Note that this uses AI and results may vary.
+              pre-filled form. Note that this uses OpenAI and results may vary.
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -141,14 +141,18 @@ export const tabSchema = baseSchema
 export type TabSchema = z.infer<typeof tabSchema>
 
 export const partialTabSchema = z.object({
-  tabName: z.string(),
-  taxAmount: z.number(),
-  tipAmount: z.number(),
+  tabName: z.string().describe("A descriptive name for this tab/receipt"),
+  taxAmount: z.number().describe("The amount of tax paid on this tab/receipt"),
+  tipAmount: z
+    .number()
+    .describe("The dollar amount of tip given for this tab/receipt"),
   items: z.array(
-    z.object({
-      name: z.string(),
-      price: z.number()
-    })
+    z
+      .object({
+        name: z.string().describe("The name of this item"),
+        price: z.number().describe("The price of this item")
+      })
+      .describe("A list of items on this tab/receipt")
   )
 })
 export type PartialTabSchema = z.infer<typeof partialTabSchema>
