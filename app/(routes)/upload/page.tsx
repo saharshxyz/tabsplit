@@ -12,7 +12,7 @@ import {
   UploadIcon,
   AlertCircle,
   ArrowLeft,
-  Loader,
+  LoaderCircle,
   CheckCircle
 } from "lucide-react"
 import { useDropzone, FileRejection, DropEvent } from "react-dropzone"
@@ -119,13 +119,13 @@ export default function Component() {
       const structuredOutput =
         await convertReceiptToStructuredOutput(base64Image)
 
-      router.push(
-        `/#${
-          getURLArgs(
-            transformPartialToFullTab(structuredOutput as PartialTabSchema)
-          )[1]
-        }`
-      )
+      const url = `/#${
+        getURLArgs(
+          transformPartialToFullTab(structuredOutput as PartialTabSchema)
+        )[1]
+      }`
+
+      router.push(url)
     } catch (error) {
       setError(
         "An error occurred while processing your request. Please try again or fill out manually."
@@ -248,7 +248,7 @@ export default function Component() {
                 >
                   {form.formState.isSubmitting ? (
                     <>
-                      <Loader className="mr-2 h-4 w-4 animate-spin" />
+                      <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                       Processing...
                     </>
                   ) : (
