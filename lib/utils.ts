@@ -1,8 +1,19 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ZodError } from "zod"
-import { SplitterSchema, TabSchema, SplitSchema } from "@/lib/schemas"
+import {
+  SplitterSchema,
+  partialTabSchema,
+  PartialTabSchema,
+  TabSchema,
+  SplitSchema
+} from "@/lib/schemas"
 import { faker } from "@faker-js/faker"
+import OpenAI from "openai"
+import { zodResponseFormat } from "openai/helpers/zod"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -127,10 +138,27 @@ export const getURLArgs = (
   return [baseUrl, encodedParams]
 }
 
-export const capitalizeFirstLetter = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1)
+export const transformPartialToFullTab = (
+  partialTab: PartialTabSchema
+): TabSchema => {
+  return {
+    ...partialTab,
+    tabDescription: {
+      type: "None"
+    },
+    tipBeforeTax: true,
+    splitters: [],
+    items: partialTab.items.map((item) => ({
+      ...item,
+      splitters: []
+    }))
+  }
+}
 
 export const generateExampleTab = (): TabSchema => {
+  const capitalizeFirstLetter = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1)
+
   const mealTypes = [
     "Dinner at",
     "Lunch at",
@@ -184,5 +212,35 @@ export const generateExampleTab = (): TabSchema => {
     tipAmount: parseFloat(faker.finance.amount({ min: 5, max: 30, dec: 2 })),
     items,
     splitters
+  }
+}
+
+export const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = (error) => reject(error)
+  })
+}
+
+export const convertReceiptToStructuredOutput = async (base64Image: string) => {
+  try {
+    const response = await fetch("/api/processReceiptUpload", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ base64Image })
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to process receipt")
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error("Error processing receipt:", error)
+    throw error
   }
 }

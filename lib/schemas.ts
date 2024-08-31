@@ -21,7 +21,7 @@ const uniqueNameArraySchema = <T extends { name: string }>(
 ) =>
   z
     .array(schema)
-    .min(1, "At least one item is required")
+    .min(1, "At least one element is required")
     .refine((arr) => uniqueArray(arr.map((item) => item.name)), {
       message: "Names must be unique"
     }) as z.ZodType<T[], z.ZodTypeDef, T[]>
@@ -139,6 +139,23 @@ export const tabSchema = baseSchema
     path: ["items"]
   })
 export type TabSchema = z.infer<typeof tabSchema>
+
+export const partialTabSchema = z.object({
+  tabName: z.string().describe("A descriptive name for this tab/receipt"),
+  taxAmount: z.number().describe("The amount of tax paid on this tab/receipt"),
+  tipAmount: z
+    .number()
+    .describe("The dollar amount of tip given for this tab/receipt"),
+  items: z.array(
+    z
+      .object({
+        name: z.string().describe("The name of this item"),
+        price: z.number().describe("The price of this item")
+      })
+      .describe("A list of items on this tab/receipt")
+  )
+})
+export type PartialTabSchema = z.infer<typeof partialTabSchema>
 
 export const splitSchema = baseSchema
   .refine(
