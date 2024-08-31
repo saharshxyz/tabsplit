@@ -3,11 +3,17 @@ import { twMerge } from "tailwind-merge"
 import { ZodError } from "zod"
 import {
   SplitterSchema,
+  partialTabSchema,
   PartialTabSchema,
   TabSchema,
   SplitSchema
 } from "@/lib/schemas"
 import { faker } from "@faker-js/faker"
+import OpenAI from "openai"
+import { zodResponseFormat } from "openai/helpers/zod"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -206,5 +212,51 @@ export const generateExampleTab = (): TabSchema => {
     tipAmount: parseFloat(faker.finance.amount({ min: 5, max: 30, dec: 2 })),
     items,
     splitters
+  }
+}
+
+export const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = (error) => reject(error)
+  })
+}
+
+export const convertReceiptToStructuredOutput = async (base64Image: string) => {
+  try {
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY
+    })
+
+    const chatCompletion = await openai.beta.chat.completions.parse({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "Extract the tab information." },
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Extract information from this receipt image:"
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: base64Image
+              }
+            }
+          ]
+        }
+      ],
+      response_format: zodResponseFormat(partialTabSchema, "tab"),
+      max_tokens: 16384
+    })
+
+    return chatCompletion.choices[0].message.parsed
+  } catch (error) {
+    console.error("Error processing receipt:", error)
+    throw error
   }
 }

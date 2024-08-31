@@ -1,8 +1,20 @@
 "use client"
 
-import React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { UploadIcon, AlertCircle, ArrowLeft, Loader } from "lucide-react"
+import React, { useEffect } from "react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card"
+import {
+  UploadIcon,
+  AlertCircle,
+  ArrowLeft,
+  Loader,
+  CheckCircle
+} from "lucide-react"
 import { useDropzone, FileRejection, DropEvent } from "react-dropzone"
 import { useCallback, useState } from "react"
 import Link from "next/link"
@@ -11,6 +23,7 @@ import {
   Form,
   FormControl,
   FormField,
+  FormLabel,
   FormItem,
   FormDescription,
   FormMessage
@@ -20,6 +33,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useRouter } from "next/navigation"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import {
+  fileToBase64,
+  convertReceiptToStructuredOutput,
+  getURLArgs,
+  transformPartialToFullTab
+} from "@/lib/utils"
+import { PartialTabSchema } from "@/lib/schemas"
 
 const ACCEPTED_FILE_TYPES = [".jpeg", ".jpg", ".png", ".gif", ".webp"]
 
@@ -47,20 +67,9 @@ const uploadFormSchema = z.object({
 
 type UploadFormValues = z.infer<typeof uploadFormSchema>
 
-const dummyApiRequest = (): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (Math.random() > 0.2) {
-        resolve("/result-page")
-      } else {
-        reject(new Error("API request failed"))
-      }
-    }, 2000)
-  })
-}
-
 export default function Component() {
   const [error, setError] = useState("")
+  const [fileUploaded, setFileUploaded] = useState(false)
   const router = useRouter()
 
   const form = useForm<UploadFormValues>({
@@ -78,6 +87,9 @@ export default function Component() {
     ) => {
       if (acceptedFiles && acceptedFiles.length > 0) {
         form.setValue("receipt", acceptedFiles[0], { shouldValidate: true })
+        setFileUploaded(true)
+      } else {
+        setFileUploaded(false)
       }
     },
     [form]
@@ -92,10 +104,28 @@ export default function Component() {
       maxFiles: 1
     })
 
+  useEffect(() => {
+    const subscription = form.watch((value, { name, type }) => {
+      if (name === "receipt") {
+        setFileUploaded(!!value.receipt)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [form])
+
   const onSubmit = async (data: UploadFormValues) => {
     try {
-      const result = await dummyApiRequest()
-      router.push(result)
+      const base64Image = await fileToBase64(data.receipt)
+      const structuredOutput =
+        await convertReceiptToStructuredOutput(base64Image)
+
+      router.push(
+        `/#${
+          getURLArgs(
+            transformPartialToFullTab(structuredOutput as PartialTabSchema)
+          )[1]
+        }`
+      )
     } catch (error) {
       setError(
         "An error occurred while processing your request. Please try again."
@@ -117,6 +147,10 @@ export default function Component() {
             <CardTitle className="text-center text-2xl font-bold">
               Upload Receipt
             </CardTitle>
+            <CardDescription>
+              Upload a picture of your receipt and you will be sent to a
+              pre-filled form. Note that this uses AI and results may vary.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -132,6 +166,7 @@ export default function Component() {
                     fieldState: { error }
                   }) => (
                     <FormItem>
+                      <FormLabel>Receipt</FormLabel>
                       <FormControl>
                         <div
                           {...getRootProps()}
@@ -140,7 +175,9 @@ export default function Component() {
                               ? "border-primary bg-primary/10"
                               : isDragReject
                                 ? "border-destructive bg-destructive/10"
-                                : "border-muted-foreground/25 hover:border-primary/50"
+                                : fileUploaded
+                                  ? "border-green-500 bg-green-50"
+                                  : "border-muted-foreground/25 hover:border-primary/50"
                           }`}
                         >
                           <input
@@ -151,31 +188,38 @@ export default function Component() {
                               const file = e.target.files?.[0]
                               if (file) {
                                 onChange(file)
+                                setFileUploaded(true)
+                              } else {
+                                setFileUploaded(false)
                               }
                             }}
                           />
-                          {isDragReject ? (
-                            <AlertCircle className="mb-4 h-12 w-12 text-destructive" />
+                          {fileUploaded ? (
+                            <CheckCircle className="mb-4 !h-8 text-green-500" />
+                          ) : isDragReject ? (
+                            <AlertCircle className="mb-4 !h-10 text-destructive" />
                           ) : (
-                            <UploadIcon className="mb-4 h-12 w-12 text-muted-foreground" />
+                            <UploadIcon className="mb-4 !h-8 text-muted-foreground" />
                           )}
-                          <p className="mb-2 text-lg font-semibold">
-                            {value
-                              ? value.name
+                          <p className="mb-2 font-semibold">
+                            {form.watch("receipt")
+                              ? form.watch("receipt").name
                               : isDragActive
                                 ? "Drop the file here"
-                                : "Drag & Drop your receipt here"}
+                                : fileUploaded
+                                  ? "File uploaded successfully"
+                                  : "Drag & Drop your receipt here"}
                           </p>
                           <p className="text-center text-sm text-muted-foreground">
                             {isDragReject
                               ? "Invalid file type. Please upload an image."
-                              : value
+                              : form.watch("receipt")
                                 ? "Click or drag to replace"
                                 : "or click to select a file"}
                           </p>
                         </div>
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-xs">
                         Accepted file types:{" "}
                         {React.createElement(
                           React.Fragment,

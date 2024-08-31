@@ -140,26 +140,17 @@ export const tabSchema = baseSchema
   })
 export type TabSchema = z.infer<typeof tabSchema>
 
-export const partialTabSchema = baseSchema
-  .pick({
-    tabName: true,
-    taxAmount: true,
-    tipAmount: true
-  })
-  .extend({
-    items: z
-      .array(
-        itemSchema.pick({
-          name: true,
-          price: true
-        })
-      )
-      .min(1, { message: "Must have at least one item" })
-  })
-  .refine(({ items }) => uniqueArray(items.map((item) => item.name)), {
-    message: "Item names must be unique.",
-    path: ["items"]
-  })
+export const partialTabSchema = z.object({
+  tabName: z.string(),
+  taxAmount: z.number(),
+  tipAmount: z.number(),
+  items: z.array(
+    z.object({
+      name: z.string(),
+      price: z.number()
+    })
+  )
+})
 export type PartialTabSchema = z.infer<typeof partialTabSchema>
 
 export const splitSchema = baseSchema
