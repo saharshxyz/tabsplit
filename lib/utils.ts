@@ -3,15 +3,15 @@ import { twMerge } from "tailwind-merge"
 import { ZodError } from "zod"
 import {
   SplitterSchema,
-  partialTabSchema,
   PartialTabSchema,
   TabSchema,
-  SplitSchema
+  SplitSchema,
+  DescriptionType
 } from "@/lib/schemas"
 import { faker } from "@faker-js/faker"
-import OpenAI from "openai"
-import { zodResponseFormat } from "openai/helpers/zod"
 import dotenv from "dotenv"
+import { Banknote, DollarSign } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 dotenv.config()
 
@@ -242,5 +242,41 @@ export const convertReceiptToStructuredOutput = async (base64Image: string) => {
   } catch (error) {
     console.error("Error processing receipt:", error)
     throw error
+  }
+}
+
+export const paymentInfo = (
+  type: Exclude<DescriptionType, "None" | "Other">,
+  details: string
+): { url: string; type: string; display: string; icon: LucideIcon } => {
+  const urlMap: Record<Exclude<DescriptionType, "None" | "Other">, string> = {
+    Venmo: `https://venmo.com/u/${details}`,
+    PayPal: `https://paypal.me/${details}`,
+    "Cash App": `https://cash.app/$${details}`
+  }
+
+  const displayMap: Record<
+    Exclude<DescriptionType, "None" | "Other">,
+    string
+  > = {
+    Venmo: `@${details}`,
+    PayPal: `@${details}`,
+    "Cash App": `$${details}`
+  }
+
+  const iconMap: Record<
+    Exclude<DescriptionType, "None" | "Other">,
+    LucideIcon
+  > = {
+    Venmo: Banknote,
+    PayPal: Banknote,
+    "Cash App": DollarSign
+  }
+
+  return {
+    url: urlMap[type],
+    type,
+    display: displayMap[type],
+    icon: iconMap[type]
   }
 }

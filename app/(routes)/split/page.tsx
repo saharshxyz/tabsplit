@@ -11,6 +11,7 @@ import { LoadingCard } from "@/components/LoadingCard"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { PenSquare, Link as LinkIcon } from "lucide-react"
+import { Toaster } from "@/components/ui/sonner"
 
 export default function Split() {
   const { hash, parsedData, error } = useHash()
@@ -79,6 +80,7 @@ export default function Split() {
 
   return (
     <main className="mx-auto mt-5 max-w-3xl">
+      <Toaster richColors expand={false} />
       <div className="m-2 flex space-x-2">
         <Link href={`/#${hash}`} className="w-2/5">
           <Button variant="outline" className="w-full">

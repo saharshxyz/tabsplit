@@ -3,7 +3,6 @@ import { Inter } from "next/font/google"
 import "@/styles/globals.css"
 import { generateMetadata } from "@/lib/generateMetadata"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/sonner"
 
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -29,7 +28,6 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <Toaster richColors expand={false} />
             <SpeedInsights />
             <Analytics />
           </ThemeProvider>
