@@ -80,7 +80,7 @@ export default function Split() {
 
   return (
     <main className="mx-auto mt-5 max-w-3xl">
-      <Toaster richColors expand={false} />
+      <Toaster richColors expand={false} position="bottom-center" />
       <div className="m-2 flex space-x-2">
         <Link href={`/#${hash}`} className="w-2/5">
           <Button variant="outline" className="w-full">

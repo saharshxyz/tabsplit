@@ -73,8 +73,7 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
           },
           closeButton: true,
           duration: Infinity,
-          icon: <payment.icon />,
-          position: "bottom-center"
+          icon: <payment.icon />
         })
       })
 
