@@ -63,11 +63,11 @@ const VenmoPayButton = ({
 }) => {
   if (tabDescription.type !== "Venmo" || !tabDescription.details) return null
 
-  const { display, icon: Icon } = paymentInfo("Venmo", tabDescription.details)
+  const { icon: Icon, url } = paymentInfo("Venmo", tabDescription.details)
 
   return (
     <a
-      href={`https://venmo.com/?txn=pay&audience=friends&recipients=${display.substring(1)}&amount=${amount.toFixed(2)}&note=${encodeURIComponent(note)}`}
+      href={`${url}?txn=pay&amount=${amount.toFixed(2)}&note=${encodeURIComponent(note)}`}
       target="_blank"
       rel="noopener noreferrer"
     >

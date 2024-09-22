@@ -250,7 +250,7 @@ export const paymentInfo = (
   details: string
 ): { url: string; type: string; display: string; icon: LucideIcon } => {
   const urlMap: Record<Exclude<DescriptionType, "None" | "Other">, string> = {
-    Venmo: `https://venmo.com/u/${details}`,
+    Venmo: `https://venmo.com/${details}`,
     PayPal: `https://paypal.me/${details}`,
     "Cash App": `https://cash.app/$${details}`
   }
