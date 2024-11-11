@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 import { LoadingCard } from "@/components/LoadingCard"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { PenSquare, Link as LinkIcon } from "lucide-react"
+import { PenSquare, Link as LinkIcon, Info } from "lucide-react"
 import { Toaster } from "@/components/ui/sonner"
 
 export default function Split() {
@@ -82,16 +82,22 @@ export default function Split() {
     <main className="mx-auto mt-5 max-w-3xl">
       <Toaster richColors expand={false} position="bottom-center" />
       <div className="m-2 flex space-x-2">
-        <Link href={`/#${hash}`} className="w-2/5">
+        <Link href={`/#${hash}`} className="flex-shrink-0">
           <Button variant="outline" className="w-full">
             Edit Tab
             <PenSquare className="ml-2" />
           </Button>
         </Link>
-        <Button onClick={copyUrlToClipboard} className="w-3/5">
+        <Button onClick={copyUrlToClipboard} className="flex-grow">
           Share Split
           <LinkIcon className="ml-2" />
         </Button>
+        <Link href="/about" className="flex-shrink-0">
+          <Button variant="outline">
+            <span className="hidden sm:block">About</span>
+            <Info className="sm:ml-2" />
+          </Button>
+        </Link>
       </div>
       {isLoading ? (
         <LoadingCard title="Loading Split ..." />
