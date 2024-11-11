@@ -67,7 +67,7 @@ const VenmoPayButton = ({
 
   return (
     <a
-      href={`${url}?txn=pay&amount=${amount.toFixed(2)}&note=${encodeURIComponent(note)}`}
+      href={`${url}?txn=pay&amount=${amount.toFixed(2)}&note=${encodeURI(note)}`}
       target="_blank"
       rel="noopener noreferrer"
     >
