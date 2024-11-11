@@ -100,11 +100,6 @@ export default function AboutPage() {
                 description="All calculations occur on your device. You can verify the math yourself for complete transparency."
               />
               <FeatureItem
-                icon={Globe}
-                title="Offline Functionality"
-                description="Once loaded, TabSplit works without an internet connection. Your data stays on your device, enhancing privacy and allowing use anywhere."
-              />
-              <FeatureItem
                 icon={Upload}
                 title="Optional Receipt Upload"
                 description={
