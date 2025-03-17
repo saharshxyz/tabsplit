@@ -114,7 +114,7 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
   }, [splitResult.tabDescription])
 
   return (
-    <Card>
+    <Card className="mb-1">
       <CardHeader className="pb-0">
         <CardTitle className="mb-1.5">
           {splitResult.tabName} - Tab Split

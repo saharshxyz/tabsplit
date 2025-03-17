@@ -39,7 +39,7 @@ export default function Home() {
         </Link>
       </div>
 
-      <Card className="mb-3">
+      <Card className="mb-1">
         <CardContent>
           <TabForm initialData={parsedData} />
         </CardContent>
