@@ -45,6 +45,7 @@ import { usePlaceholders } from "@/lib/usePlaceholders"
 import { ReceiptText, Upload } from "lucide-react"
 import { PaymentLink } from "@/components/PaymentLink"
 import Link from "next/link"
+import { compressToHash } from "@/lib/hashCompression"
 
 function DescriptionDisplay({
   type,
@@ -233,16 +234,8 @@ export function TabForm({ initialData }: TabFormProps) {
 
   const onSubmit = useCallback(
     (values: TabSchema) => {
-      const params = new URLSearchParams()
-      params.set("tabName", values.tabName || "")
-      params.set("tabDescription", JSON.stringify(values.tabDescription))
-      params.set("taxAmount", values.taxAmount?.toString() || "")
-      params.set("tipBeforeTax", values.tipBeforeTax ? "true" : "false")
-      params.set("tipAmount", values.tipAmount?.toString() || "")
-      params.set("splitters", JSON.stringify(values.splitters))
-      params.set("items", JSON.stringify(values.items))
-
-      router.push(`/split#${params.toString()}`)
+      const compressedHash = compressToHash(values)
+      router.push(`/split#${compressedHash}`)
     },
     [router]
   )

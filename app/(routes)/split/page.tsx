@@ -1,6 +1,6 @@
 "use client"
 
-import { useHash } from "@/lib/useHash"
+import { useCompressedHash } from "@/lib/useCompressedHash"
 import { ErrorDisplay } from "./ErrorDisplay"
 import { SplitDisplay } from "./SplitDisplay"
 import { calculateSplit } from "@/lib/utils"
@@ -14,7 +14,7 @@ import { PenSquare, Link as LinkIcon, Info } from "lucide-react"
 import { Toaster } from "@/components/ui/sonner"
 
 export default function Split() {
-  const { hash, parsedData, error } = useHash()
+  const { hash, parsedData, error } = useCompressedHash()
   const [isLoading, setIsLoading] = useState(true)
   const copyUrlToClipboard = useCopyURLToClipboard()
 

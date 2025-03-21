@@ -2,14 +2,14 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { TabForm } from "./TabForm"
-import { useHash } from "@/lib/useHash"
+import { useCompressedHash } from "@/lib/useCompressedHash"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 import { Shapes, Eraser, Info } from "lucide-react"
 
 export default function Home() {
-  const { parsedData } = useHash()
+  const { parsedData } = useCompressedHash()
 
   const handleClearForm = () => {
     window.location.hash = ""
