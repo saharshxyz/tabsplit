@@ -11,9 +11,13 @@ const roughlyEqual = (
 const nameSchema = z
   .string()
   .min(1, { message: "Name must be at least 1 character long." })
+export type NameSchema = z.infer<typeof nameSchema>
+
 const dollarAmountSchema = z.coerce
   .number()
   .positive({ message: "Dollar amount must be positive" })
+export type DollarAmountSchema = z.infer<typeof dollarAmountSchema>
+
 const percentageSchema = z.coerce.number().positive()
 
 const uniqueNameArraySchema = <T extends { name: string }>(

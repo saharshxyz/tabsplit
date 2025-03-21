@@ -10,24 +10,20 @@ import {
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link"
-import { getURLArgs } from "@/lib/utils"
 import { useState, useEffect } from "react"
 import { TextCursorInput, ReceiptText } from "lucide-react"
-
 import { generateExampleTab } from "@/lib/utils"
+import { compressToHash } from "@/lib/hashCompression"
 
 export default function Example() {
   const [randomTabParams, setRandomTabParams] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const generateRandomTab = () => {
-      const exampleTab = generateExampleTab()
-      setRandomTabParams(getURLArgs(exampleTab)[1])
-      setIsLoading(false)
-    }
-
-    generateRandomTab()
+    const exampleTab = generateExampleTab()
+    const compressedHash = compressToHash(exampleTab)
+    setRandomTabParams(compressedHash)
+    setIsLoading(false)
   }, [])
 
   return (

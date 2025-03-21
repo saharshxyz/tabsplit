@@ -3,7 +3,6 @@ import { tabSchema, splitSchema, TabSchema } from "@/lib/schemas"
 import { calculateSplit } from "@/lib/utils"
 import { getURLArgs, logZodErrors, getBaseUrl } from "@/lib/utils"
 import { ZodError } from "zod"
-import { headers } from "next/headers"
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,23 +10,9 @@ export async function POST(request: NextRequest) {
 
     const validatedData: TabSchema = tabSchema.parse(body)
 
-    const result = calculateSplit(validatedData)
-
-    const validatedResult = splitSchema.parse(result)
-
-    const headersList = headers()
-    const host = headersList.get("host")
-    const protocol = headersList.get("x-forwarded-proto")
-    const baseUrl =
-      getBaseUrl() ||
-      `${protocol}://${host}/split` ||
-      `${process.env.NEXT_PUBLIC_VERCEL_URL}/split`
-
-    const link = getURLArgs(validatedData).join("#")
-
     return NextResponse.json({
-      link,
-      split: validatedResult
+      link: getURLArgs(validatedData).join("#"),
+      split: splitSchema.parse(calculateSplit(validatedData))
     })
   } catch (error) {
     if (error instanceof ZodError) {

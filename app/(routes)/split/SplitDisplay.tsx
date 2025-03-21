@@ -8,12 +8,18 @@ import {
 import { SplitTable } from "./Table"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
-import { SplitSchema, DescriptionType } from "@/lib/schemas"
+import {
+  SplitSchema,
+  DescriptionType,
+  NameSchema,
+  DollarAmountSchema
+} from "@/lib/schemas"
 import { SplitCharts } from "./Charts"
 import React, { useEffect, useRef } from "react"
 import { paymentInfo } from "@/lib/utils"
 import { toast } from "sonner"
 import { PaymentLink } from "@/components/PaymentLink"
+import { Button } from "@/components/ui/button"
 
 interface SplitDisplayProps {
   splitResult: SplitSchema
@@ -46,6 +52,33 @@ const TabDescription: React.FC<TabDescriptionProps> = ({ tabDescription }) => {
   )
 }
 
+const VenmoPayButton = ({
+  tabDescription,
+  note,
+  amount
+}: {
+  tabDescription: { type: DescriptionType; details?: string }
+  note: string
+  amount: number
+}) => {
+  if (tabDescription.type !== "Venmo" || !tabDescription.details) return null
+
+  const { icon: Icon, url } = paymentInfo("Venmo", tabDescription.details)
+
+  return (
+    <a
+      href={`${url}?txn=pay&amount=${amount.toFixed(2)}&note=${encodeURI(note)}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Button size="sm" className="text-xs" variant={"default"}>
+        <Icon className="mr-2" />
+        Pay Split
+      </Button>
+    </a>
+  )
+}
+
 export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
   const toastShownRef = useRef(false)
 
@@ -54,13 +87,13 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
       !toastShownRef.current &&
       splitResult.tabDescription.type !== "Other" &&
       splitResult.tabDescription.type !== "None" &&
+      splitResult.tabDescription.type !== "Venmo" &&
       splitResult.tabDescription.details
     ) {
       const payment = paymentInfo(
         splitResult.tabDescription.type,
         splitResult.tabDescription.details
       )
-
       setTimeout(() => {
         toast(`${payment.type}: ${payment.display}`, {
           action: {
@@ -76,13 +109,12 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
           icon: <payment.icon />
         })
       })
-
       toastShownRef.current = true
     }
   }, [splitResult.tabDescription])
 
   return (
-    <Card>
+    <Card className="mb-1">
       <CardHeader className="pb-0">
         <CardTitle className="mb-1.5">
           {splitResult.tabName} - Tab Split
@@ -112,15 +144,20 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
             {splitResult.splitters.map((splitter, index) => (
               <Card key={index} className="mb-4">
                 <CardHeader>
-                  <div className="flex items-center space-x-4">
-                    <Avatar>
-                      <AvatarFallback>
-                        {splitter.name.substring(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <Avatar>
+                        <AvatarFallback>
+                          {splitter.name.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
                       <CardTitle className="text-xl">{splitter.name}</CardTitle>
                     </div>
+                    <VenmoPayButton
+                      tabDescription={splitResult.tabDescription}
+                      note={splitResult.tabName}
+                      amount={splitter.total}
+                    />
                   </div>
                 </CardHeader>
                 <CardContent>
