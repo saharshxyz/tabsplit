@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const { base64Image } = await request.json()
 
     const chatCompletion = await openai.beta.chat.completions.parse({
-      model: "gpt-4.1",
+      model: "gpt-4o",
       messages: [
         { role: "system", content: "Extract the tab information." },
         {
