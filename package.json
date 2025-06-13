@@ -32,6 +32,7 @@
 		"recharts": "^2.15.3",
 		"sonner": "^2.0.5",
 		"tailwind-merge": "^3.3.1",
+		"zipson": "^0.2.12",
 		"zod": "^3.25.63"
 	},
 	"devDependencies": {
