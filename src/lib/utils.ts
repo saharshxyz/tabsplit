@@ -113,7 +113,7 @@ export const generateExampleTab = (): TabSchema => {
 	const shuffleArray = <T>(array: T[]): T[] => {
 		for (let i = array.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1))
-			;[array[i], array[j]] = [array[j], array[i]]
+				;[array[i], array[j]] = [array[j], array[i]]
 		}
 		return array
 	}
@@ -171,7 +171,7 @@ export const generateExampleTab = (): TabSchema => {
 			: falso.randQuote()
 
 	return {
-		tabName: `${falso.randWeekday()} ${falso.rand(mealTypes)} ${falso.randDepartment} ${falso.randWord({ length: 5, capitalize: true })}`,
+		tabName: `${falso.randWeekday()} ${falso.rand(mealTypes)} ${falso.randDepartment()} ${falso.randWord({ capitalize: true })}`,
 		tabDescription: {
 			type: tabDescriptionType,
 			details: tabDescriptionDetails

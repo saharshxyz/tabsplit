@@ -126,5 +126,5 @@
 }
 
 .text-link {
-	@apply border-b-2 border-transparent transition-all duration-200 ease-in-out hover:border-current;
+	@apply underline underline-offset-4 duration-200 ease-in-out hover:underline-offset-1;
 }

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 export const Route = createFileRoute("/about")({
-	component: About
+	component: RouteComponent
 })
 
 import {
@@ -51,7 +51,7 @@ const FeatureItem = ({
 	</div>
 )
 
-function About() {
+function RouteComponent() {
 	return (
 		<main className="mx-auto my-5 mb-10 max-w-3xl">
 			<BackButton link="/" text="Back to Home" />
@@ -140,7 +140,7 @@ function About() {
 									TabSplit was created by{" "}
 									<a
 										href="https://saharsh.xyz"
-										className="text-link text-muted-foreground"
+										className="text-link"
 										target="_blank"
 										rel="noreferrer noopener"
 									>

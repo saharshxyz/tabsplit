@@ -9,12 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ExampleRouteImport } from './routes/example'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as SplitRouteRouteImport } from './routes/split/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SplitIndexRouteImport } from './routes/split/index'
 
+const ExampleRoute = ExampleRouteImport.update({
+  id: '/example',
+  path: '/example',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplitRouteRoute = SplitRouteRouteImport.update({
+  id: '/split',
+  path: '/split',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,40 +35,69 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SplitIndexRoute = SplitIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SplitRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/split': typeof SplitRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/example': typeof ExampleRoute
+  '/split/': typeof SplitIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/example': typeof ExampleRoute
+  '/split': typeof SplitIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/split': typeof SplitRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/example': typeof ExampleRoute
+  '/split/': typeof SplitIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/split' | '/about' | '/example' | '/split/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/example' | '/split'
+  id: '__root__' | '/' | '/split' | '/about' | '/example' | '/split/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SplitRouteRoute: typeof SplitRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  ExampleRoute: typeof ExampleRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/example': {
+      id: '/example'
+      path: '/example'
+      fullPath: '/example'
+      preLoaderRoute: typeof ExampleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/split': {
+      id: '/split'
+      path: '/split'
+      fullPath: '/split'
+      preLoaderRoute: typeof SplitRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -65,12 +107,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/split/': {
+      id: '/split/'
+      path: '/'
+      fullPath: '/split/'
+      preLoaderRoute: typeof SplitIndexRouteImport
+      parentRoute: typeof SplitRouteRoute
+    }
   }
 }
 
+interface SplitRouteRouteChildren {
+  SplitIndexRoute: typeof SplitIndexRoute
+}
+
+const SplitRouteRouteChildren: SplitRouteRouteChildren = {
+  SplitIndexRoute: SplitIndexRoute,
+}
+
+const SplitRouteRouteWithChildren = SplitRouteRoute._addFileChildren(
+  SplitRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SplitRouteRoute: SplitRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  ExampleRoute: ExampleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
