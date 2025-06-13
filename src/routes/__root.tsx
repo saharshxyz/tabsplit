@@ -1,11 +1,13 @@
+/// <reference types="vite/client" />
+
 import {
 	HeadContent,
 	Outlet,
 	Scripts,
 	createRootRoute,
 } from "@tanstack/react-router"
-/// <reference types="vite/client" />
 import type * as React from "react"
+import NotFound from "~/components/NotFound"
 import appCss from "~/styles/app.css?url"
 
 export const Route = createRootRoute({
@@ -25,6 +27,7 @@ export const Route = createRootRoute({
 		links: [{ rel: "stylesheet", href: appCss }],
 	}),
 	component: RootComponent,
+	notFoundComponent: () => <NotFound />,
 })
 
 function RootComponent() {

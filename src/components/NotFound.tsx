@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Info, Shapes } from "lucide-react"
+import { Info } from "lucide-react"
 import { Button } from "src//components/ui/button"
 import { BackButton } from "src/components/BackButton"
 import {
