@@ -2,7 +2,6 @@ import type React from "react"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
 import { PaymentLink } from "src/components/PaymentLink"
-import { Avatar, AvatarFallback } from "src/components/ui/avatar"
 import { Button } from "src/components/ui/button"
 import {
 	Card,
@@ -140,14 +139,8 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
 							<Card key={splitter.name} className="mb-4">
 								<CardHeader>
 									<div className="flex w-full items-center justify-between">
-										<div className="flex items-center space-x-4">
-											<Avatar>
-												<AvatarFallback>
-													{splitter.name.substring(0, 2).toUpperCase()}
-												</AvatarFallback>
-											</Avatar>
-											<CardTitle className="text-xl">{splitter.name}</CardTitle>
-										</div>
+										<CardTitle className="text-xl">{splitter.name}</CardTitle>
+
 										<VenmoPayButton
 											tabDescription={splitResult.tabDescription}
 											note={splitResult.tabName}

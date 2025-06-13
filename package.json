@@ -12,6 +12,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
+		"@fontsource-variable/inter": "^5.2.6",
 		"@ngneat/falso": "^7.4.0",
 		"@radix-ui/react-avatar": "^1.1.10",
 		"@radix-ui/react-separator": "^1.1.7",
