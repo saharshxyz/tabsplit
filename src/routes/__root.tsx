@@ -37,13 +37,15 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
-      <body>
-        {children}
-        <Scripts />
+      <body className="flex items-center justify-center">
+        <div className="min-h-screen w-full max-w-prose">
+          {children}
+          <Scripts />
+        </div>
       </body>
     </html>
   )
