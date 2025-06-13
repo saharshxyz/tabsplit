@@ -125,6 +125,11 @@
   } */
 }
 
+.lucide {
+	@apply h-4 w-auto;
+	stroke-width: 2.25px;
+}
+
 .text-link {
 	@apply underline underline-offset-4 duration-200 ease-in-out hover:underline-offset-1;
 }

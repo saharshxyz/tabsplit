@@ -1,14 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import {
 	Card,
-	CardHeader,
-	CardTitle,
+	CardContent,
 	CardDescription,
-	CardContent
+	CardHeader,
+	CardTitle
 } from "src/components/ui/card"
 import { tabSchema } from "src/lib/schemas"
 import { calculateSplit } from "src/lib/utils"
-import { Link } from "@tanstack/react-router"
+import { SplitDisplay } from "./-components/SplitDisplay"
 
 export const Route = createFileRoute("/split/")({
 	component: RouteComponent,
@@ -46,5 +47,5 @@ function RouteComponent() {
 	const searchParams = Route.useSearch()
 	const split = calculateSplit(searchParams)
 
-	return <p>{JSON.stringify(split)}</p>
+	return <SplitDisplay splitResult={split} />
 }

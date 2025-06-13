@@ -1,10 +1,19 @@
 import * as falso from "@ngneat/falso"
 import { type ClassValue, clsx } from "clsx"
-import type { SplitSchema, TabSchema } from "src/lib/schemas"
+import { Banknote, DollarSign, type LucideIcon } from "lucide-react"
+import type { DescriptionType, SplitSchema, TabSchema } from "src/lib/schemas"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
+}
+
+export const shuffleArray = <T>(array: T[]): T[] => {
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1))
+		;[array[i], array[j]] = [array[j], array[i]]
+	}
+	return array
 }
 
 export const calculateSplit = (data: TabSchema): SplitSchema => {
@@ -110,14 +119,6 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
 }
 
 export const generateExampleTab = (): TabSchema => {
-	const shuffleArray = <T>(array: T[]): T[] => {
-		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1))
-				;[array[i], array[j]] = [array[j], array[i]]
-		}
-		return array
-	}
-
 	const removeDups = <T>(array: T[]): T[] => [...new Set(array)]
 
 	const capitalizeFirstLetter = (str: string) =>
@@ -181,5 +182,41 @@ export const generateExampleTab = (): TabSchema => {
 		tipAmount: falso.randNumber({ min: 30, max: 30, precision: 2 }),
 		items,
 		splitters
+	}
+}
+
+export const paymentInfo = (
+	type: Exclude<DescriptionType, "None" | "Other">,
+	details: string
+): { url: string; type: string; display: string; icon: LucideIcon } => {
+	const urlMap: Record<Exclude<DescriptionType, "None" | "Other">, string> = {
+		Venmo: `https://venmo.com/${details}`,
+		PayPal: `https://paypal.me/${details}`,
+		"Cash App": `https://cash.app/$${details}`
+	}
+
+	const displayMap: Record<
+		Exclude<DescriptionType, "None" | "Other">,
+		string
+	> = {
+		Venmo: `@${details}`,
+		PayPal: `@${details}`,
+		"Cash App": `$${details}`
+	}
+
+	const iconMap: Record<
+		Exclude<DescriptionType, "None" | "Other">,
+		LucideIcon
+	> = {
+		Venmo: Banknote,
+		PayPal: Banknote,
+		"Cash App": DollarSign
+	}
+
+	return {
+		url: urlMap[type],
+		type,
+		display: displayMap[type],
+		icon: iconMap[type]
 	}
 }

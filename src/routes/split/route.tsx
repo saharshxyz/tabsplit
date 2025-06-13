@@ -1,9 +1,9 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router"
-import { Toaster, toast } from "sonner"
 import { Link } from "@tanstack/react-router"
-import { Button } from "src/components/ui/button"
-import { PenSquare, LinkIcon, Info } from "lucide-react"
+import { Info, LinkIcon, PenSquare } from "lucide-react"
 import { useCallback } from "react"
+import { Toaster, toast } from "sonner"
+import { Button } from "src/components/ui/button"
 
 export const Route = createFileRoute("/split")({
 	component: LayoutComponent
