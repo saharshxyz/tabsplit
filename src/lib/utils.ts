@@ -1,3 +1,4 @@
+import * as falso from "@ngneat/falso"
 import { type ClassValue, clsx } from "clsx"
 import type { SplitSchema, TabSchema } from "src/lib/schemas"
 import { twMerge } from "tailwind-merge"
@@ -104,6 +105,81 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
 		subTotal,
 		total: subTotal + taxAmount + tipAmount,
 		items: [...items].sort(byName),
+		splitters
+	}
+}
+
+export const generateExampleTab = (): TabSchema => {
+	const shuffleArray = <T>(array: T[]): T[] => {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1))
+			;[array[i], array[j]] = [array[j], array[i]]
+		}
+		return array
+	}
+
+	const removeDups = <T>(array: T[]): T[] => [...new Set(array)]
+
+	const capitalizeFirstLetter = (str: string) =>
+		str.charAt(0).toUpperCase() + str.slice(1)
+
+	const mealTypes = [
+		"Dinner",
+		"Lunch",
+		"Brunch",
+		"Breakfast",
+		"Drinks",
+		"Snacks",
+		"Party",
+		"Meetup",
+		"Celebration",
+		"Gathering"
+	].map((meal) => `${capitalizeFirstLetter(meal)} at`)
+
+	// const numItems = faker.number.int({ min: 2, max: 15 })
+
+	const splitters = removeDups(
+		falso.randFirstName({
+			length: falso.randNumber({ min: 2, max: 10 }),
+			withAccents: false
+		})
+	).map((name) => ({ name }))
+
+	const items = removeDups(
+		falso.randFood({ length: falso.randNumber({ min: 2, max: 15 }) })
+	).map((item) => ({
+		name: item,
+		price: falso.randNumber({ min: 5, max: 70, precision: 2 }),
+		splitters: shuffleArray(splitters).slice(
+			0,
+			falso.randNumber({ min: 1, max: splitters.length })
+		)
+	}))
+
+	const tabDescriptionType = falso.rand([
+		"Venmo",
+		"Cash App",
+		"PayPal"
+	] as const)
+
+	const tabDescriptionDetails = ["Venmo", "Cash App"].includes(
+		tabDescriptionType
+	)
+		? "saharshxyz"
+		: ["PayPal"].includes(tabDescriptionType)
+			? "saharshy"
+			: falso.randQuote()
+
+	return {
+		tabName: `${falso.randWeekday()} ${falso.rand(mealTypes)} ${falso.randDepartment} ${falso.randWord({ length: 5, capitalize: true })}`,
+		tabDescription: {
+			type: tabDescriptionType,
+			details: tabDescriptionDetails
+		},
+		taxAmount: falso.randNumber({ min: 2, max: 20, precision: 2 }),
+		tipBeforeTax: falso.randBoolean(),
+		tipAmount: falso.randNumber({ min: 30, max: 30, precision: 2 }),
+		items,
 		splitters
 	}
 }

@@ -8,11 +8,11 @@ const percentageSchema = z.coerce.number().nonnegative()
 
 const uniqueNameArraySchema = <T extends { name: string }>(
 	schema: z.ZodType<T>,
-	minArrayLength = 2
+	minLength = 2
 ) =>
 	z
 		.array(schema)
-		.min(minArrayLength)
+		.min(minLength)
 		.refine(
 			(arr) => uniqueArray(arr.map((item) => item.name)),
 			"Names must be unique"
@@ -113,22 +113,9 @@ export const tabSchema = splitSchema
 			)
 		},
 		{
-			message:
+			error:
 				"Every person splitting an item must be in the main 'splitters' list.",
 			path: ["items"]
-		}
-	)
-	.refine(
-		({ items, splitters }) => {
-			const itemSplitters = new Set(
-				items.flatMap((item) => item.splitters.map((e) => e.name))
-			)
-			return splitters.every((splitter) => itemSplitters.has(splitter.name))
-		},
-		{
-			message:
-				"Every person in the 'splitters' list must be assigned to at least one item.",
-			path: ["splitters"]
 		}
 	)
 export type TabSchema = z.infer<typeof tabSchema>

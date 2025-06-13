@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { type TabSchema, tabSchema } from "./schemas"
-import { calculateSplit } from "./utils"
+import { type TabSchema, partialTabSchema, tabSchema } from "./schemas"
+import { calculateSplit, generateExampleTab } from "./utils"
 
 // Reusable test data for a typical scenario
 const createMockTabData = (): TabSchema => ({
@@ -217,20 +217,6 @@ describe("tabSchema", () => {
 		}
 	})
 
-	it("should fail if a splitter in the main list is not assigned to any item", () => {
-		const invalidData = createMockTabData()
-		// 'Dave' is in the main splitters array but is not on any item
-		invalidData.splitters.push({ name: "Dave" })
-		const result = tabSchema.safeParse(invalidData)
-		expect(result.success).toBe(false)
-		if (!result.success) {
-			expect(result.error.issues[0].message).toBe(
-				"Every person in the 'splitters' list must be assigned to at least one item."
-			)
-			expect(result.error.issues[0].path).toEqual(["splitters"])
-		}
-	})
-
 	it("should fail if the items array is empty", () => {
 		const invalidData = createMockTabData()
 		invalidData.items = []
@@ -286,4 +272,76 @@ describe("tabSchema", () => {
 			expect(result.error.issues[0].path).toEqual(["items", 0, "splitters"])
 		}
 	})
+})
+
+describe("tabSchema description field", () => {
+	it("fails when type is not None and details are missing", () => {
+		const invalid = {
+			...createMockTabData(),
+			tabDescription: { type: "Venmo" }
+		}
+		const res = tabSchema.safeParse(invalid)
+		expect(res.success).toBe(false)
+		if (!res.success)
+			expect(res.error.issues[0].path).toEqual(["tabDescription", "details"])
+	})
+
+	it("fails when details contain an @ or $ character", () => {
+		const invalid = {
+			...createMockTabData(),
+			tabDescription: { type: "Other", details: "@user" }
+		}
+		const res = tabSchema.safeParse(invalid)
+		expect(res.success).toBe(false)
+		if (!res.success)
+			expect(res.error.issues[0].path).toEqual(["tabDescription", "details"])
+	})
+
+	it("succeeds when type is not None and details are provided", () => {
+		const valid = {
+			...createMockTabData(),
+			tabDescription: { type: "Venmo", details: "username" }
+		}
+		expect(tabSchema.safeParse(valid).success).toBe(true)
+	})
+})
+
+describe("partialTabSchema", () => {
+	it("parses a minimal valid payload", () => {
+		const payload = {
+			tabName: "Quick Lunch",
+			taxAmount: 1,
+			tipAmount: 2,
+			items: [
+				{ name: "Sandwich", price: 5 },
+				{ name: "Drink", price: 3 }
+			]
+		}
+		expect(partialTabSchema.safeParse(payload).success).toBe(true)
+	})
+
+	it("fails when item names are duplicated", () => {
+		const payload = {
+			tabName: "Quick Lunch",
+			taxAmount: 1,
+			tipAmount: 2,
+			items: [
+				{ name: "Sandwich", price: 5 },
+				{ name: "Sandwich", price: 3 }
+			]
+		}
+		expect(partialTabSchema.safeParse(payload).success).toBe(false)
+	})
+})
+
+describe("genExampleTab", () => {
+	it.fails(
+		"does not generate invalid tab",
+		async () =>
+			await expect
+				.poll(() => tabSchema.safeParse(generateExampleTab()).success, {
+					timeout: 3000
+				})
+				.toBe(false)
+	)
 })

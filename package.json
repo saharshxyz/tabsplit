@@ -12,6 +12,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
+		"@ngneat/falso": "^7.4.0",
 		"@radix-ui/react-slot": "^1.2.3",
 		"@tailwindcss/postcss": "^4.1.10",
 		"@tanstack/react-router": "^1.121.2",
