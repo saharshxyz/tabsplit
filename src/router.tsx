@@ -7,7 +7,7 @@ export function createRouter() {
 		defaultPreload: "intent",
 		defaultErrorComponent: (err) => <p>{err.error.stack}</p>,
 		defaultNotFoundComponent: () => <p>not found</p>,
-		scrollRestoration: true,
+		scrollRestoration: true
 	})
 
 	return router

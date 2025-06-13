@@ -13,13 +13,13 @@ const createMockTabData = (): TabSchema => ({
 		{
 			name: "Pizza",
 			price: 25.0,
-			splitters: [{ name: "Alice" }, { name: "Bob" }],
+			splitters: [{ name: "Alice" }, { name: "Bob" }]
 		},
 		{ name: "Salad", price: 15.0, splitters: [{ name: "Alice" }] },
 		{ name: "Beer", price: 8.0, splitters: [{ name: "Bob" }] },
-		{ name: "Wine", price: 12.0, splitters: [{ name: "Charlie" }] },
+		{ name: "Wine", price: 12.0, splitters: [{ name: "Charlie" }] }
 	],
-	splitters: [{ name: "Alice" }, { name: "Bob" }, { name: "Charlie" }],
+	splitters: [{ name: "Alice" }, { name: "Bob" }, { name: "Charlie" }]
 })
 
 describe("calculateSplit", () => {
@@ -63,7 +63,7 @@ describe("calculateSplit", () => {
 		expect(result.splitters.map((s) => s.name)).toEqual([
 			"Alice",
 			"Bob",
-			"Charlie",
+			"Charlie"
 		])
 
 		// Alice's Split
@@ -74,7 +74,7 @@ describe("calculateSplit", () => {
 		expect(aliceResult.total).toBeCloseTo(aliceTotal)
 		expect(aliceResult.items.map((i) => i.name).sort()).toEqual([
 			"Pizza",
-			"Salad",
+			"Salad"
 		])
 
 		// Bob's Split
@@ -121,7 +121,7 @@ describe("calculateSplit", () => {
 	it("should handle a subtotal of zero to prevent division by zero", () => {
 		const data = createMockTabData()
 		data.items = [
-			{ name: "Free Water", price: 0, splitters: [{ name: "Alice" }] },
+			{ name: "Free Water", price: 0, splitters: [{ name: "Alice" }] }
 		]
 		data.splitters = [{ name: "Alice" }]
 		data.taxAmount = 5
@@ -175,9 +175,9 @@ describe("calculateSplit", () => {
 			tipBeforeTax: true,
 			items: [
 				{ name: "Zucchini Sticks", price: 10, splitters: [{ name: "Zane" }] },
-				{ name: "Apple Pie", price: 8, splitters: [{ name: "Abby" }] },
+				{ name: "Apple Pie", price: 8, splitters: [{ name: "Abby" }] }
 			],
-			splitters: [{ name: "Zane" }, { name: "Abby" }],
+			splitters: [{ name: "Zane" }, { name: "Abby" }]
 		}
 
 		const result = calculateSplit(data)
@@ -185,7 +185,7 @@ describe("calculateSplit", () => {
 		// Check top-level items array
 		expect(result.items.map((i) => i.name)).toEqual([
 			"Apple Pie",
-			"Zucchini Sticks",
+			"Zucchini Sticks"
 		])
 		// Check splitters array
 		expect(result.splitters.map((s) => s.name)).toEqual(["Abby", "Zane"])
@@ -205,13 +205,13 @@ describe("tabSchema", () => {
 		invalidData.items.push({
 			name: "Extra Item",
 			price: 10,
-			splitters: [{ name: "Dave" }],
+			splitters: [{ name: "Dave" }]
 		})
 		const result = tabSchema.safeParse(invalidData)
 		expect(result.success).toBe(false)
 		if (!result.success) {
 			expect(result.error.issues[0].message).toBe(
-				"Every person splitting an item must be in the main 'splitters' list.",
+				"Every person splitting an item must be in the main 'splitters' list."
 			)
 			expect(result.error.issues[0].path).toEqual(["items"])
 		}
@@ -225,7 +225,7 @@ describe("tabSchema", () => {
 		expect(result.success).toBe(false)
 		if (!result.success) {
 			expect(result.error.issues[0].message).toBe(
-				"Every person in the 'splitters' list must be assigned to at least one item.",
+				"Every person in the 'splitters' list must be assigned to at least one item."
 			)
 			expect(result.error.issues[0].path).toEqual(["splitters"])
 		}
@@ -256,7 +256,7 @@ describe("tabSchema", () => {
 		invalidData.items.push({
 			name: "Salad",
 			price: 5,
-			splitters: [{ name: "Bob" }],
+			splitters: [{ name: "Bob" }]
 		})
 		const result = tabSchema.safeParse(invalidData)
 		expect(result.success).toBe(false)

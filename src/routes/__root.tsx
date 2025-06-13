@@ -4,7 +4,7 @@ import {
 	HeadContent,
 	Outlet,
 	Scripts,
-	createRootRoute,
+	createRootRoute
 } from "@tanstack/react-router"
 import type * as React from "react"
 import NotFound from "~/components/NotFound"
@@ -14,20 +14,20 @@ export const Route = createRootRoute({
 	head: () => ({
 		meta: [
 			{
-				charSet: "utf-8",
+				charSet: "utf-8"
 			},
 			{
 				name: "viewport",
-				content: "width=device-width, initial-scale=1",
+				content: "width=device-width, initial-scale=1"
 			},
 			{
-				title: "Tabsplit",
-			},
+				title: "Tabsplit"
+			}
 		],
-		links: [{ rel: "stylesheet", href: appCss }],
+		links: [{ rel: "stylesheet", href: appCss }]
 	}),
 	component: RootComponent,
-	notFoundComponent: () => <NotFound />,
+	notFoundComponent: () => <NotFound />
 })
 
 function RootComponent() {

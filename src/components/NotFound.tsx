@@ -8,7 +8,7 @@ import {
 	CardDescription,
 	CardFooter,
 	CardHeader,
-	CardTitle,
+	CardTitle
 } from "src/components/ui/card"
 
 export default function NotFound() {

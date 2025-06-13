@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 export const Route = createFileRoute("/about")({
-	component: About,
+	component: About
 })
 
 import {
@@ -9,7 +9,7 @@ import {
 	type LucideIcon,
 	Share2,
 	Upload,
-	User,
+	User
 } from "lucide-react"
 import type { ReactNode } from "react"
 import { BackButton } from "src/components/BackButton"
@@ -17,12 +17,12 @@ import {
 	Card,
 	CardContent,
 	CardHeader,
-	CardTitle,
+	CardTitle
 } from "src/components/ui/card"
 
 const Section = ({
 	title,
-	children,
+	children
 }: {
 	title: string
 	children: ReactNode
@@ -36,7 +36,7 @@ const Section = ({
 const FeatureItem = ({
 	icon: Icon,
 	title,
-	description,
+	description
 }: {
 	icon: LucideIcon
 	title: string

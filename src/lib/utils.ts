@@ -17,7 +17,7 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
 		tipBeforeTax,
 		tipAmount,
 		items,
-		splitters: formSplitters,
+		splitters: formSplitters
 	} = data
 
 	const subTotal = items.reduce((acc, item) => acc + item.price, 0)
@@ -42,9 +42,9 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
 					subtotal: 0,
 					taxAmount: 0,
 					tipAmount: 0,
-					total: 0,
+					total: 0
 				}))
-				.sort(byName),
+				.sort(byName)
 		}
 	}
 
@@ -74,7 +74,7 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
 		.map(({ name }) => {
 			const { subtotal, items: personItems } = splitterDetails.get(name) || {
 				subtotal: 0,
-				items: [],
+				items: []
 			}
 
 			const personTax = subtotal * taxRate
@@ -88,7 +88,7 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
 				subtotal,
 				taxAmount: personTax,
 				tipAmount: personTip,
-				total,
+				total
 			}
 		})
 		.sort(byName)
@@ -104,6 +104,6 @@ export const calculateSplit = (data: TabSchema): SplitSchema => {
 		subTotal,
 		total: subTotal + taxAmount + tipAmount,
 		items: [...items].sort(byName),
-		splitters,
+		splitters
 	}
 }
