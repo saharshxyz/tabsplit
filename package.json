@@ -13,7 +13,6 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.2.6",
-		"@hookform/resolvers": "^5.1.1",
 		"@ngneat/falso": "^7.4.0",
 		"@tailwindcss/postcss": "^4.1.10",
 		"@tanstack/react-router": "^1.121.2",
@@ -28,7 +27,6 @@
 		"radix-ui": "^1.4.2",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
-		"react-hook-form": "^7.57.0",
 		"recharts": "^2.15.3",
 		"sonner": "^2.0.5",
 		"tailwind-merge": "^3.3.1",
