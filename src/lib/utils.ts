@@ -1,7 +1,12 @@
 import * as falso from "@ngneat/falso"
 import { type ClassValue, clsx } from "clsx"
 import { Banknote, DollarSign, type LucideIcon } from "lucide-react"
-import type { DescriptionType, SplitSchema, TabSchema } from "src/lib/schemas"
+import {
+	type DescriptionType,
+	type SplitSchema,
+	type TabSchema,
+	tabSchema
+} from "src/lib/schemas"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -217,4 +222,36 @@ export const paymentInfo = (
 		display: displayMap[type],
 		icon: iconMap[type]
 	}
+}
+
+export const genTab = (initialData?: unknown): TabSchema => {
+	const defaultTab: TabSchema = {
+		tabName: "",
+		tabDescription: { type: "None", details: undefined },
+		taxAmount: 0,
+		tipBeforeTax: true,
+		tipAmount: 0,
+		splitters: [{ name: "" }, { name: "" }],
+		items: [
+			{
+				name: "",
+				price: 0,
+				splitters: [{ name: "" }]
+			},
+			{
+				name: "",
+				price: 0,
+				splitters: [{ name: "" }]
+			}
+		]
+	}
+
+	if (typeof initialData !== "object" || initialData === null) return defaultTab
+
+	const result = tabSchema.safeParse({
+		...defaultTab,
+		...initialData
+	})
+
+	return result.success ? result.data : defaultTab
 }
