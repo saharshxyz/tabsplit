@@ -39,3 +39,6 @@ next-env.d.ts
 
 .chettuignore
 .chettu.txt
+
+.git
+.tanstack
