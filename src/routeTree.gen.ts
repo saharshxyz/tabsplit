@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UploadRouteImport } from './routes/upload'
 import { Route as ExampleRouteImport } from './routes/example'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as SplitRouteRouteImport } from './routes/split/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplitIndexRouteImport } from './routes/split/index'
 
+const UploadRoute = UploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ExampleRoute = ExampleRouteImport.update({
   id: '/example',
   path: '/example',
@@ -46,12 +52,14 @@ export interface FileRoutesByFullPath {
   '/split': typeof SplitRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/example': typeof ExampleRoute
+  '/upload': typeof UploadRoute
   '/split/': typeof SplitIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/example': typeof ExampleRoute
+  '/upload': typeof UploadRoute
   '/split': typeof SplitIndexRoute
 }
 export interface FileRoutesById {
@@ -60,14 +68,22 @@ export interface FileRoutesById {
   '/split': typeof SplitRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/example': typeof ExampleRoute
+  '/upload': typeof UploadRoute
   '/split/': typeof SplitIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/split' | '/about' | '/example' | '/split/'
+  fullPaths: '/' | '/split' | '/about' | '/example' | '/upload' | '/split/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/example' | '/split'
-  id: '__root__' | '/' | '/split' | '/about' | '/example' | '/split/'
+  to: '/' | '/about' | '/example' | '/upload' | '/split'
+  id:
+    | '__root__'
+    | '/'
+    | '/split'
+    | '/about'
+    | '/example'
+    | '/upload'
+    | '/split/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -75,10 +91,18 @@ export interface RootRouteChildren {
   SplitRouteRoute: typeof SplitRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   ExampleRoute: typeof ExampleRoute
+  UploadRoute: typeof UploadRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/example': {
       id: '/example'
       path: '/example'
@@ -134,6 +158,7 @@ const rootRouteChildren: RootRouteChildren = {
   SplitRouteRoute: SplitRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   ExampleRoute: ExampleRoute,
+  UploadRoute: UploadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

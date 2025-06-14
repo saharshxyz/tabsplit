@@ -45,5 +45,9 @@ function TabForm() {
 	const searchParams = Route.useSearch()
 	const initialData = genTab(searchParams)
 
-	return <></>
+	return (
+		<pre className="overflow-auto rounded-md bg-red-100 p-4 text-red-800">
+			{JSON.stringify(initialData, null, 2)}
+		</pre>
+	)
 }
