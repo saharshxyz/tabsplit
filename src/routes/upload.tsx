@@ -59,16 +59,6 @@ export const Route = createFileRoute("/upload")({
 })
 
 function RouteComponent() {
-	const form = useAppForm({
-		defaultValues: { receipts: [] as File[] },
-		validators: {
-			onSubmit: uploadFormSchema
-		},
-		onSubmit: ({ value }) => {
-			console.log("hi", value)
-		}
-	})
-
 	return (
 		<main className="mx-auto flex min-h-dvh items-center justify-center overflow-hidden">
 			<div className="w-full">
@@ -86,71 +76,71 @@ function RouteComponent() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<form.AppForm>
-							<form
-								onSubmit={(e) => {
-									e.preventDefault()
-									form.handleSubmit()
-								}}
-								className="space-y-3"
-							>
-								<form.AppField
-									name="receipts"
-									// biome-ignore lint/correctness/noChildrenProp: TanStack Form uses children prop for field rendering
-									children={(field) => (
-										<field.FormItem>
-											<field.FormLabel>Receipt</field.FormLabel>
-											<field.FormControl>
-												<FileUpload.Root
-													value={field.state.value}
-													onValueChange={(files) => {
-														field.handleChange(files)
-													}}
-													maxSize={FILE_CONFIG.MAX_SIZE}
-													accept={FILE_CONFIG.ACCEPT_STRING}
-												>
-													<DynamicDropzone />
-													<FileUpload.List>
-														{field.state.value.map((file) => (
-															<FileUpload.Item key={file.name} value={file}>
-																<FileUpload.ItemPreview />
-																<FileUpload.ItemMetadata />
-																<FileUpload.ItemDelete asChild>
-																	<Button
-																		variant="secondary"
-																		size="icon"
-																		className="h-6 w-6"
-																	>
-																		<X className="h-4 w-4" />
-																	</Button>
-																</FileUpload.ItemDelete>
-															</FileUpload.Item>
-														))}
-													</FileUpload.List>
-												</FileUpload.Root>
-											</field.FormControl>
-											<field.FormDescription className="text-xs">
-												Accepted file types:{" "}
-												{FILE_CONFIG.FORMATTED_DESCRIPTION.map((ext, index) => (
-													<span key={ext}>
-														<code>{ext}</code>
-														{index < FILE_CONFIG.FORMATTED_DESCRIPTION.length - 1 && ", "}
-													</span>
-												))}
-											</field.FormDescription>
-											<field.FormMessage />
-										</field.FormItem>
-									)}
-								/>
-								<Button type="submit" className="w-full mt-3">
-									Submit
-								</Button>
-							</form>
-						</form.AppForm>
+						<UploadForm />
 					</CardContent>
 				</Card>
 			</div>
 		</main>
+	)
+}
+
+function UploadForm() {
+	const form = useAppForm({
+		defaultValues: { receipts: [] as File[] },
+		validators: {
+			onSubmit: uploadFormSchema
+		},
+		onSubmit: ({ value }) => {
+			console.log("hi", value)
+		}
+	})
+
+	return (
+		<form.AppForm>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault()
+					form.handleSubmit()
+				}}
+				className="space-y-3"
+			>
+				<form.AppField
+					name="receipts"
+					// biome-ignore lint/correctness/noChildrenProp: TanStack Form uses children prop for field rendering
+					children={(field) => (
+						<field.FormItem>
+							<field.FormLabel>Receipt</field.FormLabel>
+							<field.FormControl>
+								<FileUpload.Root
+									value={field.state.value}
+									onValueChange={(files) => {
+										field.handleChange(files)
+									}}
+									maxSize={FILE_CONFIG.MAX_SIZE}
+									accept={FILE_CONFIG.ACCEPT_STRING}
+								>
+									<DynamicDropzone />
+									<FileList files={field.state.value} />
+								</FileUpload.Root>
+							</field.FormControl>
+							<field.FormDescription className="text-xs">
+								Accepted file types:{" "}
+								{FILE_CONFIG.FORMATTED_DESCRIPTION.map((ext, index) => (
+									<span key={ext}>
+										<code>{ext}</code>
+										{index < FILE_CONFIG.FORMATTED_DESCRIPTION.length - 1 && ", "}
+									</span>
+								))}
+							</field.FormDescription>
+							<field.FormMessage />
+						</field.FormItem>
+					)}
+				/>
+				<Button type="submit" className="w-full mt-3">
+					Submit
+				</Button>
+			</form>
+		</form.AppForm>
 	)
 }
 
@@ -183,5 +173,27 @@ function DynamicDropzone() {
 				</div>
 			</div>
 		</FileUpload.Dropzone>
+	)
+}
+
+function FileList({ files }: { files: File[] }) {
+	return (
+		<FileUpload.List>
+			{files.map((file) => (
+				<FileUpload.Item key={file.name} value={file}>
+					<FileUpload.ItemPreview />
+					<FileUpload.ItemMetadata />
+					<FileUpload.ItemDelete asChild>
+						<Button
+							variant="secondary"
+							size="icon"
+							className="h-6 w-6"
+						>
+							<X className="h-4 w-4" />
+						</Button>
+					</FileUpload.ItemDelete>
+				</FileUpload.Item>
+			))}
+		</FileUpload.List>
 	)
 }
