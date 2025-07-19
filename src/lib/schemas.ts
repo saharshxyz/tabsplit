@@ -1,4 +1,4 @@
-import * as z from "zod/v4"
+import * as z from "zod"
 
 const uniqueArray = <T>(arr: T[]): boolean => arr.length === new Set(arr).size
 

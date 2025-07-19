@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { type TabSchema, partialTabSchema, tabSchema } from "./schemas"
+import { partialTabSchema, type TabSchema, tabSchema } from "./schemas"
 import { calculateSplit, generateExampleTab } from "./utils"
 
 // Reusable test data for a typical scenario

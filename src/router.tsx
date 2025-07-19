@@ -41,7 +41,7 @@ const decodeFromBinary = (str: string) =>
 
 const encodeToBinary = (str: string) =>
 	btoa(
-		encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) =>
+		encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_match, p1) =>
 			String.fromCharCode(Number.parseInt(p1, 16))
 		)
 	)

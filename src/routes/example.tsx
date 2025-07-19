@@ -1,5 +1,4 @@
-import { Link } from "@tanstack/react-router"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { ReceiptText, TextCursorInput } from "lucide-react"
 import { Button } from "src/components/ui/button"
 import {

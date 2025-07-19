@@ -1,5 +1,4 @@
-import { Outlet, createFileRoute } from "@tanstack/react-router"
-import { Link } from "@tanstack/react-router"
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
 import { Info, LinkIcon, PenSquare } from "lucide-react"
 import { useCallback } from "react"
 import { Toaster, toast } from "sonner"

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Info } from "lucide-react"
+import { Info, Shapes } from "lucide-react"
 import { Button } from "src//components/ui/button"
 import { BackButton } from "src/components/BackButton"
 import {
@@ -29,12 +29,12 @@ export default function NotFound() {
 								<Info className="ml-2" strokeWidth={2.25} />
 							</Button>
 						</Link>
-						{/* <Link to="/example">
-              <Button className="w-full">
-                View Examples
-                <Shapes className="ml-2" />
-              </Button>
-            </Link> */}
+						<Link to="/example">
+							<Button className="w-full">
+								View Examples
+								<Shapes className="ml-2" />
+							</Button>
+						</Link>
 					</CardContent>
 					<CardFooter className="flex flex-col items-start">
 						<span className="mb-2">

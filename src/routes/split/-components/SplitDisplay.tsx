@@ -5,6 +5,7 @@ import { PaymentLink } from "src/components/PaymentLink"
 import { Button } from "src/components/ui/button"
 import {
 	Card,
+	CardAction,
 	CardContent,
 	CardDescription,
 	CardHeader,
@@ -138,17 +139,16 @@ export const SplitDisplay: React.FC<SplitDisplayProps> = ({ splitResult }) => {
 						{splitResult.splitters.map((splitter) => (
 							<Card key={splitter.name} className="mb-4">
 								<CardHeader>
-									<div className="flex w-full items-center justify-between">
-										<CardTitle className="text-xl">{splitter.name}</CardTitle>
-
+									<CardTitle className="text-xl">{splitter.name}</CardTitle>
+									<CardAction>
 										<VenmoPayButton
 											tabDescription={splitResult.tabDescription}
 											note={splitResult.tabName}
 											amount={splitter.total}
 										/>
-									</div>
+									</CardAction>
 								</CardHeader>
-								<CardContent>
+								<CardContent className="-mt-3">
 									<SplitTable
 										items={splitter.items}
 										summary={{
