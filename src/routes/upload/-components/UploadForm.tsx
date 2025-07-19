@@ -1,14 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router"
 import { Upload, X } from "lucide-react"
-import { BackButton } from "src/components/BackButton"
 import { Button } from "src/components/ui/button"
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle
-} from "src/components/ui/card"
 import * as FileUpload from "src/components/ui/file-upload"
 import { useFileUpload } from "src/components/ui/file-upload"
 import { useAppForm } from "src/components/ui/tanstack-form"
@@ -54,37 +45,7 @@ const uploadFormSchema = z.object({
 		)
 })
 
-export const Route = createFileRoute("/upload")({
-	component: RouteComponent
-})
-
-function RouteComponent() {
-	return (
-		<main className="mx-auto flex min-h-dvh items-center justify-center overflow-hidden">
-			<div className="w-full">
-				<BackButton link="/" text="Back to Home" />
-
-				<Card className="w-full p-10">
-					<CardHeader>
-						<CardTitle className="text-2xl text-center">
-							Upload Receipt
-						</CardTitle>
-						<CardDescription>
-							Upload a picture of your receipt and you will be redirected to a
-							pre-filled form. Note that this uses OpenAI and results may vary.
-							We recommend verifying the auto-populated data.
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<UploadForm />
-					</CardContent>
-				</Card>
-			</div>
-		</main>
-	)
-}
-
-function UploadForm() {
+export function UploadForm() {
 	const form = useAppForm({
 		defaultValues: { receipts: [] as File[] },
 		validators: {
@@ -128,7 +89,8 @@ function UploadForm() {
 								{FILE_CONFIG.FORMATTED_DESCRIPTION.map((ext, index) => (
 									<span key={ext}>
 										<code>{ext}</code>
-										{index < FILE_CONFIG.FORMATTED_DESCRIPTION.length - 1 && ", "}
+										{index < FILE_CONFIG.FORMATTED_DESCRIPTION.length - 1 &&
+											", "}
 									</span>
 								))}
 							</field.FormDescription>
@@ -184,11 +146,7 @@ function FileList({ files }: { files: File[] }) {
 					<FileUpload.ItemPreview />
 					<FileUpload.ItemMetadata />
 					<FileUpload.ItemDelete asChild>
-						<Button
-							variant="secondary"
-							size="icon"
-							className="h-6 w-6"
-						>
+						<Button variant="secondary" size="icon" className="h-6 w-6">
 							<X className="h-4 w-4" />
 						</Button>
 					</FileUpload.ItemDelete>
