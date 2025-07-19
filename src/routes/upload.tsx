@@ -16,7 +16,7 @@ import { cn } from "src/lib/utils"
 import * as z from "zod"
 
 const FILE_CONFIG = {
-	MAX_SIZE: 1_000_000,
+	MAX_SIZE: 5_000_000,
 	MIN_SIZE: 100,
 	MAX_FILES: 3,
 	ACCEPTED_TYPES: [
@@ -47,10 +47,10 @@ const uploadFormSchema = z.object({
 				.max(FILE_CONFIG.MAX_SIZE)
 				.mime(FILE_CONFIG.ACCEPTED_TYPES)
 		)
-		.min(1, "At least one receipt is required")
+		.min(1, "At least one attachment is required")
 		.max(
 			FILE_CONFIG.MAX_FILES,
-			`Maximum ${FILE_CONFIG.MAX_FILES} receipts allowed`
+			`Maximum ${FILE_CONFIG.MAX_FILES} attachments allowed`
 		)
 })
 
@@ -62,10 +62,10 @@ function RouteComponent() {
 	const form = useAppForm({
 		defaultValues: { receipts: [] as File[] },
 		validators: {
-			onChange: uploadFormSchema
+			onSubmit: uploadFormSchema
 		},
 		onSubmit: ({ value }) => {
-			console.log(value)
+			console.log("hi", value)
 		}
 	})
 
@@ -87,7 +87,13 @@ function RouteComponent() {
 					</CardHeader>
 					<CardContent>
 						<form.AppForm>
-							<form className="space-y-3">
+							<form
+								onSubmit={(e) => {
+									e.preventDefault()
+									form.handleSubmit()
+								}}
+								className="space-y-3"
+							>
 								<form.AppField
 									name="receipts"
 									// biome-ignore lint/correctness/noChildrenProp: TanStack Form uses children prop for field rendering
@@ -100,7 +106,6 @@ function RouteComponent() {
 													onValueChange={(files) => {
 														field.handleChange(files)
 													}}
-													maxFiles={FILE_CONFIG.MAX_FILES}
 													maxSize={FILE_CONFIG.MAX_SIZE}
 													accept={FILE_CONFIG.ACCEPT_STRING}
 												>
@@ -112,7 +117,7 @@ function RouteComponent() {
 																<FileUpload.ItemMetadata />
 																<FileUpload.ItemDelete asChild>
 																	<Button
-																		variant="ghost"
+																		variant="secondary"
 																		size="icon"
 																		className="h-6 w-6"
 																	>
